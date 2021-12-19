@@ -101,6 +101,72 @@ public class TupleTests
         Assert.Throws<ArgumentException>(() => point1.Add(point2));
     }
 
+    [Fact]
+    public void SubtractPointFromPoint()
+    {
+        var point1 = CreatePoint();
+        var point2 = CreatePoint();
+
+        var result = point1.Subtract(point2);
+
+        var expectedTuple = new Tuple
+        {
+            X = point1.X - point2.X,
+            Y = point1.Y - point2.Y,
+            Z = point1.Z - point2.Z,
+            W = Tuple.Vector
+        };
+
+        Assert.Equal(expectedTuple, result, _comparer);
+    }
+
+    [Fact]
+    public void SubtractVectorFromPoint()
+    {
+        var point = CreatePoint();
+        var vector = CreateVector();
+        
+        var result = point.Subtract(vector);
+
+        var expectedTuple = new Tuple
+        {
+            X = point.X - vector.X,
+            Y = point.Y - vector.Y,
+            Z = point.Z - vector.Z,
+            W = Tuple.Point
+        };
+
+        Assert.Equal(expectedTuple, result, _comparer);
+    }
+
+    [Fact]
+    public void SubtractVectorFromVector()
+    {
+        var vector1 = CreateVector();
+        var vector2 = CreateVector();
+        
+        var result = vector1.Subtract(vector2);
+
+        var expectedTuple = new Tuple
+        {
+            X = vector1.X - vector2.X,
+            Y = vector1.Y - vector2.Y,
+            Z = vector1.Z - vector2.Z,
+            W = Tuple.Vector
+        };
+
+        Assert.Equal(expectedTuple, result, _comparer);
+    }
+
+    [Fact]
+    public void ErrorSubtractingPointFromVector()
+    {
+        var vector = CreateVector();
+        var point = CreatePoint();
+
+        Assert.Throws<ArgumentException>(() => vector.Subtract(point));
+    }
+
     private Tuple CreatePoint()
     {
         return _fixture.Build<Tuple>()

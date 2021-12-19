@@ -51,9 +51,27 @@ public class Tuple
             X = X + vector.X,
             Y = Y + vector.Y,
             Z = Z + vector.Z,
-            W = W
+            W = W + vector.W
         };
     }
 
     public static Tuple operator +(Tuple x, Tuple y) => x.Add(y);
+
+    public Tuple Subtract(Tuple other)
+    {
+        if(IsVector && other.IsPoint)
+        {
+            throw new ArgumentException($"Cannot subtract a point from a vector", nameof(other));
+        }
+
+        return new Tuple
+        {
+            X = X - other.X,
+            Y = Y - other.Y,
+            Z = Z - other.Z,
+            W = W - other.W
+        };
+    }
+
+    public static Tuple operator -(Tuple x, Tuple y) => x.Subtract(y);
 }
