@@ -4,12 +4,12 @@
 
 namespace RayTracerChallenge.Domain;
 
-public class Tuple
+public record class Tuple
 {
-    public float X { get; set; }
-    public float Y { get; set; }
-    public float Z { get; set; }
-    public float W { get; set; }
+    public float X { get; init; }
+    public float Y { get; init; }
+    public float Z { get; init; }
+    public float W { get; init; }
 
     public bool IsPoint => W == Point;
     public bool IsVector => W == Vector;
