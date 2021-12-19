@@ -74,4 +74,17 @@ public class Tuple
     }
 
     public static Tuple operator -(Tuple x, Tuple y) => x.Subtract(y);
+
+    public Tuple Negate()
+    {
+        return new Tuple
+        {
+            X = X * -1,
+            Y = Y * -1,
+            Z = Z * -1,
+            W = W * -1
+        };
+    }
+
+    public static Tuple operator -(Tuple x) => x.Negate();
 }

@@ -167,6 +167,43 @@ public class TupleTests
         Assert.Throws<ArgumentException>(() => vector.Subtract(point));
     }
 
+    [Fact]
+    public void SubtractVectorFromZeroVector()
+    {
+        var zero = Tuple.CreateVector(0.0F, 0.0F, 0.0F);
+        var vector = CreateVector();
+
+        var result = zero.Subtract(vector);
+
+        var expectedTuple = new Tuple
+        {
+            X = vector.X * -1,
+            Y = vector.Y * -1,
+            Z = vector.Z * -1,
+            W = Tuple.Vector
+        };
+
+        Assert.Equal(expectedTuple, result, _comparer);
+    }
+
+    [Fact]
+    public void NegateATuple()
+    {
+        var tuple = _fixture.Create<Tuple>();
+
+        var result = tuple.Negate();
+
+        var expectedTuple = new Tuple
+        {
+            X = tuple.X * -1,
+            Y = tuple.Y * -1,
+            Z = tuple.Z * -1,
+            W = tuple.W * -1
+        };
+
+        Assert.Equal(expectedTuple, result, _comparer);
+    }
+
     private Tuple CreatePoint()
     {
         return _fixture.Build<Tuple>()
