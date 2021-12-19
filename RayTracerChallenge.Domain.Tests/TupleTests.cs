@@ -250,6 +250,28 @@ public class TupleTests
         Assert.Throws<DivideByZeroException>(() => tuple.Divide(0.0F));
     }
 
+    [Theory]
+    [InlineData(1.0F, 0.0F, 0.0F, 1)]
+    [InlineData(0.0F, 1.0F, 0.0F, 1)]
+    [InlineData(0.0F, 0.0F, 1.0F, 1)]
+    [InlineData(1.0F, 2.0F, 3.0F, 14.0)]
+    [InlineData(-1.0F, -2.0F, -3.0F, 14.0)]
+    public void ComputeMagnitudeOfVector(float x, float y, float z, double expectedMagnitude)
+    {
+        var tuple = Tuple.CreateVector(x, y, z);
+        
+        var magnitude = tuple.Magnitude();
+        var expectedResult = Math.Sqrt(expectedMagnitude);
+
+        Assert.Equal(expectedResult, magnitude);
+    }
+
+    [Fact]
+    public void NormalizeVector()
+    {
+
+    }
+
     private Tuple CreatePoint()
     {
         return _fixture.Build<Tuple>()
