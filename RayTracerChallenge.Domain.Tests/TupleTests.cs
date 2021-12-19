@@ -1,8 +1,11 @@
+using System;
+
 namespace RayTracerChallenge.Domain.Tests;
 
 public class TupleTests
 {
     private readonly IFixture _fixture = new Fixture();
+    private readonly TupleComparer _comparer = new TupleComparer();
 
     [Fact]
     public void TupleIsPoint()
@@ -35,9 +38,15 @@ public class TupleTests
 
         var tuple = Tuple.CreatePoint(x, y, z);
 
-        Assert.Equal(x, tuple.X);
-        Assert.Equal(y, tuple.Y);
-        Assert.Equal(z, tuple.Z);
+        var expectedTuple = new Tuple
+        {
+            X = x,
+            Y = y,
+            Z = z,
+            W = Tuple.Point
+        };
+
+        Assert.Equal(expectedTuple, tuple, _comparer);
         Assert.True(tuple.IsPoint);
         Assert.False(tuple.IsVector);
     }
@@ -51,10 +60,58 @@ public class TupleTests
 
         var tuple = Tuple.CreateVector(x, y, z);
 
-        Assert.Equal(x, tuple.X);
-        Assert.Equal(y, tuple.Y);
-        Assert.Equal(z, tuple.Z);
+        var expectedTuple = new Tuple
+        {
+            X = x,
+            Y = y,
+            Z = z,
+            W = Tuple.Vector
+        };
+
+        Assert.Equal(expectedTuple, tuple, _comparer);
         Assert.False(tuple.IsPoint);
         Assert.True(tuple.IsVector);
+    }
+
+    [Fact]
+    public void AddVectorToPoint()
+    {
+        var point = CreatePoint();
+        var vector = CreateVector();
+
+        var result = point.Add(vector);
+
+        var expectedTuple = new Tuple
+        {
+            X = point.X + vector.X,
+            Y = point.Y + vector.Y,
+            Z = point.Z + vector.Z,
+            W = Tuple.Point
+        };
+
+        Assert.Equal(expectedTuple, result, _comparer);
+    }
+
+    [Fact]
+    public void ErrorAddingPointToPoint()
+    {
+        var point1 = CreatePoint();
+        var point2 = CreatePoint();
+
+        Assert.Throws<ArgumentException>(() => point1.Add(point2));
+    }
+
+    private Tuple CreatePoint()
+    {
+        return _fixture.Build<Tuple>()
+            .With(tuple => tuple.W, Tuple.Point)
+            .Create();
+    }
+
+    private Tuple CreateVector()
+    {
+        return _fixture.Build<Tuple>()
+            .With(tuple => tuple.W, Tuple.Vector)
+            .Create();
     }
 }
