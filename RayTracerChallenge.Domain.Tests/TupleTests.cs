@@ -251,25 +251,48 @@ public class TupleTests
     }
 
     [Theory]
-    [InlineData(1.0F, 0.0F, 0.0F, 1)]
-    [InlineData(0.0F, 1.0F, 0.0F, 1)]
-    [InlineData(0.0F, 0.0F, 1.0F, 1)]
-    [InlineData(1.0F, 2.0F, 3.0F, 14.0)]
-    [InlineData(-1.0F, -2.0F, -3.0F, 14.0)]
-    public void ComputeMagnitudeOfVector(float x, float y, float z, double expectedMagnitude)
+    [InlineData(1.0F, 0.0F, 0.0F, 1.0F)]
+    [InlineData(0.0F, 1.0F, 0.0F, 1.0F)]
+    [InlineData(0.0F, 0.0F, 1.0F, 1.0F)]
+    [InlineData(1.0F, 2.0F, 3.0F, 3.7416573868F)]
+    [InlineData(-1.0F, -2.0F, -3.0F, 3.7416573868F)]
+    public void ComputeMagnitudeOfVector(float x, float y, float z, float expectedMagnitude)
     {
         var tuple = Tuple.CreateVector(x, y, z);
-        
-        var magnitude = tuple.Magnitude();
-        var expectedResult = Math.Sqrt(expectedMagnitude);
 
-        Assert.Equal(expectedResult, magnitude);
+        var magnitude = tuple.Magnitude();
+
+        Assert.Equal(expectedMagnitude, magnitude);
+    }
+
+    [Theory]
+    [InlineData(4.0F, 0.0F, 0.0F, 4.0F)]
+    [InlineData(1.0F, 2.0F, 3.0F, 3.7416573868F)]
+    public void NormalizeVector(float x, float y, float z, float expectedMagnitude)
+    {
+        var vector = Tuple.CreateVector(x, y, z);
+
+        var normalized = vector.Normalize();
+
+        var expectedTuple = new Tuple
+        {
+            X = vector.X / expectedMagnitude,
+            Y = vector.Y / expectedMagnitude,
+            Z = vector.Z / expectedMagnitude,
+            W = Tuple.Vector
+        };
+        Assert.Equal(expectedTuple, normalized, _comparer);
     }
 
     [Fact]
-    public void NormalizeVector()
+    public void MagntiudeOfNormalizedVector()
     {
+        var vector = CreateVector();
 
+        var normalized = vector.Normalize();
+        var magnitude = normalized.Magnitude();
+
+        Assert.Equal(1.0F, magnitude);
     }
 
     private Tuple CreatePoint()

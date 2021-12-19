@@ -119,9 +119,21 @@ public class Tuple
 
     public static Tuple operator /(Tuple x, float factor) => x.Divide(factor);
 
-    public double Magnitude()
+    public float Magnitude()
     {
         var sum = Math.Pow(X, 2) + Math.Pow(Y, 2) + Math.Pow(Z, 2) + Math.Pow(W, 2);
-        return Math.Sqrt(sum);
+        return (float)Math.Sqrt(sum);
+    }
+
+    public Tuple Normalize()
+    {
+        var magntiude = Magnitude();
+        return new Tuple
+        {
+            X = X / magntiude,
+            Y = Y / magntiude,
+            Z = Z / magntiude,
+            W = W / magntiude
+        };
     }
 }
