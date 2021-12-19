@@ -311,6 +311,40 @@ public class TupleTests
         Assert.Equal(expectedDotProduct, dotProduct);
     }
 
+    [Fact]
+    public void CrossProduct()
+    {
+        var vector1 = CreateVector();
+        var vector2 = CreateVector();
+
+        var crossProduct = vector1.CrossProduct(vector2);
+
+        var expectedTuple = Tuple.CreateVector(
+            vector1.Y * vector2.Z - vector1.Z * vector2.Y,
+            vector1.Z * vector2.X - vector1.X * vector2.Z,
+            vector1.X * vector2.Y - vector1.Y * vector2.X);
+
+        Assert.Equal(expectedTuple, crossProduct, _comparer);
+    }
+
+    [Fact]
+    public void InvalidCrossProduct_ThisIsPoint()
+    {
+        var tuple1 = CreatePoint();
+        var tuple2 = CreateVector();
+
+        Assert.Throws<Exception>(() => tuple1.CrossProduct(tuple2));
+    }
+
+    [Fact]
+    public void InvalidCrossProduct_OtherIsPoint()
+    {
+        var tuple1 = CreateVector();
+        var tuple2 = CreatePoint();
+
+        Assert.Throws<ArgumentException>(() => tuple1.CrossProduct(tuple2));
+    }
+
     private Tuple CreatePoint()
     {
         return _fixture.Build<Tuple>()

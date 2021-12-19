@@ -144,4 +144,20 @@ public class Tuple
             Z * other.Z +
             W * other.W;
     }
+
+    public Tuple CrossProduct(Tuple other)
+    {
+        if(!IsVector)
+        {
+            throw new Exception("Can only compute cross product of vectors");
+        }
+        if(!other.IsVector)
+        {
+            throw new ArgumentException("Can only compute cross product of vectors", nameof(other));
+        }
+
+        return CreateVector(Y * other.Z - Z * other.Y,
+            Z * other.X - X * other.Z,
+            X * other.Y - Y * other.X);
+    }
 }
