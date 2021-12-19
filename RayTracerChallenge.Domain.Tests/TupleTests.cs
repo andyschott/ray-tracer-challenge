@@ -295,6 +295,22 @@ public class TupleTests
         Assert.Equal(1.0F, magnitude);
     }
 
+    [Fact]
+    public void DotProduct()
+    {
+        var vector1 = CreateVector();
+        var vector2 = CreateVector();
+
+        var dotProduct = vector1.DotProduct(vector2);
+
+        var expectedDotProduct = vector1.X * vector2.X +
+            vector1.Y * vector2.Y +
+            vector1.Z * vector2.Z +
+            vector1.W * vector2.W;
+
+        Assert.Equal(expectedDotProduct, dotProduct);
+    }
+
     private Tuple CreatePoint()
     {
         return _fixture.Build<Tuple>()

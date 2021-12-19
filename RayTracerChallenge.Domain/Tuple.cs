@@ -136,4 +136,12 @@ public class Tuple
             W = W / magntiude
         };
     }
+
+    public float DotProduct(Tuple other)
+    {
+        return X * other.X +
+            Y * other.Y +
+            Z * other.Z +
+            W * other.W;
+    }
 }
