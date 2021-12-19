@@ -1,2 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using RayTracerChallenge;
+
+var chapter1 = new Chapter1();
+chapter1.SimulateEnvironment();
