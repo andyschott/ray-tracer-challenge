@@ -204,6 +204,52 @@ public class TupleTests
         Assert.Equal(expectedTuple, result, _comparer);
     }
 
+    [Fact]
+    public void MultplyTupleByScalar()
+    {
+        var tuple = _fixture.Create<Tuple>();
+        var factor = _fixture.Create<float>();
+
+        var result = tuple.Multiply(factor);
+
+        var expectedTuple = new Tuple
+        {
+            X = tuple.X * factor,
+            Y = tuple.Y * factor,
+            Z = tuple.Z * factor,
+            W = tuple.W * factor
+        };
+
+        Assert.Equal(expectedTuple, result, _comparer);
+    }
+
+    [Fact]
+    public void DivideTupleByScalar()
+    {
+        var tuple = _fixture.Create<Tuple>();
+        var factor = _fixture.Create<float>();
+
+        var result = tuple.Divide(factor);
+
+        var expectedTuple = new Tuple
+        {
+            X = tuple.X / factor,
+            Y = tuple.Y / factor,
+            Z = tuple.Z / factor,
+            W = tuple.W / factor
+        };
+
+        Assert.Equal(expectedTuple, result, _comparer);
+    }
+
+    [Fact]
+    public void ErrorDividingByZero()
+    {
+        var tuple = _fixture.Create<Tuple>();
+
+        Assert.Throws<DivideByZeroException>(() => tuple.Divide(0.0F));
+    }
+
     private Tuple CreatePoint()
     {
         return _fixture.Build<Tuple>()

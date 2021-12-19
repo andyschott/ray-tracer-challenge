@@ -87,4 +87,35 @@ public class Tuple
     }
 
     public static Tuple operator -(Tuple x) => x.Negate();
+
+    public Tuple Multiply(float factor)
+    {
+        return new Tuple
+        {
+            X = X * factor,
+            Y = Y * factor,
+            Z = Z * factor,
+            W = W * factor
+        };
+    }
+
+    public static Tuple operator *(Tuple x, float factor) => x.Multiply(factor);
+
+    public Tuple Divide(float factor)
+    {
+        if(factor == 0.0F)
+        {
+            throw new DivideByZeroException();
+        }
+
+        return new Tuple
+        {
+            X = X / factor,
+            Y = Y / factor,
+            Z = Z / factor,
+            W = W / factor
+        };
+    }
+
+    public static Tuple operator /(Tuple x, float factor) => x.Divide(factor);
 }
