@@ -1,25 +1,18 @@
-using RayTracerChallenge.Domain;
+using RayTracerChallenge.Models;
 using Console = System.Console;
 
 namespace RayTracerChallenge;
 public class Chapter1
 {
-    class Projectile
-    {
-        public Tuple Position { get; init; } = Tuple.CreatePoint(0.0F, 0.0F, 0.0F);
-        public Tuple Velocity { get; init; } = Tuple.CreateVector(0.0F, 0.0F, 0.0F);
-    }
-
-    class Environment
-    {
-        public Tuple Gravity { get; init; } = Tuple.CreateVector(0.0F, 0.0F, 0.0F);
-        public Tuple Wind { get; init; } = Tuple.CreateVector(0.0F, 0.0F, 0.0F);
-    }
-
-    private static Projectile Tick(Environment environment, Projectile projectile)
+    protected static Projectile Tick(Environment environment, Projectile projectile)
     {
         var position = projectile.Position + projectile.Velocity;
         var velocity = projectile.Velocity + environment.Gravity + environment.Wind;
+
+        if(position.Y < 0.0F)
+        {
+            position = Tuple.CreatePoint(position.X, 0.0F, position.Z);
+        }
 
         return new Projectile
         {

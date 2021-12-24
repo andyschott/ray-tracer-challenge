@@ -1,4 +1,6 @@
 ﻿using RayTracerChallenge;
 
-var chapter1 = new Chapter1();
-chapter1.SimulateEnvironment();
+var chapter2 = new Chapter2();
+var ppm = chapter2.PlotProjectileTragectory();
+
+System.Console.WriteLine(ppm);
