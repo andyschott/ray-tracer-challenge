@@ -219,6 +219,33 @@ public class Matrix
         return minor;
     }
 
+    public bool IsInvertable() => Determinant() != 0;
+
+    public Matrix Invert()
+    {
+        if(!IsInvertable())
+        {
+            throw new Exception("Matrix is not invertable");
+        }
+
+        var determinant = Determinant();
+
+        var matrix = new Matrix(Width, Height);
+
+        for(var y = 0; y < Height; ++y)
+        {
+            for(var x = 0; x < Width; ++x)
+            {
+                var cofactor = Cofactor(y, x);
+
+                // Swapping x and y here effectively transposes the matrix
+                matrix[x, y] = cofactor / Determinant();
+            }
+        }
+
+        return matrix;
+    }
+
     class RowEnumerator : IEnumerable<float>
     {
         private readonly Matrix _matrix;

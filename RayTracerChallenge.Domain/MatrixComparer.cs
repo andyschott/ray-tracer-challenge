@@ -4,6 +4,8 @@ namespace RayTracerChallenge.Domain;
 
 public class MatrixComparer : IEqualityComparer<Matrix>
 {
+    private const float Epsilon = 0.0001F;
+
     public bool Equals(Matrix? first, Matrix? second)
     {
         if(first is null && second is null)
@@ -24,7 +26,7 @@ public class MatrixComparer : IEqualityComparer<Matrix>
         {
             for(var x = 0; x < second.Width; ++x)
             {
-                if(first[y, x] != second[y, x])
+                if(Math.Abs(first[y, x] - second[y, x]) > Epsilon)
                 {
                     return false;
                 }

@@ -254,6 +254,96 @@ public class MatrixTests
         Assert.Equal(-4071, determinant);
     }
 
+    [Fact]
+    public void MatrixIsInvertable()
+    {
+        var matrix = new Matrix(4, 4, 6, 4, 4, 4, 5, 5, 7, 6, 4, -9, 3, -7, 9, 1, 7, -6);
+        Assert.True(matrix.IsInvertable());
+    }
+
+    [Fact]
+    public void MatrixIsNotInvertable()
+    {
+        var matrix = new Matrix(4, 4, -4, 2, -2, -3, 9, 6, 2, 6, 0, -5, 1, -5, 0, 0, 0, 0);
+        Assert.False(matrix.IsInvertable());
+    }
+
+    [Fact]
+    public void Invert()
+    {
+        var matrix = new Matrix(4, 4, -5, 2, 6, -8, 1, -5, 1, 8, 7, 7, -6, -7, 1, -3, 7, 4);
+
+        var inverse = matrix.Invert();
+
+        Assert.Equal(532, matrix.Determinant());
+        Assert.Equal(-160, matrix.Cofactor(2, 3));
+        Assert.Equal(-160F / 532F, inverse[3, 2]);
+        Assert.Equal(105, matrix.Cofactor(3, 2));
+        Assert.Equal(105F / 532F, inverse[2, 3]);
+
+        var expectedResult = new Matrix(4, 4, 0.21805F, 0.45113F, 0.24060F, -0.04511F,
+            -0.80827F, -1.45677F, -0.44361F, 0.52068F,
+            -0.07895F, -0.22368F, -0.05263F, 0.19737F,
+            -0.52256F, -0.81391F, -0.30075F, 0.30639F);
+        Assert.Equal(expectedResult, inverse, _matrixComparer);
+    }
+
+    [Theory]
+    [MemberData(nameof(InvertTestData))]
+    public void InvertTestCases(float[] input, float[] result)
+    {
+        var matrix = new Matrix(4, 4, input);
+
+        var inverse = matrix.Invert();
+
+        var expectedResult = new Matrix(4, 4, result);
+        Assert.Equal(expectedResult, inverse, _matrixComparer);
+    }
+
+    public static TheoryData<float[], float[]> InvertTestData => new TheoryData<float[], float[]>
+    {
+        {
+            new[] { 8F, -5F, 9F, 2F, 7F, 5F, 6F, 1F, -6F, 0F, 9F, 6F, -3F, 0F, -9F, -4F },
+            new[]
+            {
+                -0.15385F, -0.15385F, -0.28205F, -0.53846F,
+                -0.07692F, 0.12308F, 0.02564F, 0.03077F,
+                0.35897F, 0.35897F, 0.43590F, 0.92308F,
+                -0.69231F, -0.69231F, -0.76923F, -1.92308F
+            }
+        },
+        {
+            new[] { 9F, 3F, 0F, 9F, -5F, -2F, -6F, -3F, -4F, 9F, 6F, 4F, -7F, 6F, 6F, 2F },
+            new[]
+            {
+                -0.04074F, -0.07778F,  0.14444F, -0.22222F,
+                -0.07778F,  0.03333F,  0.36667F, -0.33333F,
+                -0.02901F, -0.14630F, -0.10926F,  0.12963F,
+                 0.17778F,  0.06667F, -0.26667F,  0.33333F
+            }
+        }
+    };
+
+    [Fact]
+    public void MultiplyProductByInverse()
+    {
+        var matrix1 = new Matrix(4, 4, 3, -9, 7, 3, 3, -8, 2, -9, -4, 4, 4, 1, -6, 5, -1, 1);
+        var matrix2 = new Matrix(4, 4, 8, 2, 2, 2, 3, -1, 7, 0, 7, 0, 5, 4, 6, -2, 0, 5);
+
+        var product = matrix1.Multiply(matrix2);
+        var inverse2 = matrix2.Invert();
+        var result = product.Multiply(inverse2);
+
+        Assert.Equal(matrix1, result, _matrixComparer);
+    }
+
+    [Fact]
+    public void CannotInvertMatrix()
+    {
+        var matrix = new Matrix(4, 4, -4, 2, -2, -3, 9, 6, 2, 6, 0, -5, 1, -5, 0, 0, 0, 0);
+        Assert.Throws<Exception>(() => matrix.Invert());
+    }
+
     private float[,] CreateTestData(int width, int height)
     {
         var data = new float[width, height];
