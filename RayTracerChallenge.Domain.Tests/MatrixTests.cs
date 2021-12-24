@@ -30,13 +30,13 @@ public class MatrixTests
     [Fact]
     public void GetRowData()
     {
-        var matrix = new Matrix(4, 4);
-        var row = _fixture.Create<int>() % matrix.Width;
+        var matrix = new Matrix(4, 4, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2);
+        var row = _fixture.Create<int>() % matrix.Height;
 
         var rowData = matrix.GetRow(row);
-        for(var x = 0; x < matrix.Height; ++x)
+        for(var x = 0; x < matrix.Width; ++x)
         {
-            Assert.Equal(matrix[x, row], rowData.ElementAt(x));
+            Assert.Equal(matrix[row, x], rowData.ElementAt(x));
         }
     }
 
