@@ -100,6 +100,34 @@ public class MatrixTests
         Assert.Throws<InvalidOperationException>(() => matrix.Multiply(tuple));
     }
 
+    [Fact]
+    public void MultiplyMatrixByIdentityMatrix()
+    {
+        var matrix = new Matrix(CreateTestData(4, 4));
+        var identityMatrix = Matrix.IdentityMatrix(4, 4);
+
+        var product = matrix.Multiply(identityMatrix);
+
+        Assert.Equal(matrix, product, _matrixComparer);
+    }
+
+    [Fact]
+    public void MultiplyTupleByIdentityMatrix()
+    {
+        var tuple = new Tuple
+        {
+            X = _fixture.Create<float>(),
+            Y = _fixture.Create<float>(),
+            Z = _fixture.Create<float>(),
+            W = _fixture.Create<float>()
+        };
+        var identityMatrix = Matrix.IdentityMatrix(4, 4);
+
+        var product = identityMatrix.Multiply(tuple);
+        
+        Assert.Equal(tuple, product, _tupleComparer);
+    }
+
     private float[,] CreateTestData(int width, int height)
     {
         var data = new float[width, height];

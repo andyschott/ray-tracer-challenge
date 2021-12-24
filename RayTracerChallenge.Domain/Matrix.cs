@@ -7,6 +7,22 @@ public class Matrix
     public int Width { get; }
     public int Height { get; }
 
+    public static Matrix IdentityMatrix(int width, int height)
+    {
+        if(width != height)
+        {
+            throw new ArgumentException("width and height must be equal");
+        }
+
+        var matrix = new Matrix(width, height);
+        for(var index = 0; index < width; ++index)
+        {
+            matrix[index, index] = 1;
+        }
+
+        return matrix;
+    }
+
     public Matrix(int width, int height)
     {
         _data = new float[width, height];
