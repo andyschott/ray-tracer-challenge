@@ -128,6 +128,32 @@ public class MatrixTests
         Assert.Equal(tuple, product, _tupleComparer);
     }
 
+    [Fact]
+    public void TransposeMatrix()
+    {
+        var matrix = new Matrix(CreateTestData(4, 4));
+
+        var result = matrix.Transpose();
+
+        for(var y = 0; y < matrix.Height; ++y)
+        {
+            for(var x = 0; x < matrix.Width; ++x)
+            {
+                Assert.Equal(matrix[x,y], result[y,x]);
+            }
+        }
+    }
+
+    [Fact]
+    public void TransposeIdentityMatrix()
+    {
+        var identityMatrix = Matrix.IdentityMatrix(4, 4);
+
+        var result = identityMatrix.Transpose();
+
+        Assert.Equal(identityMatrix, result, _matrixComparer);
+    }
+
     private float[,] CreateTestData(int width, int height)
     {
         var data = new float[width, height];

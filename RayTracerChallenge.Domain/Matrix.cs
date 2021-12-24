@@ -125,6 +125,21 @@ public class Matrix
 
     public static Tuple operator *(Matrix m, Tuple t) => m.Multiply(t);
 
+    public Matrix Transpose()
+    {
+        var matrix = new Matrix(Width, Height);
+
+        for(var y = 0; y < Height; ++y)
+        {
+            for(var x = 0; x < Width; ++x)
+            {
+                matrix[x,y] = this[y,x];
+            }
+        }
+
+        return matrix;
+    }
+
     class RowEnumerator : IEnumerable<float>
     {
         private readonly Matrix _matrix;
