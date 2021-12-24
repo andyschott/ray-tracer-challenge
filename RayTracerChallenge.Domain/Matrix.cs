@@ -204,6 +204,19 @@ public class Matrix
         return subMatrix.Determinant();
     }
 
+    public float Cofactor(int row, int column)
+    {
+        var minor = Minor(row, column);
+
+        // Negate the minor of row + column is odd
+        if((row + column) % 2 != 0)
+        {
+            minor *= -1;
+        }
+
+        return minor;
+    }
+
     class RowEnumerator : IEnumerable<float>
     {
         private readonly Matrix _matrix;

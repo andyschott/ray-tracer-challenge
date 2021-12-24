@@ -177,7 +177,19 @@ public class MatrixTests
     }
 
     [Fact]
-    public void MinorOfMatrix()
+    public void Extract4x4Matrix()
+    {
+        var matrix = new Matrix(4, 4, -6, 1, 1, 6, -8, 5, 8, 6, -1, 0, 8, 2, -7, 1, -1, 1);
+
+        var subMatrix = matrix.ExtractSubMatrix(2, 1);
+
+        var expectedResult = new Matrix(3, 3, -6, 1, 6, -8, 8, 6, -7, -1, 1);
+
+        Assert.Equal(expectedResult, subMatrix, _matrixComparer);
+    }
+
+    [Fact]
+    public void Minor()
     {
         var matrix = new Matrix(3, 3, 3, 5, 0, 2, -1, -7, 6, -1, 5);
 
@@ -190,15 +202,17 @@ public class MatrixTests
     }
 
     [Fact]
-    public void Extract4x4Matrix()
+    public void Cofactor()
     {
-        var matrix = new Matrix(4, 4, -6, 1, 1, 6, -8, 5, 8, 6, -1, 0, 8, 2, -7, 1, -1, 1);
+        var matrix = new Matrix(3, 3, 3, 5, 0, 2, -1, -7, 6, -1, 5);
 
-        var subMatrix = matrix.ExtractSubMatrix(2, 1);
+        var cofactor = matrix.Cofactor(0, 0);
+        var minor = matrix.Minor(0, 0);
+        Assert.Equal(minor, cofactor);
 
-        var expectedResult = new Matrix(3, 3, -6, 1, 6, -8, 8, 6, -7, -1, 1);
-
-        Assert.Equal(expectedResult, subMatrix, _matrixComparer);
+        cofactor = matrix.Cofactor(1, 0);
+        minor = matrix.Minor(1, 0);
+        Assert.Equal(minor * -1, cofactor);
     }
 
     private float[,] CreateTestData(int width, int height)
