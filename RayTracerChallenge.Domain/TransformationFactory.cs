@@ -16,4 +16,14 @@ public class TransformationFactory
 
         return matrix;
     }
+
+    public Matrix Scale(float x, float y, float z)
+    {
+        var matrix = Matrix.IdentityMatrix(4, 4);
+        matrix[0,0] = x;
+        matrix[1,1] = y;
+        matrix[2,2] = z;
+
+        return matrix;
+    }
 }
