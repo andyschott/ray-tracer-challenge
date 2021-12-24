@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RayTracerChallenge.Domain\RayTracerChallenge.Domain.csproj" />
+    <ProjectReference Include="..\RayTracerChallenge.IO.PPM\RayTracerChallenge.IO.PPM.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
