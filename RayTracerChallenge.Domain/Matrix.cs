@@ -142,13 +142,15 @@ public class Matrix
 
     public float Determinant()
     {
-        if(Width != 2 && Height != 2)
+        if(Width == 2 && Height == 2)
         {
-            throw new Exception("can only compute determinant of a 2x2 matrix");
+            return this[0,0] * this[1,1] - 
+                this[0,1] * this[1,0];
         }
 
-        return this[0,0] * this[1,1] - 
-            this[0,1] * this[1,0];
+        var row = GetRow(0);
+        return row.Select((value, index) => value * Cofactor(0, index))
+            .Sum();
     }
 
     public Matrix ExtractSubMatrix(int row, int column)

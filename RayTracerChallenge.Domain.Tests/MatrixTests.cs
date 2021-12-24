@@ -215,6 +215,45 @@ public class MatrixTests
         Assert.Equal(minor * -1, cofactor);
     }
 
+    [Fact]
+    public void CalculateDeterminantOf3x3Matrix()
+    {
+        var matrix = new Matrix(3, 3, 1, 2, 6, -5, 8, -4, 2, 6, 4);
+
+        var cofactor = matrix.Cofactor(0, 0);
+        Assert.Equal(56, cofactor);
+
+        cofactor = matrix.Cofactor(0, 1);
+        Assert.Equal(12, cofactor);
+
+        cofactor = matrix.Cofactor(0, 2);
+        Assert.Equal(-46, cofactor);
+
+        var determinant = matrix.Determinant();
+        Assert.Equal(-196, determinant);
+    }
+
+    [Fact]
+    public void CalculateDeterminantOf4x4Matrix()
+    {
+        var matrix = new Matrix(4, 4, -2, -8, 3, 5, -3, 1, 7, 3, 1, 2, -9, 6, -6, 7, 7, -9);
+
+        var cofactor = matrix.Cofactor(0, 0);
+        Assert.Equal(690, cofactor);
+
+        cofactor = matrix.Cofactor(0, 1);
+        Assert.Equal(447, cofactor);
+
+        cofactor = matrix.Cofactor(0, 2);
+        Assert.Equal(210, cofactor);
+
+        cofactor = matrix.Cofactor(0, 3);
+        Assert.Equal(51, cofactor);
+
+        var determinant = matrix.Determinant();
+        Assert.Equal(-4071, determinant);
+    }
+
     private float[,] CreateTestData(int width, int height)
     {
         var data = new float[width, height];
