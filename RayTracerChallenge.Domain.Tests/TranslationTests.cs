@@ -146,4 +146,25 @@ public class TranslationTests
         var expectedResult = Tuple.CreatePoint(expectedX, expectedY, expectedZ);
         Assert.Equal(expectedResult, result, _tupleComparer);
     }
+
+    [Theory]
+    [InlineData(1, 0, 0, 0, 0, 0, 5, 3, 4)]
+    [InlineData(0, 1, 0, 0, 0, 0, 6, 3, 4)]
+    [InlineData(0, 0, 1, 0, 0, 0, 2, 5, 4)]
+    [InlineData(0, 0, 0, 1, 0, 0, 2, 7, 4)]
+    [InlineData(0, 0, 0, 0, 1, 0, 2, 3, 6)]
+    [InlineData(0, 0, 0, 0, 0, 1, 2, 3, 7)]
+    public void ShearXToY(float xToY, float xToZ,
+        float yToX, float yToZ,
+        float zToX, float zToY,
+        float expectedX, float expectedY, float expectedZ)
+    {
+        var transform = _factory.Shearing(xToY, xToZ, yToX, yToZ, zToX, zToY);
+        var point = Tuple.CreatePoint(2, 3, 4);
+
+        var result = transform * point;
+
+        var expectedResult = Tuple.CreatePoint(expectedX, expectedY, expectedZ);
+        Assert.Equal(expectedResult, result, _tupleComparer);
+    }
 }

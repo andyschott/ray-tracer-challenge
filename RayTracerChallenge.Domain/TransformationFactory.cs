@@ -71,4 +71,18 @@ public class TransformationFactory
         return matrix;
     }
 
+    public Matrix Shearing(float xToY, float xToZ,
+        float yToX, float yToZ,
+        float zToX, float zToY)
+    {
+        var matrix = Matrix.IdentityMatrix(4, 4);
+        matrix[0,1] = xToY;
+        matrix[0,2] = xToZ;
+        matrix[1,0] = yToX;
+        matrix[1,2] = yToZ;
+        matrix[2,0] = zToX;
+        matrix[2,1] = zToY;
+
+        return matrix;
+    }
 }
