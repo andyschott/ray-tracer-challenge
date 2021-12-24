@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace RayTracerChallenge.Domain;
 
 public class Matrix
@@ -244,6 +246,19 @@ public class Matrix
         }
 
         return matrix;
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+
+        for(var y = 0; y < Height; ++y)
+        {
+            var row = GetRow(y);
+            sb.AppendLine(string.Join(", ", row.Select(value => value.ToString("F"))));
+        }
+
+        return sb.ToString();
     }
 
     class RowEnumerator : IEnumerable<float>

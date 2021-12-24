@@ -52,4 +52,6 @@ public record class Color
     }
 
     public static Color operator *(Color color1, Color color2) => color1.Multiply(color2);
+
+    public override string ToString() => $"{Red}, {Green}, {Blue}";
 }
