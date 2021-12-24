@@ -188,6 +188,22 @@ public class Matrix
         return matrix;
     }
 
+    public float Minor(int row, int column)
+    {
+        if(column < 0 || column >= Width)
+        {
+            throw new ArgumentOutOfRangeException(nameof(column));
+        }
+
+        if(row < 0 || row >= Height)
+        {
+            throw new ArgumentOutOfRangeException(nameof(row));
+        }
+
+        var subMatrix = ExtractSubMatrix(row, column);
+        return subMatrix.Determinant();
+    }
+
     class RowEnumerator : IEnumerable<float>
     {
         private readonly Matrix _matrix;

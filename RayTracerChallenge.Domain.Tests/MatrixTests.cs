@@ -177,6 +177,19 @@ public class MatrixTests
     }
 
     [Fact]
+    public void MinorOfMatrix()
+    {
+        var matrix = new Matrix(3, 3, 3, 5, 0, 2, -1, -7, 6, -1, 5);
+
+        var minor = matrix.Minor(1, 0);
+
+        var subMatrix = matrix.ExtractSubMatrix(1, 0);
+        var determinant = subMatrix.Determinant();
+
+        Assert.Equal(determinant, minor);
+    }
+
+    [Fact]
     public void Extract4x4Matrix()
     {
         var matrix = new Matrix(4, 4, -6, 1, 1, 6, -8, 5, 8, 6, -1, 0, 8, 2, -7, 1, -1, 1);
