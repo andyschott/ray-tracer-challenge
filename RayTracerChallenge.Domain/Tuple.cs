@@ -17,6 +17,18 @@ public record class Tuple
     internal const float Point = 1.0F;
     internal const float Vector = 0.0F;
 
+    public Tuple()
+    {
+    }
+
+    public Tuple(float x, float y, float z, float w)
+    {
+        X = x;
+        Y = y;
+        Z = z;
+        W = w;
+    }
+
     public static Tuple CreatePoint(float x, float y, float z)
     {
         return new Tuple
