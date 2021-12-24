@@ -104,7 +104,7 @@ public class MatrixTests
     public void MultiplyMatrixByIdentityMatrix()
     {
         var matrix = new Matrix(CreateTestData(4, 4));
-        var identityMatrix = Matrix.IdentityMatrix(4, 4);
+        var identityMatrix = Matrix.Identity(4, 4);
 
         var product = matrix.Multiply(identityMatrix);
 
@@ -121,7 +121,7 @@ public class MatrixTests
             Z = _fixture.Create<float>(),
             W = _fixture.Create<float>()
         };
-        var identityMatrix = Matrix.IdentityMatrix(4, 4);
+        var identityMatrix = Matrix.Identity(4, 4);
 
         var product = identityMatrix.Multiply(tuple);
         
@@ -147,7 +147,7 @@ public class MatrixTests
     [Fact]
     public void TransposeIdentityMatrix()
     {
-        var identityMatrix = Matrix.IdentityMatrix(4, 4);
+        var identityMatrix = Matrix.Identity(4, 4);
 
         var result = identityMatrix.Transpose();
 

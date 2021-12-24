@@ -9,7 +9,7 @@ public class Matrix
     public int Width { get; }
     public int Height { get; }
 
-    public static Matrix IdentityMatrix(int width, int height)
+    public static Matrix Identity(int width = 4, int height = 4)
     {
         if(width != height)
         {
@@ -261,6 +261,7 @@ public class Matrix
         return sb.ToString();
     }
 
+#region Enumerators
     class RowEnumerator : IEnumerable<float>
     {
         private readonly Matrix _matrix;
@@ -368,5 +369,7 @@ public class Matrix
             {
                 _index = -1;
             }
-        }    }
+        }
+    }
+#endregion
 }
