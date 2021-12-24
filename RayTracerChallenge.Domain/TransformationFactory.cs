@@ -4,17 +4,12 @@ namespace RayTracerChallenge.Domain;
 
 public class TransformationFactory
 {
-    public Matrix Translation(Tuple amount)
+    public Matrix Translation(float x, float y, float z)
     {
-        if(!amount.IsPoint)
-        {
-            throw new ArgumentException($"{amount} must be a point", nameof(amount));
-        }
-
         var matrix = Matrix.IdentityMatrix(4, 4);
-        matrix[0,3] = amount.X;
-        matrix[1,3] = amount.Y;
-        matrix[2,3] = amount.Z;
+        matrix[0,3] = x;
+        matrix[1,3] = y;
+        matrix[2,3] = z;
 
         return matrix;
     }

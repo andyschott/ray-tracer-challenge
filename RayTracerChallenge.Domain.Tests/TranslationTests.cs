@@ -10,7 +10,7 @@ public class TranslationTests
     [Fact]
     public void TranslatePoint()
     {
-        var transform = _factory.Translation(Tuple.CreatePoint(5.0F, -3.0F, 2.0F));
+        var transform = _factory.Translation(5.0F, -3.0F, 2.0F);
         var point = Tuple.CreatePoint(-3.0F, 4.0F, 5.0F);
 
         var result = transform * point;
@@ -22,7 +22,7 @@ public class TranslationTests
     [Fact]
     public void InverseTranslatePoint()
     {
-        var transform = _factory.Translation(Tuple.CreatePoint(5.0F, -3.0F, 2.0F));
+        var transform = _factory.Translation(5.0F, -3.0F, 2.0F);
         var inverseTransform = transform.Invert();
         var point = Tuple.CreatePoint(-3.0F, 4.0F, 5.0F);
         
@@ -35,7 +35,7 @@ public class TranslationTests
     [Fact]
     public void TranslateVectorDoesNothing()
     {
-        var transform = _factory.Translation(Tuple.CreatePoint(5.0F, -3.0F, 2.0F));
+        var transform = _factory.Translation(5.0F, -3.0F, 2.0F);
         var vector = Tuple.CreateVector(-3.0F, 4.0F, 5.0F);
 
         var result = transform * vector;
@@ -165,6 +165,46 @@ public class TranslationTests
         var result = transform * point;
 
         var expectedResult = Tuple.CreatePoint(expectedX, expectedY, expectedZ);
+        Assert.Equal(expectedResult, result, _tupleComparer);
+    }
+
+    [Fact]
+    public void IndividualTransformationsAppliedInSequence()
+    {
+        var point = Tuple.CreatePoint(1, 0, 1);
+        var rotation = _factory.RotationAroundXAxis(Math.PI / 2);
+        var scaling = _factory.Scale(5, 5, 3);
+        var translation = _factory.Translation(10, 5, 7);
+
+        // Apply rotation first
+        var point2 = rotation * point;
+        var expectedResult = Tuple.CreatePoint(1, -1, 0);
+        Assert.Equal(expectedResult, point2, _tupleComparer);
+
+        // Then apply scaling
+        var point3 = scaling * point2;
+        expectedResult = Tuple.CreatePoint(5, -5, 0);
+        Assert.Equal(expectedResult, point3, _tupleComparer);
+
+        // Then apply translation
+        var point4 = translation * point3;
+        expectedResult = Tuple.CreatePoint(15, 0, 7);
+        Assert.Equal(expectedResult, point4, _tupleComparer);
+    }
+
+    [Fact]
+    public void ChainTransformations()
+    {
+        var point = Tuple.CreatePoint(1, 0, 1);
+        var rotation = _factory.RotationAroundXAxis(Math.PI / 2);
+        var scaling = _factory.Scale(5, 5, 3);
+        var translation = _factory.Translation(10, 5, 7);
+
+        var transform = translation * scaling * rotation;
+
+        var result = transform * point;
+
+        var expectedResult = Tuple.CreatePoint(15, 0, 7);
         Assert.Equal(expectedResult, result, _tupleComparer);
     }
 }
