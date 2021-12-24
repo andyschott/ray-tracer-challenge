@@ -140,6 +140,54 @@ public class Matrix
         return matrix;
     }
 
+    public float Determinant()
+    {
+        if(Width != 2 && Height != 2)
+        {
+            throw new Exception("can only compute determinant of a 2x2 matrix");
+        }
+
+        return this[0,0] * this[1,1] - 
+            this[0,1] * this[1,0];
+    }
+
+    public Matrix ExtractSubMatrix(int row, int column)
+    {
+        if(column < 0 || column >= Width)
+        {
+            throw new ArgumentOutOfRangeException(nameof(column));
+        }
+
+        if(row < 0 || row >= Height)
+        {
+            throw new ArgumentOutOfRangeException(nameof(row));
+        }
+
+        var matrix = new Matrix(Width - 1, Height - 1);
+
+        for(var y = 0; y < Height; ++y)
+        {
+            if(y == row)
+            {
+                continue;
+            }
+            
+            var destY = y > row ? y - 1 : y;
+            for(var x = 0; x < Width; ++x)
+            {
+                if(x == column)
+                {
+                    continue;
+                }
+
+                var destX = x > column ? x - 1 : x;
+                matrix[destY,destX] = this[y,x];
+            }
+        }
+
+        return matrix;
+    }
+
     class RowEnumerator : IEnumerable<float>
     {
         private readonly Matrix _matrix;

@@ -154,6 +154,40 @@ public class MatrixTests
         Assert.Equal(identityMatrix, result, _matrixComparer);
     }
 
+    [Fact]
+    public void CalculateDeterminantOf2x2Matrix()
+    {
+        var matrix = new Matrix(2, 2, 1, 5, -3, 2);
+
+        var determinant = matrix.Determinant();
+
+        Assert.Equal(17.0F, determinant);
+    }
+
+    [Fact]
+    public void Extract3x3Matrix()
+    {
+        var matrix = new Matrix(3, 3, 1, 5, 0, -3, 2, 7, 0, 6, -3);
+
+        var subMatrix = matrix.ExtractSubMatrix(0, 2);
+
+        var expectedResult = new Matrix(2, 2, -3, 2, 0, 6);
+
+        Assert.Equal(expectedResult, subMatrix, _matrixComparer);
+    }
+
+    [Fact]
+    public void Extract4x4Matrix()
+    {
+        var matrix = new Matrix(4, 4, -6, 1, 1, 6, -8, 5, 8, 6, -1, 0, 8, 2, -7, 1, -1, 1);
+
+        var subMatrix = matrix.ExtractSubMatrix(2, 1);
+
+        var expectedResult = new Matrix(3, 3, -6, 1, 6, -8, 8, 6, -7, -1, 1);
+
+        Assert.Equal(expectedResult, subMatrix, _matrixComparer);
+    }
+
     private float[,] CreateTestData(int width, int height)
     {
         var data = new float[width, height];
