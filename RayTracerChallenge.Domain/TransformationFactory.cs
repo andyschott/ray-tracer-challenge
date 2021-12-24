@@ -1,3 +1,5 @@
+using Math = System.Math;
+
 namespace RayTracerChallenge.Domain;
 
 public class TransformationFactory
@@ -26,4 +28,47 @@ public class TransformationFactory
 
         return matrix;
     }
+
+    public Matrix RotationAroundXAxis(double radians)
+    {
+        var cos = (float)Math.Cos(radians);
+        var sin = (float)Math.Sin(radians);
+
+        var matrix = Matrix.IdentityMatrix(4, 4);
+        matrix[1,1] = cos;
+        matrix[1,2] = -1 * sin;
+        matrix[2,1] = sin;
+        matrix[2,2] = cos;
+
+        return matrix;
+    }
+    
+    public Matrix RotationAroundYAxis(double radians)
+    {
+        var cos = (float)Math.Cos(radians);
+        var sin = (float)Math.Sin(radians);
+
+        var matrix = Matrix.IdentityMatrix(4, 4);
+        matrix[0,0] = cos;
+        matrix[0,2] = sin;
+        matrix[2,0] = -1 * sin;
+        matrix[2,2] = cos;
+
+        return matrix;
+    }
+
+    public Matrix RotationAroundZAxis(double radians)
+    {
+        var cos = (float)Math.Cos(radians);
+        var sin = (float)Math.Sin(radians);
+
+        var matrix = Matrix.IdentityMatrix(4, 4);
+        matrix[0,0] = cos;
+        matrix[0,1] = -1 * sin;
+        matrix[1,0] = sin;
+        matrix[1,1] = cos;
+        
+        return matrix;
+    }
+
 }

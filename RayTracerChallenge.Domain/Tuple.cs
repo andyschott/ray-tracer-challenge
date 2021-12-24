@@ -173,5 +173,5 @@ public record class Tuple
             X * other.Y - Y * other.X);
     }
 
-    public override string ToString() => $"({X}, {Y}, {Z}, {W}";
+    public override string ToString() => $"({X}, {Y}, {Z}, {W})";
 }

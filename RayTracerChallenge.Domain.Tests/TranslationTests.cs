@@ -1,5 +1,7 @@
 namespace RayTracerChallenge.Domain.Tests;
 
+using Math = System.Math;
+
 public class TranslationTests
 {
     private readonly TransformationFactory _factory = new TransformationFactory();
@@ -87,6 +89,61 @@ public class TranslationTests
         var result = transform * point;
 
         var expectedResult = Tuple.CreatePoint(-2.0F, 3.0F, 4.0F);
+        Assert.Equal(expectedResult, result, _tupleComparer);
+    }
+
+    [Theory]
+    [InlineData(Math.PI / 4, 0.0F, 0.7071067812F, 0.7071067812F)]
+    [InlineData(Math.PI / 2, 0.0F, 0.0F, 1.0F)]
+    public void RotatePointAroundXAxis(double radians, float expectedX, float expectedY, float expectedZ)
+    {
+        var point = Tuple.CreatePoint(0.0F, 1.0F, 0.0F);
+        var rotation = _factory.RotationAroundXAxis(radians);
+
+        var result = rotation * point;
+
+        var expectedResult = Tuple.CreatePoint(expectedX, expectedY, expectedZ);
+        Assert.Equal(expectedResult, result, _tupleComparer);
+    }
+
+    [Fact]
+    public void InverseRotationAroundXAxis()
+    {
+        var point = Tuple.CreatePoint(0.0F, 1.0F, 0.0F);
+        var rotation = _factory.RotationAroundXAxis(Math.PI / 4);
+        var inverse = rotation.Invert();
+
+        var result = inverse * point;
+
+        var expectedResult = Tuple.CreatePoint(0.0F, 0.7071067812F, -0.7071067812F);
+        Assert.Equal(expectedResult, result, _tupleComparer);
+    }
+
+    [Theory]
+    [InlineData(Math.PI / 4, 0.7071067812F, 0.0F, 0.7071067812F)]
+    [InlineData(Math.PI / 2, 1.0F, 0.0F, 0.0F)]
+    public void RotatePointAroundYAxis(double radians, float expectedX, float expectedY, float expectedZ)
+    {
+        var point = Tuple.CreatePoint(0.0F, 0.0F, 1.0F);
+        var rotation = _factory.RotationAroundYAxis(radians);
+
+        var result = rotation * point;
+
+        var expectedResult = Tuple.CreatePoint(expectedX, expectedY, expectedZ);
+        Assert.Equal(expectedResult, result, _tupleComparer);
+    }
+
+    [Theory]
+    [InlineData(Math.PI / 4, -0.7071067812F, 0.7071067812F, 0.0F)]
+    [InlineData(Math.PI / 2, -1.0F, 0.0F, 0.0F)]
+    public void RotatePointAroundZAxis(double radians, float expectedX, float expectedY, float expectedZ)
+    {
+        var point = Tuple.CreatePoint(0.0F, 1.0F, 0.0F);
+        var rotation = _factory.RotationAroundZAxis(radians);
+
+        var result = rotation * point;
+
+        var expectedResult = Tuple.CreatePoint(expectedX, expectedY, expectedZ);
         Assert.Equal(expectedResult, result, _tupleComparer);
     }
 }

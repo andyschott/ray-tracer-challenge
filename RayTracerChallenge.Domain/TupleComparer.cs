@@ -4,6 +4,8 @@ namespace RayTracerChallenge.Domain;
 
 public class TupleComparer : IEqualityComparer<Tuple>
 {
+    private const float Epsilon = 0.0001F;
+    
     public bool Equals(Tuple? x, Tuple? y)
     {
         if(x is null && y is null)
@@ -15,10 +17,10 @@ public class TupleComparer : IEqualityComparer<Tuple>
             return false;
         }
 
-        return x.X == y.X &&
-            x.Y == y.Y &&
-            x.Z == y.Z &&
-            x.W == y.W;
+        return Math.Abs(x.X - y.X) < Epsilon &&
+            Math.Abs(x.Y - y.Y) < Epsilon &&
+            Math.Abs(x.Z - y.Z) < Epsilon &&
+            Math.Abs(x.W - y.W) < Epsilon;
     }
 
     public int GetHashCode([DisallowNull] Tuple obj)
