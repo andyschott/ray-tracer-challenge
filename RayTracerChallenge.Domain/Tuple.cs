@@ -6,22 +6,22 @@ namespace RayTracerChallenge.Domain;
 
 public record class Tuple
 {
-    public float X { get; init; }
-    public float Y { get; init; }
-    public float Z { get; init; }
-    public float W { get; init; }
+    public decimal X { get; init; }
+    public decimal Y { get; init; }
+    public decimal Z { get; init; }
+    public decimal W { get; init; }
 
     public bool IsPoint => W == Point;
     public bool IsVector => W == Vector;
 
-    internal const float Point = 1.0F;
-    internal const float Vector = 0.0F;
+    internal const decimal Point = 1;
+    internal const decimal Vector = 0;
 
     public Tuple()
     {
     }
 
-    public Tuple(float x, float y, float z, float w)
+    public Tuple(decimal x, decimal y, decimal z, decimal w)
     {
         X = x;
         Y = y;
@@ -29,7 +29,7 @@ public record class Tuple
         W = w;
     }
 
-    public static Tuple CreatePoint(float x, float y, float z)
+    public static Tuple CreatePoint(decimal x, decimal y, decimal z)
     {
         return new Tuple
         {
@@ -40,7 +40,7 @@ public record class Tuple
         };
     }
 
-    public static Tuple CreateVector(float x, float y, float z)
+    public static Tuple CreateVector(decimal x, decimal y, decimal z)
     {
         return new Tuple
         {
@@ -100,7 +100,7 @@ public record class Tuple
 
     public static Tuple operator -(Tuple x) => x.Negate();
 
-    public Tuple Multiply(float factor)
+    public Tuple Multiply(decimal factor)
     {
         return new Tuple
         {
@@ -111,11 +111,11 @@ public record class Tuple
         };
     }
 
-    public static Tuple operator *(Tuple x, float factor) => x.Multiply(factor);
+    public static Tuple operator *(Tuple x, decimal factor) => x.Multiply(factor);
 
-    public Tuple Divide(float factor)
+    public Tuple Divide(decimal factor)
     {
-        if(factor == 0.0F)
+        if(factor == 0)
         {
             throw new DivideByZeroException();
         }
@@ -129,12 +129,12 @@ public record class Tuple
         };
     }
 
-    public static Tuple operator /(Tuple x, float factor) => x.Divide(factor);
+    public static Tuple operator /(Tuple x, decimal factor) => x.Divide(factor);
 
-    public float Magnitude()
+    public decimal Magnitude()
     {
-        var sum = Math.Pow(X, 2) + Math.Pow(Y, 2) + Math.Pow(Z, 2) + Math.Pow(W, 2);
-        return (float)Math.Sqrt(sum);
+        var sum = Math.Pow((double)X, 2) + Math.Pow((double)Y, 2) + Math.Pow((double)Z, 2) + Math.Pow((double)W, 2);
+        return (decimal)Math.Sqrt(sum);
     }
 
     public Tuple Normalize()
@@ -149,7 +149,7 @@ public record class Tuple
         };
     }
 
-    public float DotProduct(Tuple other)
+    public decimal DotProduct(Tuple other)
     {
         return X * other.X +
             Y * other.Y +
@@ -173,5 +173,5 @@ public record class Tuple
             X * other.Y - Y * other.X);
     }
 
-    public override string ToString() => $"({X}, {Y}, {Z}, {W}";
+    public override string ToString() => $"({X}, {Y}, {Z}, {W})";
 }

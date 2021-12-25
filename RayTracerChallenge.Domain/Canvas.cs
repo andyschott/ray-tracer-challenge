@@ -19,9 +19,9 @@ public class Canvas : IEnumerable<Color>
             {
                 _pixels[x,y] = new Color
                 {
-                    Red = 0.0F,
-                    Green = 0.0F,
-                    Blue = 0.0F
+                    Red = 0,
+                    Green = 0,
+                    Blue = 0
                 };
             }
         }

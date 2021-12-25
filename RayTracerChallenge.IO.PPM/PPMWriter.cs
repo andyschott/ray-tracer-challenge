@@ -54,10 +54,10 @@ public class PPMWriter
         }
     }
 
-    private static int Convert(float value)
+    private static int Convert(decimal value)
     {
-        value = Math.Min(1.0F, value);
-        value = Math.Max(0.0F, value);
+        value = Math.Min(1, value);
+        value = Math.Max(0, value);
 
         value = value * 255;
         return (int)Math.Round(value, 0);

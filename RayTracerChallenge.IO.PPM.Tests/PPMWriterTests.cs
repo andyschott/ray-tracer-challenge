@@ -30,21 +30,21 @@ public class PPMWriterTests
         var canvas = new Canvas(5, 3);
         var c1 = new Color
         {
-            Red = 1.5F,
-            Green = 0.0F,
-            Blue = 0.0F
+            Red = 1.5M,
+            Green = 0,
+            Blue = 0
         };
         var c2 = new Color
         {
-            Red = 0.0F,
-            Green = 0.5F,
-            Blue = 0.0F
+            Red = 0,
+            Green = 0.5M,
+            Blue = 0
         };
         var c3 = new Color
         {
-            Red = -0.5F,
-            Green = 0.0F,
-            Blue = 1.0F
+            Red = -0.5M,
+            Green = 0,
+            Blue = 1
         };
 
         canvas.WritePixel(0, 0, c1);
@@ -77,9 +77,9 @@ public class PPMWriterTests
             {
                 canvas[x, y] = new Color
                 {
-                    Red = 1.0F,
-                    Green = 0.8F,
-                    Blue = 0.6F
+                    Red = 1,
+                    Green = 0.8M,
+                    Blue = 0.6M
                 };
             }
         }

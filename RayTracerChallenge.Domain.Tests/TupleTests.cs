@@ -11,7 +11,7 @@ public class TupleTests
     public void TupleIsPoint()
     {
         var tuple = _fixture.Build<Tuple>()
-            .With(tuple => tuple.W, 1.0)
+            .With(tuple => tuple.W, 1)
             .Create();
 
         Assert.True(tuple.IsPoint);
@@ -22,7 +22,7 @@ public class TupleTests
     public void TupleIsVector()
     {
         var tuple = _fixture.Build<Tuple>()
-            .With(tuple => tuple.W, 0.0)
+            .With(tuple => tuple.W, 0)
             .Create();
 
         Assert.False(tuple.IsPoint);
@@ -32,9 +32,9 @@ public class TupleTests
     [Fact]
     public void CreateTupleAsPoint()
     {
-        var x = _fixture.Create<float>();
-        var y = _fixture.Create<float>();
-        var z = _fixture.Create<float>();
+        var x = _fixture.Create<decimal>();
+        var y = _fixture.Create<decimal>();
+        var z = _fixture.Create<decimal>();
 
         var tuple = Tuple.CreatePoint(x, y, z);
 
@@ -54,9 +54,9 @@ public class TupleTests
     [Fact]
     public void CreateTupleAsVector()
     {
-        var x = _fixture.Create<float>();
-        var y = _fixture.Create<float>();
-        var z = _fixture.Create<float>();
+        var x = _fixture.Create<decimal>();
+        var y = _fixture.Create<decimal>();
+        var z = _fixture.Create<decimal>();
 
         var tuple = Tuple.CreateVector(x, y, z);
 
@@ -170,7 +170,7 @@ public class TupleTests
     [Fact]
     public void SubtractVectorFromZeroVector()
     {
-        var zero = Tuple.CreateVector(0.0F, 0.0F, 0.0F);
+        var zero = Tuple.CreateVector(0, 0, 0);
         var vector = CreateVector();
 
         var result = zero.Subtract(vector);
@@ -208,7 +208,7 @@ public class TupleTests
     public void MultplyTupleByScalar()
     {
         var tuple = _fixture.Create<Tuple>();
-        var factor = _fixture.Create<float>();
+        var factor = _fixture.Create<decimal>();
 
         var result = tuple.Multiply(factor);
 
@@ -227,7 +227,7 @@ public class TupleTests
     public void DivideTupleByScalar()
     {
         var tuple = _fixture.Create<Tuple>();
-        var factor = _fixture.Create<float>();
+        var factor = _fixture.Create<decimal>();
 
         var result = tuple.Divide(factor);
 
@@ -247,28 +247,28 @@ public class TupleTests
     {
         var tuple = _fixture.Create<Tuple>();
 
-        Assert.Throws<DivideByZeroException>(() => tuple.Divide(0.0F));
+        Assert.Throws<DivideByZeroException>(() => tuple.Divide(0));
     }
 
     [Theory]
-    [InlineData(1.0F, 0.0F, 0.0F, 1.0F)]
-    [InlineData(0.0F, 1.0F, 0.0F, 1.0F)]
-    [InlineData(0.0F, 0.0F, 1.0F, 1.0F)]
-    [InlineData(1.0F, 2.0F, 3.0F, 3.7416573868F)]
-    [InlineData(-1.0F, -2.0F, -3.0F, 3.7416573868F)]
-    public void ComputeMagnitudeOfVector(float x, float y, float z, float expectedMagnitude)
+    [InlineData(1, 0, 0, 1)]
+    [InlineData(0, 1, 0, 1)]
+    [InlineData(0, 0, 1, 1)]
+    [InlineData(1, 2, 3, 3.7416573868)]
+    [InlineData(-1, -2, -3, 3.7416573868)]
+    public void ComputeMagnitudeOfVector(decimal x, decimal y, decimal z, decimal expectedMagnitude)
     {
         var tuple = Tuple.CreateVector(x, y, z);
 
         var magnitude = tuple.Magnitude();
 
-        Assert.Equal(expectedMagnitude, magnitude);
+        Assert.True(Math.Abs(expectedMagnitude - magnitude) < 0.0001M);
     }
 
     [Theory]
-    [InlineData(4.0F, 0.0F, 0.0F, 4.0F)]
-    [InlineData(1.0F, 2.0F, 3.0F, 3.7416573868F)]
-    public void NormalizeVector(float x, float y, float z, float expectedMagnitude)
+    [InlineData(4, 0, 0, 4)]
+    [InlineData(1, 2, 3, 3.7416573868F)]
+    public void NormalizeVector(decimal x, decimal y, decimal z, decimal expectedMagnitude)
     {
         var vector = Tuple.CreateVector(x, y, z);
 
@@ -292,7 +292,7 @@ public class TupleTests
         var normalized = vector.Normalize();
         var magnitude = normalized.Magnitude();
 
-        Assert.True(Math.Abs(1.0F - magnitude) < 0.01F);
+        Assert.True(Math.Abs(1 - magnitude) < 0.0001M);
     }
 
     [Fact]
