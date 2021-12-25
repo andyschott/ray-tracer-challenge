@@ -292,7 +292,7 @@ public class TupleTests
         var normalized = vector.Normalize();
         var magnitude = normalized.Magnitude();
 
-        Assert.Equal(1, magnitude);
+        Assert.True(Math.Abs(1 - magnitude) < 0.0001M);
     }
 
     [Fact]
