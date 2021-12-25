@@ -24,4 +24,9 @@ public class Ray
     {
         return Origin + Direction * t;
     }
+
+    public Ray Transform(Matrix transform)
+    {
+        return new Ray(transform * Origin, transform * Direction);
+    }
 }

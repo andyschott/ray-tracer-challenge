@@ -6,8 +6,12 @@ public class Sphere
     {
     }
 
+    public Matrix Transform { get; set; } = Matrix.Identity();
+
     public IEnumerable<Intersection> Intersects(Ray ray)
     {
+        ray = ray.Transform(Transform.Invert());
+        
         // This assumes the sphere is centered at the world's origin
         var sphereToRay = ray.Origin - Tuple.CreatePoint(0, 0, 0);
 

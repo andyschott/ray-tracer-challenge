@@ -4,7 +4,9 @@ namespace RayTracerChallenge.Domain.Tests;
 
 public class RayTests
 {
-    private TupleComparer _tupleComparer = new TupleComparer();
+    private readonly TransformationFactory _factory = new TransformationFactory();
+    private readonly TupleComparer _tupleComparer = new TupleComparer();
+    private readonly RayComparer _rayComparer = new RayComparer();
 
     [Fact]
     public void CreateRay()
@@ -14,8 +16,8 @@ public class RayTests
 
         var ray = new Ray(origin, direction);
 
-        Assert.Equal(origin, ray.Origin, _tupleComparer);
-        Assert.Equal(direction, ray.Direction, _tupleComparer);
+        var expectedResult = new Ray(origin, direction);
+        Assert.Equal(expectedResult, ray, _rayComparer);
     }
 
     [Fact]
@@ -49,5 +51,29 @@ public class RayTests
 
         var expectedResult = Tuple.CreatePoint(expectedX, expectedY, expectedZ);
         Assert.Equal(expectedResult, position, _tupleComparer);
+    }
+
+    [Fact]
+    public void TranslateRay()
+    {
+        var ray = new Ray(Tuple.CreatePoint(1, 2, 3), Tuple.CreateVector(0, 1, 0));
+        var translation = _factory.Translation(3, 4, 5);
+
+        var result = ray.Transform(translation);
+
+        var expectedResult = new Ray(Tuple.CreatePoint(4, 6, 8), Tuple.CreateVector(0, 1, 0));
+        Assert.Equal(expectedResult, result, _rayComparer);
+    }
+
+    [Fact]
+    public void ScaleRay()
+    {
+        var ray = new Ray(Tuple.CreatePoint(1, 2, 3), Tuple.CreateVector(0, 1, 0));
+        var scale = _factory.Scale(2, 3, 4);
+
+        var result = ray.Transform(scale);
+
+        var expectedResult = new Ray(Tuple.CreatePoint(2, 6, 12), Tuple.CreateVector(0, 3, 0));
+        Assert.Equal(expectedResult, result, _rayComparer);
     }
 }
