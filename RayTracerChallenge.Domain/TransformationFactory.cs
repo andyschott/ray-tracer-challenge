@@ -4,7 +4,7 @@ namespace RayTracerChallenge.Domain;
 
 public class TransformationFactory
 {
-    public Matrix Translation(float x, float y, float z)
+    public Matrix Translation(decimal x, decimal y, decimal z)
     {
         var matrix = Matrix.Identity(4, 4);
         matrix[0,3] = x;
@@ -14,7 +14,7 @@ public class TransformationFactory
         return matrix;
     }
 
-    public Matrix Scale(float x, float y, float z)
+    public Matrix Scale(decimal x, decimal y, decimal z)
     {
         var matrix = Matrix.Identity(4, 4);
         matrix[0,0] = x;
@@ -26,8 +26,8 @@ public class TransformationFactory
 
     public Matrix RotationAroundXAxis(double radians)
     {
-        var cos = (float)Math.Cos(radians);
-        var sin = (float)Math.Sin(radians);
+        var cos = (decimal)Math.Cos(radians);
+        var sin = (decimal)Math.Sin(radians);
 
         var matrix = Matrix.Identity(4, 4);
         matrix[1,1] = cos;
@@ -40,8 +40,8 @@ public class TransformationFactory
     
     public Matrix RotationAroundYAxis(double radians)
     {
-        var cos = (float)Math.Cos(radians);
-        var sin = (float)Math.Sin(radians);
+        var cos = (decimal)Math.Cos(radians);
+        var sin = (decimal)Math.Sin(radians);
 
         var matrix = Matrix.Identity(4, 4);
         matrix[0,0] = cos;
@@ -54,8 +54,8 @@ public class TransformationFactory
 
     public Matrix RotationAroundZAxis(double radians)
     {
-        var cos = (float)Math.Cos(radians);
-        var sin = (float)Math.Sin(radians);
+        var cos = (decimal)Math.Cos(radians);
+        var sin = (decimal)Math.Sin(radians);
 
         var matrix = Matrix.Identity(4, 4);
         matrix[0,0] = cos;
@@ -66,9 +66,9 @@ public class TransformationFactory
         return matrix;
     }
 
-    public Matrix Shearing(float xToY, float xToZ,
-        float yToX, float yToZ,
-        float zToX, float zToY)
+    public Matrix Shearing(decimal xToY, decimal xToZ,
+        decimal yToX, decimal yToZ,
+        decimal zToX, decimal zToY)
     {
         var matrix = Matrix.Identity(4, 4);
         matrix[0,1] = xToY;

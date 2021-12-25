@@ -10,33 +10,33 @@ public class TranslationTests
     [Fact]
     public void TranslatePoint()
     {
-        var transform = _factory.Translation(5.0F, -3.0F, 2.0F);
-        var point = Tuple.CreatePoint(-3.0F, 4.0F, 5.0F);
+        var transform = _factory.Translation(5, -3, 2);
+        var point = Tuple.CreatePoint(-3, 4, 5);
 
         var result = transform * point;
 
-        var expectedResult = Tuple.CreatePoint(2.0F, 1.0F, 7.0F);
+        var expectedResult = Tuple.CreatePoint(2, 1, 7);
         Assert.Equal(expectedResult, result, _tupleComparer);
     }
 
     [Fact]
     public void InverseTranslatePoint()
     {
-        var transform = _factory.Translation(5.0F, -3.0F, 2.0F);
+        var transform = _factory.Translation(5, -3, 2);
         var inverseTransform = transform.Invert();
-        var point = Tuple.CreatePoint(-3.0F, 4.0F, 5.0F);
+        var point = Tuple.CreatePoint(-3, 4, 5);
         
         var result = inverseTransform * point;
 
-        var expectedResult = Tuple.CreatePoint(-8.0F, 7.0F, 3.0F);
+        var expectedResult = Tuple.CreatePoint(-8, 7, 3);
         Assert.Equal(expectedResult, result, _tupleComparer);
     }
 
     [Fact]
     public void TranslateVectorDoesNothing()
     {
-        var transform = _factory.Translation(5.0F, -3.0F, 2.0F);
-        var vector = Tuple.CreateVector(-3.0F, 4.0F, 5.0F);
+        var transform = _factory.Translation(5, -3, 2);
+        var vector = Tuple.CreateVector(-3, 4, 5);
 
         var result = transform * vector;
 
@@ -46,58 +46,58 @@ public class TranslationTests
     [Fact]
     public void ScalePoint()
     {
-        var transform = _factory.Scale(2.0F, 3.0F, 4.0F);
-        var point = Tuple.CreatePoint(-4.0F, 6.0F, 8.0F);
+        var transform = _factory.Scale(2, 3, 4);
+        var point = Tuple.CreatePoint(-4, 6, 8);
 
         var result = transform * point;
 
-        var expectedResult = Tuple.CreatePoint(-8.0F, 18.0F, 32.0F);
+        var expectedResult = Tuple.CreatePoint(-8, 18, 32);
         Assert.Equal(expectedResult, result, _tupleComparer);
     }
 
     [Fact]
     public void ScaleVector()
     {
-        var transform = _factory.Scale(2.0F, 3.0F, 4.0F);
-        var vector = Tuple.CreateVector(-4.0F, 6.0F, 8.0F);
+        var transform = _factory.Scale(2, 3, 4);
+        var vector = Tuple.CreateVector(-4, 6, 8);
 
         var result = transform * vector;
 
-        var expectedResult = Tuple.CreateVector(-8.0F, 18.0F, 32.0F);
+        var expectedResult = Tuple.CreateVector(-8, 18, 32);
         Assert.Equal(expectedResult, result, _tupleComparer);
     }
 
     [Fact]
     public void ScaleByInverse()
     {
-        var transform = _factory.Scale(2.0F, 3.0F, 4.0F);
+        var transform = _factory.Scale(2, 3, 4);
         var inverse = transform.Invert();
-        var vector = Tuple.CreateVector(-4.0F, 6.0F, 8.0F);
+        var vector = Tuple.CreateVector(-4, 6, 8);
 
         var result = inverse * vector;
 
-        var expectedResult = Tuple.CreateVector(-2.0F, 2.0F, 2.0F);
-        Assert.Equal(expectedResult, result);
+        var expectedResult = Tuple.CreateVector(-2, 2, 2);
+        Assert.Equal(expectedResult, result, _tupleComparer);
     }
 
     [Fact]
     public void ReflectPoint()
     {
-        var transform = _factory.Scale(-1.0F, 1.0F, 1.0F);
-        var point = Tuple.CreatePoint(2.0F, 3.0F, 4.0F);
+        var transform = _factory.Scale(-1, 1, 1);
+        var point = Tuple.CreatePoint(2, 3, 4);
 
         var result = transform * point;
 
-        var expectedResult = Tuple.CreatePoint(-2.0F, 3.0F, 4.0F);
+        var expectedResult = Tuple.CreatePoint(-2, 3, 4);
         Assert.Equal(expectedResult, result, _tupleComparer);
     }
 
     [Theory]
-    [InlineData(Math.PI / 4, 0.0F, 0.7071067812F, 0.7071067812F)]
-    [InlineData(Math.PI / 2, 0.0F, 0.0F, 1.0F)]
-    public void RotatePointAroundXAxis(double radians, float expectedX, float expectedY, float expectedZ)
+    [InlineData(Math.PI / 4, 0, 0.7071067812F, 0.7071067812F)]
+    [InlineData(Math.PI / 2, 0, 0, 1)]
+    public void RotatePointAroundXAxis(double radians, decimal expectedX, decimal expectedY, decimal expectedZ)
     {
-        var point = Tuple.CreatePoint(0.0F, 1.0F, 0.0F);
+        var point = Tuple.CreatePoint(0, 1, 0);
         var rotation = _factory.RotationAroundXAxis(radians);
 
         var result = rotation * point;
@@ -109,22 +109,22 @@ public class TranslationTests
     [Fact]
     public void InverseRotationAroundXAxis()
     {
-        var point = Tuple.CreatePoint(0.0F, 1.0F, 0.0F);
+        var point = Tuple.CreatePoint(0, 1, 0);
         var rotation = _factory.RotationAroundXAxis(Math.PI / 4);
         var inverse = rotation.Invert();
 
         var result = inverse * point;
 
-        var expectedResult = Tuple.CreatePoint(0.0F, 0.7071067812F, -0.7071067812F);
+        var expectedResult = Tuple.CreatePoint(0, 0.7071067812M, -0.7071067812M);
         Assert.Equal(expectedResult, result, _tupleComparer);
     }
 
     [Theory]
-    [InlineData(Math.PI / 4, 0.7071067812F, 0.0F, 0.7071067812F)]
-    [InlineData(Math.PI / 2, 1.0F, 0.0F, 0.0F)]
-    public void RotatePointAroundYAxis(double radians, float expectedX, float expectedY, float expectedZ)
+    [InlineData(Math.PI / 4, 0.7071067812F, 0, 0.7071067812F)]
+    [InlineData(Math.PI / 2, 1, 0, 0)]
+    public void RotatePointAroundYAxis(double radians, decimal expectedX, decimal expectedY, decimal expectedZ)
     {
-        var point = Tuple.CreatePoint(0.0F, 0.0F, 1.0F);
+        var point = Tuple.CreatePoint(0, 0, 1);
         var rotation = _factory.RotationAroundYAxis(radians);
 
         var result = rotation * point;
@@ -134,11 +134,11 @@ public class TranslationTests
     }
 
     [Theory]
-    [InlineData(Math.PI / 4, -0.7071067812F, 0.7071067812F, 0.0F)]
-    [InlineData(Math.PI / 2, -1.0F, 0.0F, 0.0F)]
-    public void RotatePointAroundZAxis(double radians, float expectedX, float expectedY, float expectedZ)
+    [InlineData(Math.PI / 4, -0.7071067812F, 0.7071067812F, 0)]
+    [InlineData(Math.PI / 2, -1, 0, 0)]
+    public void RotatePointAroundZAxis(double radians, decimal expectedX, decimal expectedY, decimal expectedZ)
     {
-        var point = Tuple.CreatePoint(0.0F, 1.0F, 0.0F);
+        var point = Tuple.CreatePoint(0, 1, 0);
         var rotation = _factory.RotationAroundZAxis(radians);
 
         var result = rotation * point;
@@ -154,10 +154,10 @@ public class TranslationTests
     [InlineData(0, 0, 0, 1, 0, 0, 2, 7, 4)]
     [InlineData(0, 0, 0, 0, 1, 0, 2, 3, 6)]
     [InlineData(0, 0, 0, 0, 0, 1, 2, 3, 7)]
-    public void ShearXToY(float xToY, float xToZ,
-        float yToX, float yToZ,
-        float zToX, float zToY,
-        float expectedX, float expectedY, float expectedZ)
+    public void ShearXToY(decimal xToY, decimal xToZ,
+        decimal yToX, decimal yToZ,
+        decimal zToX, decimal zToY,
+        decimal expectedX, decimal expectedY, decimal expectedZ)
     {
         var transform = _factory.Shearing(xToY, xToZ, yToX, yToZ, zToX, zToY);
         var point = Tuple.CreatePoint(2, 3, 4);

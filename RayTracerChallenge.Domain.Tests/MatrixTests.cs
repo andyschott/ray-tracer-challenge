@@ -116,10 +116,10 @@ public class MatrixTests
     {
         var tuple = new Tuple
         {
-            X = _fixture.Create<float>(),
-            Y = _fixture.Create<float>(),
-            Z = _fixture.Create<float>(),
-            W = _fixture.Create<float>()
+            X = _fixture.Create<decimal>(),
+            Y = _fixture.Create<decimal>(),
+            Z = _fixture.Create<decimal>(),
+            W = _fixture.Create<decimal>()
         };
         var identityMatrix = Matrix.Identity(4, 4);
 
@@ -161,7 +161,7 @@ public class MatrixTests
 
         var determinant = matrix.Determinant();
 
-        Assert.Equal(17.0F, determinant);
+        Assert.Equal(17, determinant);
     }
 
     [Fact]
@@ -277,20 +277,20 @@ public class MatrixTests
 
         Assert.Equal(532, matrix.Determinant());
         Assert.Equal(-160, matrix.Cofactor(2, 3));
-        Assert.Equal(-160F / 532F, inverse[3, 2]);
+        Assert.Equal(-160M / 532M, inverse[3, 2]);
         Assert.Equal(105, matrix.Cofactor(3, 2));
-        Assert.Equal(105F / 532F, inverse[2, 3]);
+        Assert.Equal(105M / 532M, inverse[2, 3]);
 
-        var expectedResult = new Matrix(4, 4, 0.21805F, 0.45113F, 0.24060F, -0.04511F,
-            -0.80827F, -1.45677F, -0.44361F, 0.52068F,
-            -0.07895F, -0.22368F, -0.05263F, 0.19737F,
-            -0.52256F, -0.81391F, -0.30075F, 0.30639F);
+        var expectedResult = new Matrix(4, 4, 0.21805M, 0.45113M, 0.24060M, -0.04511M,
+            -0.80827M, -1.45677M, -0.44361M, 0.52068M,
+            -0.07895M, -0.22368M, -0.05263M, 0.19737M,
+            -0.52256M, -0.81391M, -0.30075M, 0.30639M);
         Assert.Equal(expectedResult, inverse, _matrixComparer);
     }
 
     [Theory]
     [MemberData(nameof(InvertTestData))]
-    public void InvertTestCases(float[] input, float[] result)
+    public void InvertTestCases(decimal[] input, decimal[] result)
     {
         var matrix = new Matrix(4, 4, input);
 
@@ -300,26 +300,26 @@ public class MatrixTests
         Assert.Equal(expectedResult, inverse, _matrixComparer);
     }
 
-    public static TheoryData<float[], float[]> InvertTestData => new TheoryData<float[], float[]>
+    public static TheoryData<decimal[], decimal[]> InvertTestData => new TheoryData<decimal[], decimal[]>
     {
         {
-            new[] { 8F, -5F, 9F, 2F, 7F, 5F, 6F, 1F, -6F, 0F, 9F, 6F, -3F, 0F, -9F, -4F },
+            new[] { 8M, -5M, 9M, 2M, 7M, 5M, 6M, 1M, -6M, 0M, 9M, 6M, -3M, 0M, -9M, -4M },
             new[]
             {
-                -0.15385F, -0.15385F, -0.28205F, -0.53846F,
-                -0.07692F, 0.12308F, 0.02564F, 0.03077F,
-                0.35897F, 0.35897F, 0.43590F, 0.92308F,
-                -0.69231F, -0.69231F, -0.76923F, -1.92308F
+                -0.15385M, -0.15385M, -0.28205M, -0.53846M,
+                -0.07692M, 0.12308M, 0.02564M, 0.03077M,
+                0.35897M, 0.35897M, 0.43590M, 0.92308M,
+                -0.69231M, -0.69231M, -0.76923M, -1.92308M
             }
         },
         {
-            new[] { 9F, 3F, 0F, 9F, -5F, -2F, -6F, -3F, -4F, 9F, 6F, 4F, -7F, 6F, 6F, 2F },
+            new[] { 9M, 3M, 0M, 9M, -5M, -2M, -6M, -3M, -4M, 9M, 6M, 4M, -7M, 6M, 6M, 2M },
             new[]
             {
-                -0.04074F, -0.07778F,  0.14444F, -0.22222F,
-                -0.07778F,  0.03333F,  0.36667F, -0.33333F,
-                -0.02901F, -0.14630F, -0.10926F,  0.12963F,
-                 0.17778F,  0.06667F, -0.26667F,  0.33333F
+                -0.04074M, -0.07778M,  0.14444M, -0.22222M,
+                -0.07778M,  0.03333M,  0.36667M, -0.33333M,
+                -0.02901M, -0.14630M, -0.10926M,  0.12963M,
+                 0.17778M,  0.06667M, -0.26667M,  0.33333M
             }
         }
     };
@@ -344,14 +344,14 @@ public class MatrixTests
         Assert.Throws<Exception>(() => matrix.Invert());
     }
 
-    private float[,] CreateTestData(int width, int height)
+    private decimal[,] CreateTestData(int width, int height)
     {
-        var data = new float[width, height];
+        var data = new decimal[width, height];
         for(var y = 0; y < height; ++y)
         {
             for(var x = 0; x < width; ++x)
             {
-                data[y, x] = _fixture.Create<float>();
+                data[y, x] = _fixture.Create<decimal>();
             }
         }
 

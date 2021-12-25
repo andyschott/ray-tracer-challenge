@@ -4,7 +4,7 @@ namespace RayTracerChallenge.Domain;
 
 public class TupleComparer : IEqualityComparer<Tuple>
 {
-    private const float Epsilon = 0.0001F;
+    private const decimal Epsilon = 0.0001M;
     
     public bool Equals(Tuple? x, Tuple? y)
     {

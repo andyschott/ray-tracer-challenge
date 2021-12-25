@@ -11,9 +11,9 @@ public class ColorComparerTests : AbstractComparerTests<Color>
     [Fact]
     public void SameValuesAreEqual()
     {
-        var r = _fixture.Create<float>();
-        var g = _fixture.Create<float>();
-        var b = _fixture.Create<float>();
+        var r = _fixture.Create<decimal>();
+        var g = _fixture.Create<decimal>();
+        var b = _fixture.Create<decimal>();
 
         var color1 = new Color
         {

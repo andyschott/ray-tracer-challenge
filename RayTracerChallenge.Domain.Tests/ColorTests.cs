@@ -8,9 +8,9 @@ public class ColorTests
     [Fact]
     public void ColorValues()
     {
-        var red = _fixture.Create<float>();
-        var green = _fixture.Create<float>();
-        var blue = _fixture.Create<float>();
+        var red = _fixture.Create<decimal>();
+        var green = _fixture.Create<decimal>();
+        var blue = _fixture.Create<decimal>();
 
         var color = _fixture.Build<Color>()
             .With(color => color.Red, red)
@@ -63,7 +63,7 @@ public class ColorTests
     public void MultiplyByScalar()
     {
         var color = _fixture.Create<Color>();
-        var scalar = _fixture.Create<float>();
+        var scalar = _fixture.Create<decimal>();
 
         var result = color.Multiply(scalar);
 

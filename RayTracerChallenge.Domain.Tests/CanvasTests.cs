@@ -22,9 +22,9 @@ public class CanvasTests
 
         var black = new Color
         {
-            Red = 0.0F,
-            Green = 0.0F,
-            Blue = 0.0F
+            Red = 0,
+            Green = 0,
+            Blue = 0
         };
         Assert.All(canvas, pixel => Assert.Equal(black, pixel, _comparer));
     }
@@ -39,9 +39,9 @@ public class CanvasTests
 
         var red = new Color
         {
-            Red = 1.0F,
-            Green = 0.0F,
-            Blue = 0.0F
+            Red = 1,
+            Green = 0,
+            Blue = 0
         };
 
         canvas.WritePixel(x, y, red);

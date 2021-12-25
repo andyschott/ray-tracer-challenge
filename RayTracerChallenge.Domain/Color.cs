@@ -1,9 +1,9 @@
 namespace RayTracerChallenge.Domain;
 public record class Color
 {
-    public float Red { get; init; }
-    public float Blue { get; init; }
-    public float Green { get; init; }
+    public decimal Red { get; init; }
+    public decimal Blue { get; init; }
+    public decimal Green { get; init; }
 
     public Color Add(Color other)
     {
@@ -29,7 +29,7 @@ public record class Color
 
     public static Color operator -(Color color1, Color color2) => color1.Subtract(color2);
 
-    public Color Multiply(float scalar)
+    public Color Multiply(decimal scalar)
     {
         return new Color
         {
@@ -39,7 +39,7 @@ public record class Color
         };
     }
 
-    public static Color operator *(Color color, float scalar) => color.Multiply(scalar);
+    public static Color operator *(Color color, decimal scalar) => color.Multiply(scalar);
 
     public Color Multiply(Color other)
     {

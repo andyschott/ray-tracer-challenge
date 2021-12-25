@@ -4,7 +4,7 @@ namespace RayTracerChallenge.Domain;
 
 public class MatrixComparer : IEqualityComparer<Matrix>
 {
-    private const float Epsilon = 0.0001F;
+    private const decimal Epsilon = 0.0001M;
 
     public bool Equals(Matrix? first, Matrix? second)
     {

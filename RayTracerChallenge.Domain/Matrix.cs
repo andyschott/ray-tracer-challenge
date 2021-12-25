@@ -4,7 +4,7 @@ namespace RayTracerChallenge.Domain;
 
 public class Matrix
 {
-    private readonly float[,] _data;
+    private readonly decimal[,] _data;
 
     public int Width { get; }
     public int Height { get; }
@@ -27,13 +27,13 @@ public class Matrix
 
     public Matrix(int width, int height)
     {
-        _data = new float[width, height];
+        _data = new decimal[width, height];
 
         Width = width;
         Height = height;
     }
 
-    public Matrix(float[,] data)
+    public Matrix(decimal[,] data)
         : this(data.GetLength(0), data.GetLength(1))
     {
         for(var y = 0; y < Height; ++y)
@@ -45,7 +45,7 @@ public class Matrix
         }
     }
 
-    public Matrix(int width, int height, params float[] data)
+    public Matrix(int width, int height, params decimal[] data)
         : this(width, height)
     {
         var index = 0;
@@ -59,18 +59,18 @@ public class Matrix
         }
     }
 
-    public float this[int y, int x]
+    public decimal this[int y, int x]
     {
         get => _data[x, y];
         set => _data[x, y] = value;
     }
 
-    public IEnumerable<float> GetRow(int y)
+    public IEnumerable<decimal> GetRow(int y)
     {
         return new RowEnumerator(this, y);
     }
 
-    public IEnumerable<float> GetColumn(int x)
+    public IEnumerable<decimal> GetColumn(int x)
     {
         return new ColumnEnumerator(this, x);
     }
@@ -100,7 +100,7 @@ public class Matrix
         return product;
     }
 
-    private static float Multiply(IEnumerable<float> rowData, IEnumerable<float> columnData)
+    private static decimal Multiply(IEnumerable<decimal> rowData, IEnumerable<decimal> columnData)
     {
         return rowData.Zip(columnData).Sum(item => item.First * item.Second);
     }
@@ -142,7 +142,7 @@ public class Matrix
         return matrix;
     }
 
-    public float Determinant()
+    public decimal Determinant()
     {
         if(Width == 2 && Height == 2)
         {
@@ -192,7 +192,7 @@ public class Matrix
         return matrix;
     }
 
-    public float Minor(int row, int column)
+    public decimal Minor(int row, int column)
     {
         if(column < 0 || column >= Width)
         {
@@ -208,7 +208,7 @@ public class Matrix
         return subMatrix.Determinant();
     }
 
-    public float Cofactor(int row, int column)
+    public decimal Cofactor(int row, int column)
     {
         var minor = Minor(row, column);
 
@@ -262,7 +262,7 @@ public class Matrix
     }
 
 #region Enumerators
-    class RowEnumerator : IEnumerable<float>
+    class RowEnumerator : IEnumerable<decimal>
     {
         private readonly Matrix _matrix;
         private readonly int _row;
@@ -278,13 +278,13 @@ public class Matrix
             _row = row;
         }
 
-        public IEnumerator<float> GetEnumerator() => new Enumerator(_matrix, _row);
+        public IEnumerator<decimal> GetEnumerator() => new Enumerator(_matrix, _row);
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
 
-        class Enumerator : IEnumerator<float>
+        class Enumerator : IEnumerator<decimal>
         {
-            public float Current => _matrix[_row, _index];
+            public decimal Current => _matrix[_row, _index];
 
             private readonly Matrix _matrix;
             private readonly int _row;
@@ -317,7 +317,7 @@ public class Matrix
         }
     }
 
-    class ColumnEnumerator : IEnumerable<float>
+    class ColumnEnumerator : IEnumerable<decimal>
     {
         private readonly Matrix _matrix;
         private readonly int _column;
@@ -333,13 +333,13 @@ public class Matrix
             _column = column;
         }
 
-        public IEnumerator<float> GetEnumerator() => new Enumerator(_matrix, _column);
+        public IEnumerator<decimal> GetEnumerator() => new Enumerator(_matrix, _column);
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
 
-        class Enumerator : IEnumerator<float>
+        class Enumerator : IEnumerator<decimal>
         {
-            public float Current => _matrix[_index, _column];
+            public decimal Current => _matrix[_index, _column];
 
             private readonly Matrix _matrix;
             private readonly int _column;

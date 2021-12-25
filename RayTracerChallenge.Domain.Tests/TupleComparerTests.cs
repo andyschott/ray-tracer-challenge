@@ -11,10 +11,10 @@ public class TupleComparerTests : AbstractComparerTests<Tuple>
     [Fact]
     public void SameValuesAreEqual()
     {
-        var x = _fixture.Create<float>();
-        var y = _fixture.Create<float>();
-        var z = _fixture.Create<float>();
-        var w = _fixture.Create<float>();
+        var x = _fixture.Create<decimal>();
+        var y = _fixture.Create<decimal>();
+        var z = _fixture.Create<decimal>();
+        var w = _fixture.Create<decimal>();
 
         var tuple1 = new Tuple
         {
