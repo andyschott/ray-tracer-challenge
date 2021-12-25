@@ -1,6 +1,5 @@
 ﻿using RayTracerChallenge;
 
-var chapter2 = new Chapter2();
-var ppm = chapter2.PlotProjectileTragectory();
+var ppm = Chapter4.CreateClock();
 
 System.Console.WriteLine(ppm);
