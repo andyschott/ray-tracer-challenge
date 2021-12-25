@@ -6,7 +6,7 @@ public class Sphere
     {
     }
 
-    public IEnumerable<decimal> Intersects(Ray ray)
+    public IEnumerable<Intersection> Intersects(Ray ray)
     {
         // This assumes the sphere is centered at the world's origin
         var sphereToRay = ray.Origin - Tuple.CreatePoint(0, 0, 0);
@@ -19,7 +19,7 @@ public class Sphere
         var discriminant = Math.Pow(b, 2) - 4.0 * a * c;
         if(discriminant < 0)
         {
-            return Enumerable.Empty<decimal>();
+            return Enumerable.Empty<Intersection>();
         }
 
         var t1 = (-b - Math.Sqrt(discriminant)) / (2 * a);
@@ -27,7 +27,7 @@ public class Sphere
 
         return new[] { t1, t2 }
             .OrderBy(t => t)
-            .Select(t => Convert.ToDecimal(t))
+            .Select(t => new Intersection(Convert.ToDecimal(t), this))
             .ToArray();
     }
 }

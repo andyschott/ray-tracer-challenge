@@ -4,6 +4,8 @@ namespace RayTracerChallenge.Domain.Tests;
 
 public class SphereTests
 {
+    private readonly IntersectionComparer _intersectionComparer = new IntersectionComparer();
+
     [Fact]
     public void RayIntersectsSphereTwice()
     {
@@ -12,8 +14,12 @@ public class SphereTests
 
         var result = sphere.Intersects(ray);
 
-        var expectedResult = new[] { 4.0M, 6.0M };
-        Assert.Equal(expectedResult, result);
+        var expectedResult = new[]
+        {
+            new Intersection(4.0M, sphere),
+            new Intersection(6.0M, sphere)
+        };
+        Assert.Equal(expectedResult, result, _intersectionComparer);
     }
 
     [Fact]
@@ -24,8 +30,8 @@ public class SphereTests
 
         var result = sphere.Intersects(ray);
 
-        var expectedResult = Enumerable.Repeat(5.0M, 2);
-        Assert.Equal(expectedResult, result);
+        var expectedResult = Enumerable.Repeat(new Intersection(5.0M, sphere), 2);
+        Assert.Equal(expectedResult, result, _intersectionComparer);
     }
 
     [Fact]
@@ -47,8 +53,12 @@ public class SphereTests
 
         var result = sphere.Intersects(ray);
 
-        var expectedResult = new[] { -1.0M, 1.0M };
-        Assert.Equal(expectedResult, result);
+        var expectedResult = new[]
+        {
+            new Intersection(-1.0M, sphere),
+            new Intersection(1.0M, sphere)
+        };
+        Assert.Equal(expectedResult, result, _intersectionComparer);
     }
 
     [Fact]
@@ -59,7 +69,11 @@ public class SphereTests
 
         var result = sphere.Intersects(ray);
 
-        var expectedResult = new[] { -6.0M, -4.0M };
-        Assert.Equal(expectedResult, result);
+        var expectedResult = new[]
+        {
+            new Intersection(-6.0M, sphere),
+            new Intersection(-4.0M, sphere)
+        };
+        Assert.Equal(expectedResult, result, _intersectionComparer);
     }
 }
