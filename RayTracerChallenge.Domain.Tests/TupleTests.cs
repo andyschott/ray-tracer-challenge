@@ -345,6 +345,49 @@ public class TupleTests
         Assert.Throws<ArgumentException>(() => tuple1.CrossProduct(tuple2));
     }
 
+    [Fact]
+    public void CannotReflectPoint()
+    {
+        var tuple = CreatePoint();
+        var normal = CreateVector();
+
+        Assert.Throws<Exception>(() => tuple.Reflect(normal));
+    }
+
+    [Fact]
+    public void ReflectNormalMustBeVector()
+    {
+        var vector = CreateVector();
+        var normal = CreatePoint();
+
+        Assert.Throws<ArgumentException>(() => vector.Reflect(normal));
+    }
+
+    [Fact]
+    public void Reflect45DegreeVector()
+    {
+        var vector = Tuple.CreateVector(1, -1, 0);
+        var normal = Tuple.CreateVector(0, 1, 0);
+
+        var result = vector.Reflect(normal);
+
+        var expectedResult = Tuple.CreateVector(1, 1, 0);
+        Assert.Equal(expectedResult, result, _comparer);
+    }
+
+    [Fact]
+    public void ReflectOffSlantedSurface()
+    {
+        var vector = Tuple.CreateVector(0, -1, 0);
+        var normal = Tuple.CreateVector(Convert.ToDecimal(Math.Sqrt(2) / 2),
+            Convert.ToDecimal(Math.Sqrt(2) / 2), 0);
+
+        var result = vector.Reflect(normal);
+
+        var expectedResult = Tuple.CreateVector(1, 0, 0);
+        Assert.Equal(expectedResult, result, _comparer);
+    }
+
     private Tuple CreatePoint()
     {
         return _fixture.Build<Tuple>()

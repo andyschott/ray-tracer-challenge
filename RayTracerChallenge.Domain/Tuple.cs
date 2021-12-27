@@ -173,5 +173,19 @@ public record class Tuple
             X * other.Y - Y * other.X);
     }
 
+    public Tuple Reflect(Tuple normal)
+    {
+        if(!IsVector)
+        {
+            throw new Exception("can only reflect a vector");
+        }
+        if(!normal.IsVector)
+        {
+            throw new ArgumentException($"{nameof(normal)} must be a vector");
+        }
+
+        return this - normal * 2 * DotProduct(normal);
+    }
+
     public override string ToString() => $"({X}, {Y}, {Z}, {W})";
 }
