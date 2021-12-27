@@ -1,5 +1,5 @@
 ﻿using RayTracerChallenge;
 
-var ppm = Chapter5.SphereShadow();
+var ppm = Chapter6.SphereShadow();
 
 System.Console.WriteLine(ppm);
