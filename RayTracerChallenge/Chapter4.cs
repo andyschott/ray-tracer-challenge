@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using RayTracerChallenge.IO.PPM;
-using Math = System.Math;
-
 namespace RayTracerChallenge;
 
 public static class Chapter4
