@@ -12,6 +12,7 @@ public class SphereTests
     private readonly IntersectionComparer _intersectionComparer = new IntersectionComparer();
     private readonly MatrixComparer _matrixComparer = new MatrixComparer();
     private readonly TupleComparer _tupleComparer = new TupleComparer();
+    private readonly MaterialComparer _materialComparer = new MaterialComparer();
 
     [Fact]
     public void RayIntersectsSphereTwice()
@@ -185,5 +186,26 @@ public class SphereTests
 
         var expectedResult = Tuple.CreateVector(0, 0.97014M, -0.24254M);
         Assert.Equal(expectedResult, result, _tupleComparer);
+    }
+
+    [Fact]
+    public void DefaultMaterial()
+    {
+        var sphere = new Sphere();
+
+        var expected = new Material();
+
+        Assert.Equal(expected, sphere.Material, _materialComparer);
+    }
+
+    [Fact]
+    public void CustomMaterial()
+    {
+        var sphere = new Sphere();
+        var material = _fixture.Create<Material>();
+
+        sphere.Material = material;
+
+        Assert.Equal(material, sphere.Material, _materialComparer);
     }
 }

@@ -7,6 +7,7 @@ public class Sphere
     }
 
     public Matrix Transform { get; set; } = Matrix.Identity();
+    public Material Material { get; set; } = new Material();
 
     public IEnumerable<Intersection> Intersects(Ray ray)
     {
