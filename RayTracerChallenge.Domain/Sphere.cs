@@ -7,6 +7,7 @@ public class Sphere
     }
 
     public Matrix Transform { get; set; } = Matrix.Identity();
+    public Material Material { get; set; } = new Material();
 
     public IEnumerable<Intersection> Intersects(Ray ray)
     {
@@ -33,5 +34,26 @@ public class Sphere
             .OrderBy(t => t)
             .Select(t => new Intersection(Convert.ToDecimal(t), this))
             .ToArray();
+    }
+
+    public Tuple NormalAt(Tuple point)
+    {
+        if(!point.IsPoint)
+        {
+            throw new ArgumentException($"{nameof(point)} must be a point");
+        }
+
+        var inverseTransform = Transform.Invert();
+
+        // Assumes the sphere's origin is (0, 0, 0)
+        var origin = Tuple.CreatePoint(0, 0, 0);
+
+        var objectPoint = inverseTransform * point;
+        var objectNormal = objectPoint - origin;
+
+        var worldNormal = inverseTransform.Transpose() * objectNormal;
+        worldNormal = Tuple.CreateVector(worldNormal.X, worldNormal.Y, worldNormal.Z);
+
+        return worldNormal.Normalize();
     }
 }
