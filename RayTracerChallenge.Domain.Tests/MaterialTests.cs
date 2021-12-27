@@ -1,4 +1,5 @@
 using System;
+using RayTracerChallenge.Domain.Tests.Extensions;
 
 namespace RayTracerChallenge.Domain.Tests;
 
@@ -10,7 +11,7 @@ public class MaterialTests
 
     public MaterialTests()
     {
-        _fixture.Register(() => new Light(CreatePoint(),
+        _fixture.Register(() => new Light(_fixture.CreatePoint(),
             _fixture.Create<Color>()));
     }
 
@@ -36,10 +37,10 @@ public class MaterialTests
     [Fact]
     public void LightingPointMustBePoint()
     {
-        var point = CreateVector();
+        var point = _fixture.CreateVector();
         var light = _fixture.Create<Light>();
-        var eye = CreateVector();
-        var normal = CreateVector();
+        var eye = _fixture.CreateVector();
+        var normal = _fixture.CreateVector();
 
         var material = _fixture.Create<Material>();
 
@@ -49,10 +50,10 @@ public class MaterialTests
     [Fact]
     public void EyeMustBeVector()
     {
-        var point = CreatePoint();
+        var point = _fixture.CreatePoint();
         var light = _fixture.Create<Light>();
-        var eye = CreatePoint();
-        var normal = CreateVector();
+        var eye = _fixture.CreatePoint();
+        var normal = _fixture.CreateVector();
 
         var material = _fixture.Create<Material>();
 
@@ -62,10 +63,10 @@ public class MaterialTests
     [Fact]
     public void NormalMustBeVector()
     {
-        var point = CreatePoint();
+        var point = _fixture.CreatePoint();
         var light = _fixture.Create<Light>();
-        var eye = CreateVector();
-        var normal = CreatePoint();
+        var eye = _fixture.CreateVector();
+        var normal = _fixture.CreatePoint();
 
         var material = _fixture.Create<Material>();
 
@@ -154,18 +155,4 @@ public class MaterialTests
             }
         },
     };
-
-    private Tuple CreatePoint()
-    {
-        return _fixture.Build<Tuple>()
-            .With(tuple => tuple.W, Tuple.Point)
-            .Create();
-    }
-
-    private Tuple CreateVector()
-    {
-        return _fixture.Build<Tuple>()
-            .With(tuple => tuple.W, Tuple.Vector)
-            .Create();
-    }
 }

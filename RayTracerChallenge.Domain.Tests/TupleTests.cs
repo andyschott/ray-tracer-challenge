@@ -1,4 +1,5 @@
 using System;
+using RayTracerChallenge.Domain.Tests.Extensions;
 
 namespace RayTracerChallenge.Domain.Tests;
 
@@ -76,8 +77,8 @@ public class TupleTests
     [Fact]
     public void AddVectorToPoint()
     {
-        var point = CreatePoint();
-        var vector = CreateVector();
+        var point = _fixture.CreatePoint();
+        var vector = _fixture.CreateVector();
 
         var result = point.Add(vector);
 
@@ -95,8 +96,8 @@ public class TupleTests
     [Fact]
     public void ErrorAddingPointToPoint()
     {
-        var point1 = CreatePoint();
-        var point2 = CreatePoint();
+        var point1 = _fixture.CreatePoint();
+        var point2 = _fixture.CreatePoint();
 
         Assert.Throws<ArgumentException>(() => point1.Add(point2));
     }
@@ -104,8 +105,8 @@ public class TupleTests
     [Fact]
     public void SubtractPointFromPoint()
     {
-        var point1 = CreatePoint();
-        var point2 = CreatePoint();
+        var point1 = _fixture.CreatePoint();
+        var point2 = _fixture.CreatePoint();
 
         var result = point1.Subtract(point2);
 
@@ -123,8 +124,8 @@ public class TupleTests
     [Fact]
     public void SubtractVectorFromPoint()
     {
-        var point = CreatePoint();
-        var vector = CreateVector();
+        var point = _fixture.CreatePoint();
+        var vector = _fixture.CreateVector();
         
         var result = point.Subtract(vector);
 
@@ -142,8 +143,8 @@ public class TupleTests
     [Fact]
     public void SubtractVectorFromVector()
     {
-        var vector1 = CreateVector();
-        var vector2 = CreateVector();
+        var vector1 = _fixture.CreateVector();
+        var vector2 = _fixture.CreateVector();
         
         var result = vector1.Subtract(vector2);
 
@@ -161,8 +162,8 @@ public class TupleTests
     [Fact]
     public void ErrorSubtractingPointFromVector()
     {
-        var vector = CreateVector();
-        var point = CreatePoint();
+        var vector = _fixture.CreateVector();
+        var point = _fixture.CreatePoint();
 
         Assert.Throws<ArgumentException>(() => vector.Subtract(point));
     }
@@ -171,7 +172,7 @@ public class TupleTests
     public void SubtractVectorFromZeroVector()
     {
         var zero = Tuple.CreateVector(0, 0, 0);
-        var vector = CreateVector();
+        var vector = _fixture.CreateVector();
 
         var result = zero.Subtract(vector);
 
@@ -287,7 +288,7 @@ public class TupleTests
     [Fact]
     public void MagntiudeOfNormalizedVector()
     {
-        var vector = CreateVector();
+        var vector = _fixture.CreateVector();
 
         var normalized = vector.Normalize();
         var magnitude = normalized.Magnitude();
@@ -298,8 +299,8 @@ public class TupleTests
     [Fact]
     public void DotProduct()
     {
-        var vector1 = CreateVector();
-        var vector2 = CreateVector();
+        var vector1 = _fixture.CreateVector();
+        var vector2 = _fixture.CreateVector();
 
         var dotProduct = vector1.DotProduct(vector2);
 
@@ -314,8 +315,8 @@ public class TupleTests
     [Fact]
     public void CrossProduct()
     {
-        var vector1 = CreateVector();
-        var vector2 = CreateVector();
+        var vector1 = _fixture.CreateVector();
+        var vector2 = _fixture.CreateVector();
 
         var crossProduct = vector1.CrossProduct(vector2);
 
@@ -330,8 +331,8 @@ public class TupleTests
     [Fact]
     public void InvalidCrossProduct_ThisIsPoint()
     {
-        var tuple1 = CreatePoint();
-        var tuple2 = CreateVector();
+        var tuple1 = _fixture.CreatePoint();
+        var tuple2 = _fixture.CreateVector();
 
         Assert.Throws<Exception>(() => tuple1.CrossProduct(tuple2));
     }
@@ -339,8 +340,8 @@ public class TupleTests
     [Fact]
     public void InvalidCrossProduct_OtherIsPoint()
     {
-        var tuple1 = CreateVector();
-        var tuple2 = CreatePoint();
+        var tuple1 = _fixture.CreateVector();
+        var tuple2 = _fixture.CreatePoint();
 
         Assert.Throws<ArgumentException>(() => tuple1.CrossProduct(tuple2));
     }
@@ -348,8 +349,8 @@ public class TupleTests
     [Fact]
     public void CannotReflectPoint()
     {
-        var tuple = CreatePoint();
-        var normal = CreateVector();
+        var tuple = _fixture.CreatePoint();
+        var normal = _fixture.CreateVector();
 
         Assert.Throws<Exception>(() => tuple.Reflect(normal));
     }
@@ -357,8 +358,8 @@ public class TupleTests
     [Fact]
     public void ReflectNormalMustBeVector()
     {
-        var vector = CreateVector();
-        var normal = CreatePoint();
+        var vector = _fixture.CreateVector();
+        var normal = _fixture.CreatePoint();
 
         Assert.Throws<ArgumentException>(() => vector.Reflect(normal));
     }
@@ -386,19 +387,5 @@ public class TupleTests
 
         var expectedResult = Tuple.CreateVector(1, 0, 0);
         Assert.Equal(expectedResult, result, _comparer);
-    }
-
-    private Tuple CreatePoint()
-    {
-        return _fixture.Build<Tuple>()
-            .With(tuple => tuple.W, Tuple.Point)
-            .Create();
-    }
-
-    private Tuple CreateVector()
-    {
-        return _fixture.Build<Tuple>()
-            .With(tuple => tuple.W, Tuple.Vector)
-            .Create();
     }
 }
