@@ -1,7 +1,5 @@
-using RayTracerChallenge.Models;
-using Console = System.Console;
-
 namespace RayTracerChallenge;
+
 public class Chapter1
 {
     protected static Projectile Tick(Environment environment, Projectile projectile)
