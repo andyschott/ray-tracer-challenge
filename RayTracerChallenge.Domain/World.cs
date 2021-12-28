@@ -73,4 +73,27 @@ public class World
         var computations = hit.PrepareComputations(ray);
         return ShadeHit(computations);
     }
+
+    public bool IsShadowed(Tuple point)
+    {
+        if(!point.IsPoint)
+        {
+            throw new ArgumentException($"{nameof(point)} must be a point");
+        }
+
+        if(Light is null)
+        {
+            return false;
+        }
+
+        var vector = Light.Position - point;
+        var distance = vector.Magnitude();
+        var direction = vector.Normalize();
+
+        var ray = new Ray(point, direction);
+        var intersections = Intersect(ray);
+
+        var hit = intersections.Hit();
+        return hit?.T < distance;
+    }
 }

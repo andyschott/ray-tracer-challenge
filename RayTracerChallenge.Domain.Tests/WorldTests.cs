@@ -172,4 +172,61 @@ public class WorldTests
 
         Assert.Equal(world.Objects.ElementAt(1).Material.Color, result, _colorComparer);
     }
+
+    [Fact]
+    public void IsShadowedMustTakePoint()
+    {
+        var world = _fixture.Build<World>()
+            .With(world => world.Light, _fixture.CreateLight())
+            .Create();
+        var vector = _fixture.CreateVector();
+
+        Assert.Throws<ArgumentException>(() => world.IsShadowed(vector));
+    }
+
+    [Fact]
+    public void NoShadows()
+    {
+        var world = World.Default();
+        var position = Tuple.CreatePoint(0, 10, 0);
+
+        var result = world.IsShadowed(position);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void NoShadowWithoutLight()
+    {
+        var world = _fixture.Build<World>()
+            .Without(world => world.Light)
+            .Create();
+        var position = _fixture.CreatePoint();
+
+        var result = world.IsShadowed(position);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void NoShadowWhenBehindLight()
+    {
+        var world = World.Default();
+        var position = Tuple.CreatePoint(-20, 20, -20);
+
+        var result = world.IsShadowed(position);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void NoShadowWhenObjectBehindPoint()
+    {
+        var world = World.Default();
+        var position = Tuple.CreatePoint(-2, 2, -2);
+
+        var result = world.IsShadowed(position);
+
+        Assert.False(result);
+    }
 }
