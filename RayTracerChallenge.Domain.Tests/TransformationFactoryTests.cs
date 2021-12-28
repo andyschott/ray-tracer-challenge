@@ -1,11 +1,16 @@
 namespace RayTracerChallenge.Domain.Tests;
 
+using RayTracerChallenge.Domain.Tests.Extensions;
+using ArgumentException = System.ArgumentException;
 using Math = System.Math;
 
-public class TranslationTests
+public class TransformationFactoryTests
 {
+    private readonly IFixture _fixture = new Fixture();
+
     private readonly TransformationFactory _factory = new TransformationFactory();
     private readonly TupleComparer _tupleComparer = new TupleComparer();
+    private readonly MatrixComparer _matrixComparer = new MatrixComparer();
 
     [Fact]
     public void TranslatePoint()
@@ -206,5 +211,90 @@ public class TranslationTests
 
         var expectedResult = Tuple.CreatePoint(15, 0, 7);
         Assert.Equal(expectedResult, result, _tupleComparer);
+    }
+
+    [Fact]
+    public void TransformView_FromMustBePoint()
+    {
+        var from = _fixture.CreateVector();
+        var to = _fixture.CreatePoint();
+        var up = _fixture.CreateVector();
+
+        Assert.Throws<ArgumentException>(() => _factory.TransformView(from, up, to));
+    }
+
+    [Fact]
+    public void TransformView_ToMustBePoint()
+    {
+        var from = _fixture.CreatePoint();
+        var to = _fixture.CreateVector();
+        var up = _fixture.CreateVector();
+
+        Assert.Throws<ArgumentException>(() => _factory.TransformView(from, up, to));
+    }
+
+    [Fact]
+    public void TransformView_UpMustBeVector()
+    {
+        var from = _fixture.CreatePoint();
+        var to = _fixture.CreatePoint();
+        var up = _fixture.CreatePoint();
+
+        Assert.Throws<ArgumentException>(() => _factory.TransformView(from, up, to));
+    }
+
+    [Fact]
+    public void TransformViewDefaultOrientation()
+    {
+        var from = Tuple.CreatePoint(0, 0, 0);
+        var to = Tuple.CreatePoint(0, 0, -1);
+        var up = Tuple.CreateVector(0, 1, 0);
+
+        var result = _factory.TransformView(from, to, up);
+
+        Assert.Equal(Matrix.Identity(), result, _matrixComparer);
+    }
+
+    [Fact]
+    public void TransformViewLookPositiveZ()
+    {
+        var from = Tuple.CreatePoint(0, 0, 0);
+        var to = Tuple.CreatePoint(0, 0, 1);
+        var up = Tuple.CreateVector(0, 1, 0);
+
+        var result = _factory.TransformView(from, to, up);
+
+        var expectedResult = _factory.Scale(-1, 1, -1);
+        Assert.Equal(expectedResult, result, _matrixComparer);
+    }
+
+    [Fact]
+    public void TransformViewMovesTheWorld()
+    {
+        var from = Tuple.CreatePoint(0, 0, 8);
+        var to = Tuple.CreatePoint(0, 0, 0);
+        var up = Tuple.CreateVector(0, 1, 0);
+
+        var result = _factory.TransformView(from, to, up);
+
+        var expectedResult = _factory.Translation(0, 0, -8);
+        Assert.Equal(expectedResult, result, _matrixComparer);
+    }
+
+    [Fact]
+    public void TransformViewArbitraryDirection()
+    {
+        var from = Tuple.CreatePoint(1, 3, 2);
+        var to = Tuple.CreatePoint(4, -2, 8);
+        var up = Tuple.CreateVector(1, 1, 0);
+
+        var result = _factory.TransformView(from, to, up);
+
+        var expectedResult = new Matrix(4, 4,
+            -0.50709M, 0.50709M,  0.67612M, -2.36643M,
+             0.76772M, 0.60609M,  0.12122M, -2.82843M,
+            -0.35857M, 0.59761M, -0.71714M,  0,
+             0,        0,        0,          1);
+        Assert.Equal(expectedResult, result, _matrixComparer);
     }
 }

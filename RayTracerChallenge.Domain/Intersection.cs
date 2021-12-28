@@ -10,4 +10,13 @@ public class Intersection
         T = t;
         Object = s;
     }
+
+    public IntersectionComputations PrepareComputations(Ray ray)
+    {
+        var point = ray.Position(T);
+        var eyeVector = ray.Direction * -1;
+        var normalVector = Object.NormalAt(point);
+
+        return new IntersectionComputations(T, Object, point, eyeVector, normalVector);
+    }
 }

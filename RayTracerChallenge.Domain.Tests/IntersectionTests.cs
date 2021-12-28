@@ -4,6 +4,8 @@ namespace RayTracerChallenge.Domain.Tests;
 
 public class IntersectionTests
 {
+    private readonly TupleComparer _tupleComparer = new TupleComparer();
+
     [Fact]
     public void IntersectionEncapsulatesTAndObject()
     {
@@ -74,5 +76,50 @@ public class IntersectionTests
         var result = intersections.Hit();
 
         Assert.Same(intersection4, result);
+    }
+
+    [Fact]
+    public void CheckPreparedComputations()
+    {
+        var ray = new Ray(Tuple.CreatePoint(0, 0, -5), Tuple.CreateVector(0, 0, 1));
+        var sphere = new Sphere();
+        var intersection = new Intersection(4, sphere);
+
+        var result = intersection.PrepareComputations(ray);
+
+        Assert.Equal(intersection.T, result.T);
+        Assert.Same(intersection.Object, result.Object);
+        
+        var expectedPoint = Tuple.CreatePoint(0, 0, -1);
+        Assert.Equal(expectedPoint, result.Point, _tupleComparer);
+
+        var expectedEye = Tuple.CreateVector(0, 0, -1);
+        Assert.Equal(expectedEye, result.EyeVector, _tupleComparer);
+
+        var expectedNormal = Tuple.CreateVector(0, 0, -1);
+        Assert.Equal(expectedNormal, result.NormalVector, _tupleComparer);
+
+        Assert.False(result.Inside);
+    }
+
+    [Fact]
+    public void IntersectionOccursInside()
+    {
+        var ray = new Ray(Tuple.CreatePoint(0, 0, 0), Tuple.CreateVector(0, 0, 1));
+        var sphere = new Sphere();
+        var intersection = new Intersection(1, sphere);
+
+        var result = intersection.PrepareComputations(ray);
+
+        var expectedPoint = Tuple.CreatePoint(0, 0, 1);
+        Assert.Equal(expectedPoint, result.Point, _tupleComparer);
+
+        var expectedEye = Tuple.CreateVector(0, 0, -1);
+        Assert.Equal(expectedEye, result.EyeVector, _tupleComparer);
+
+        var expectedNormal = Tuple.CreateVector(0, 0, -1);
+        Assert.Equal(expectedNormal, result.NormalVector, _tupleComparer);
+
+        Assert.True(result.Inside);
     }
 }

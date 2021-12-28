@@ -5,6 +5,20 @@ public record class Color
     public decimal Blue { get; init; }
     public decimal Green { get; init; }
 
+    public static Color Black => new Color
+    {
+        Red = 0,
+        Green = 0,
+        Blue = 0
+    };
+
+    public static Color White => new Color
+    {
+        Red = 1,
+        Green = 1,
+        Blue = 1
+    };
+
     public Color Add(Color other)
     {
         return new Color

@@ -80,4 +80,34 @@ public class TransformationFactory
 
         return matrix;
     }
+
+    public Matrix TransformView(Tuple from, Tuple to, Tuple up)
+    {
+        if(!from.IsPoint)
+        {
+            throw new ArgumentException($"{nameof(from)} must be a point");
+        }
+        if(!to.IsPoint)
+        {
+            throw new ArgumentException($"{nameof(to)} must be a point");
+        }
+        if(!up.IsVector)
+        {
+            throw new ArgumentException($"{nameof(up)} must be a vector");
+        }
+
+        var forward = (to - from).Normalize();
+        var normalizedUp = up.Normalize();
+        var left = forward.CrossProduct(normalizedUp);
+        var trueUp = left.CrossProduct(forward);
+
+        var orientation = new Matrix(4, 4,
+            left.X,      left.Y,     left.Z,    0,
+            trueUp.X,    trueUp.Y,   trueUp.Z,  0,
+            -forward.X, -forward.Y, -forward.Z, 0,
+             0,          0,          0,         1);
+
+        var translation = Translation(-from.X, -from.Y, -from.Z);
+        return orientation * translation;
+    }
 }
