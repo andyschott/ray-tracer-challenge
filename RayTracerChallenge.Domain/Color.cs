@@ -12,6 +12,13 @@ public record class Color
         Blue = 0
     };
 
+    public static Color White => new Color
+    {
+        Red = 1,
+        Green = 1,
+        Blue = 1
+    };
+
     public Color Add(Color other)
     {
         return new Color
