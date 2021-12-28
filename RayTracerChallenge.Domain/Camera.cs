@@ -74,12 +74,59 @@ public class Camera
         {
             for(var x = 0; x < Width; ++x)
             {
-                var ray = RayForPixel(x, y);
-                var color = world.ColorAt(ray);
+                var color = ColorAt(world, x, y);
                 canvas[x, y] = color;
             }
         }
 
         return canvas;
+    }
+
+    public async Task<Canvas> RenderAsync(World world)
+    {
+        var pixels = GetPixels(Width, Height);
+        var processors = System.Environment.ProcessorCount;
+
+        var canvas = new Canvas(Width, Height);
+
+        for(var index = 0; index < pixels.Length; index += processors)
+        {
+            var chunk = pixels.Skip(index).Take(processors);
+            var tasks = chunk.Select(item => Task.Run(() =>
+            {
+                var color = ColorAt(world, item.x, item.y);
+                return (item.x, item.y, color);
+            }));
+
+            var results = await Task.WhenAll(tasks);
+            foreach(var item in results)
+            {
+                canvas[item.x, item.y] = item.color;
+            }
+        }
+
+        return canvas;
+    }
+
+    private static (int x, int y)[] GetPixels(int width, int height)
+    {
+        var pixels = new (int x, int y)[width * height];
+
+        var index = 0;
+        for(var y = 0; y < height; ++y)
+        {
+            for(var x = 0; x < width; ++x)
+            {
+                pixels[index++] = (x, y);
+            }
+        }
+
+        return pixels;
+    }
+
+    private Color ColorAt(World world, int x, int y)
+    {
+        var ray = RayForPixel(x, y);
+        return world.ColorAt(ray);
     }
 }
