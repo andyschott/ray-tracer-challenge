@@ -1,5 +1,5 @@
 ﻿using RayTracerChallenge;
 
-var ppm = await Chapter7.CreateWorld();
+var ppm = await Chapter9.CreateWorld();
 
 System.Console.WriteLine(ppm);
