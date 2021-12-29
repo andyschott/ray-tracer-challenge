@@ -1,3 +1,4 @@
+using Moq.Protected;
 using RayTracerChallenge.Domain.Extensions;
 
 namespace RayTracerChallenge.Domain.Tests;
@@ -11,21 +12,21 @@ public class IntersectionTests
     [Fact]
     public void IntersectionEncapsulatesTAndObject()
     {
-        var sphere = new Sphere();
+        var shape = new TestShape();
         var t = 3.5M;
 
-        var intersection = new Intersection(t, sphere);
+        var intersection = new Intersection(t, shape);
 
         Assert.Equal(t, intersection.T);
-        Assert.Same(sphere, intersection.Object);
+        Assert.Same(shape, intersection.Object);
     }
 
     [Fact]
     public void FindHitInIntersectionsWithPositiveT()
     {
-        var sphere = new Sphere();
-        var intersection1 = new Intersection(1, sphere);
-        var intersection2 = new Intersection(2, sphere);
+        var shape = new TestShape();
+        var intersection1 = new Intersection(1, shape);
+        var intersection2 = new Intersection(2, shape);
         var intersections = new[] { intersection1, intersection2 };
 
         var result = intersections.Hit();
@@ -36,9 +37,9 @@ public class IntersectionTests
     [Fact]
     public void FindHitInIntersectionsWithSomeNegativeT()
     {
-        var sphere = new Sphere();
-        var intersection1 = new Intersection(-1, sphere);
-        var intersection2 = new Intersection(1, sphere);
+        var shape = new TestShape();
+        var intersection1 = new Intersection(-1, shape);
+        var intersection2 = new Intersection(1, shape);
         var intersections = new[] { intersection1, intersection2 };
 
         var result = intersections.Hit();
@@ -49,9 +50,9 @@ public class IntersectionTests
     [Fact]
     public void NoHitInIntersections()
     {
-        var sphere = new Sphere();
-        var intersection1 = new Intersection(-2, sphere);
-        var intersection2 = new Intersection(-1, sphere);
+        var shape = new TestShape();
+        var intersection1 = new Intersection(-2, shape);
+        var intersection2 = new Intersection(-1, shape);
         var intersections = new[] { intersection1, intersection2 };
 
         var result = intersections.Hit();
@@ -62,11 +63,11 @@ public class IntersectionTests
     [Fact]
     public void HitIsLowestNonNegativeIntersection()
     {
-        var sphere = new Sphere();
-        var intersection1 = new Intersection(5, sphere);
-        var intersection2 = new Intersection(7, sphere);
-        var intersection3 = new Intersection(-3, sphere);
-        var intersection4 = new Intersection(2, sphere);
+        var shape = new TestShape();
+        var intersection1 = new Intersection(5, shape);
+        var intersection2 = new Intersection(7, shape);
+        var intersection3 = new Intersection(-3, shape);
+        var intersection4 = new Intersection(2, shape);
         var intersections = new[]
         {
             intersection1,
@@ -84,8 +85,13 @@ public class IntersectionTests
     public void CheckPreparedComputations()
     {
         var ray = new Ray(Tuple.CreatePoint(0, 0, -5), Tuple.CreateVector(0, 0, 1));
-        var sphere = new Sphere();
-        var intersection = new Intersection(4, sphere);
+        var mockShape = new Mock<Shape>();
+        var intersection = new Intersection(4, mockShape.Object);
+
+        var expectedNormal = Tuple.CreateVector(0, 0, -1);
+        mockShape.Protected()
+            .Setup<Tuple>("LocalNormalAt", ItExpr.IsAny<Tuple>())
+            .Returns(expectedNormal);
 
         var result = intersection.PrepareComputations(ray);
 
@@ -98,7 +104,6 @@ public class IntersectionTests
         var expectedEye = Tuple.CreateVector(0, 0, -1);
         Assert.Equal(expectedEye, result.EyeVector, _tupleComparer);
 
-        var expectedNormal = Tuple.CreateVector(0, 0, -1);
         Assert.Equal(expectedNormal, result.NormalVector, _tupleComparer);
 
         Assert.False(result.Inside);
@@ -129,11 +134,11 @@ public class IntersectionTests
     public void HitShouldOffsetPoint()
     {
         var ray = new Ray(Tuple.CreatePoint(0, 0, -5), Tuple.CreateVector(0, 0, 1));
-        var sphere = new Sphere
+        var shape = new Sphere
         {
             Transform = _factory.Translation(0, 0, 1)
         };
-        var intersection = new Intersection(5, sphere);
+        var intersection = new Intersection(5, shape);
         var computations = intersection.PrepareComputations(ray);
 
         Assert.True(computations.OverPoint.Z < -0.0001M / 2);

@@ -1,16 +1,19 @@
+using AutoFixture.Kernel;
+
 namespace RayTracerChallenge.Domain.Tests;
 
 public class IntersectionComparerTests : AbstractComparerTests<Intersection>
 {
     public IntersectionComparerTests() : base(new IntersectionComparer())
     {
+        _fixture.Customizations.Add(new TypeRelay(typeof(Shape), typeof(TestShape)));
     }
 
     [Fact]
     public void SameValuesAreEqual()
     {
         var t = _fixture.Create<decimal>();
-        var sphere = _fixture.Create<Sphere>();
+        var sphere = _fixture.Create<Shape>();
 
         var intersection1 = new Intersection(t, sphere);
         var intersection2 = new Intersection(t, sphere);

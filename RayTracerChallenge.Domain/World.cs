@@ -5,7 +5,7 @@ namespace RayTracerChallenge.Domain;
 public class World
 {
     public Light? Light { get; set; } = null;
-    public IEnumerable<Sphere> Objects { get; set; } = Enumerable.Empty<Sphere>();
+    public IEnumerable<Shape> Objects { get; set; } = Enumerable.Empty<Shape>();
 
     private static readonly TransformationFactory _factory = new TransformationFactory();
 
