@@ -1,18 +1,13 @@
 namespace RayTracerChallenge.Domain;
 
-public class Sphere
+public class Sphere : Shape
 {
     public Sphere()
     {
     }
 
-    public Matrix Transform { get; set; } = Matrix.Identity();
-    public Material Material { get; set; } = new Material();
-
-    public IEnumerable<Intersection> Intersects(Ray ray)
+    protected override IEnumerable<Intersection> LocalIntersects(Ray ray)
     {
-        ray = ray.Transform(Transform.Invert());
-        
         // This assumes the sphere is centered at the world's origin
         var sphereToRay = ray.Origin - Tuple.CreatePoint(0, 0, 0);
 
@@ -36,24 +31,12 @@ public class Sphere
             .ToArray();
     }
 
-    public Tuple NormalAt(Tuple point)
+    protected override Tuple LocalNormalAt(Tuple point)
     {
-        if(!point.IsPoint)
-        {
-            throw new ArgumentException($"{nameof(point)} must be a point");
-        }
-
-        var inverseTransform = Transform.Invert();
-
-        // Assumes the sphere's origin is (0, 0, 0)
+        // Assumes the shape's origin is (0, 0, 0)
         var origin = Tuple.CreatePoint(0, 0, 0);
 
-        var objectPoint = inverseTransform * point;
-        var objectNormal = objectPoint - origin;
-
-        var worldNormal = inverseTransform.Transpose() * objectNormal;
-        worldNormal = Tuple.CreateVector(worldNormal.X, worldNormal.Y, worldNormal.Z);
-
-        return worldNormal.Normalize();
+        var objectNormal = point - origin;
+        return objectNormal;
     }
 }

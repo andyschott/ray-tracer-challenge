@@ -5,14 +5,14 @@ public class IntersectionComputations
     private const decimal Epsilon = 0.0001M;
 
     public decimal T { get; init; }
-    public Sphere Object { get; init; }
+    public Shape Object { get; init; }
     public Tuple Point { get; init; }
     public Tuple EyeVector { get; init; }
     public Tuple NormalVector { get; init; }
     public Tuple OverPoint { get; set; }
     public bool Inside { get; init; }
 
-    public IntersectionComputations(decimal t, Sphere obj,
+    public IntersectionComputations(decimal t, Shape obj,
         Tuple point, Tuple eyeVector, Tuple normalVector)
     {
         if(!point.IsPoint)

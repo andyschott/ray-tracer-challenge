@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using AutoFixture.Kernel;
 using RayTracerChallenge.Domain.Tests.Extensions;
 
 namespace RayTracerChallenge.Domain.Tests;
@@ -16,8 +17,10 @@ public class WorldTests
     public WorldTests()
     {
         _fixture.Register(() => new IntersectionComputations(_fixture.Create<decimal>(),
-            _fixture.Create<Sphere>(), _fixture.CreatePoint(),
+            _fixture.Create<Shape>(), _fixture.CreatePoint(),
             _fixture.CreateVector(), _fixture.CreateVector()));
+
+        _fixture.Customizations.Add(new TypeRelay(typeof(Shape), typeof(TestShape)));
     }
 
     [Fact]

@@ -18,14 +18,14 @@ public class SphereTests
     public void RayIntersectsSphereTwice()
     {
         var ray = new Ray(Tuple.CreatePoint(0, 0, -5), Tuple.CreateVector(0, 0, 1));
-        var sphere = new Sphere();
+        var shape = new Sphere();
 
-        var result = sphere.Intersects(ray);
+        var result = shape.Intersects(ray);
 
         var expectedResult = new[]
         {
-            new Intersection(4.0M, sphere),
-            new Intersection(6.0M, sphere)
+            new Intersection(4.0M, shape),
+            new Intersection(6.0M, shape)
         };
         Assert.Equal(expectedResult, result, _intersectionComparer);
     }
@@ -34,11 +34,11 @@ public class SphereTests
     public void RayIntersectsSphereAtTangent()
     {
         var ray = new Ray(Tuple.CreatePoint(0, 1, -5), Tuple.CreateVector(0, 0, 1));
-        var sphere = new Sphere();
+        var shape = new Sphere();
 
-        var result = sphere.Intersects(ray);
+        var result = shape.Intersects(ray);
 
-        var expectedResult = Enumerable.Repeat(new Intersection(5.0M, sphere), 2);
+        var expectedResult = Enumerable.Repeat(new Intersection(5.0M, shape), 2);
         Assert.Equal(expectedResult, result, _intersectionComparer);
     }
 
@@ -46,9 +46,9 @@ public class SphereTests
     public void RayMissedSphere()
     {
         var ray = new Ray(Tuple.CreatePoint(0, 2, -5), Tuple.CreateVector(0, 0, 1));
-        var sphere = new Sphere();
+        var shape = new Sphere();
 
-        var result = sphere.Intersects(ray);
+        var result = shape.Intersects(ray);
 
         Assert.Empty(result);
     }
@@ -57,14 +57,14 @@ public class SphereTests
     public void RayStartsInsideSphere()
     {
         var ray = new Ray(Tuple.CreatePoint(0, 0, 0), Tuple.CreateVector(0, 0, 1));
-        var sphere = new Sphere();
+        var shape = new Sphere();
 
-        var result = sphere.Intersects(ray);
+        var result = shape.Intersects(ray);
 
         var expectedResult = new[]
         {
-            new Intersection(-1.0M, sphere),
-            new Intersection(1.0M, sphere)
+            new Intersection(-1.0M, shape),
+            new Intersection(1.0M, shape)
         };
         Assert.Equal(expectedResult, result, _intersectionComparer);
     }
@@ -73,14 +73,14 @@ public class SphereTests
     public void SphereIsBehindRay()
     {
         var ray = new Ray(Tuple.CreatePoint(0, 0, 5), Tuple.CreateVector(0, 0, 1));
-        var sphere = new Sphere();
+        var shape = new Sphere();
 
-        var result = sphere.Intersects(ray);
+        var result = shape.Intersects(ray);
 
         var expectedResult = new[]
         {
-            new Intersection(-6.0M, sphere),
-            new Intersection(-4.0M, sphere)
+            new Intersection(-6.0M, shape),
+            new Intersection(-4.0M, shape)
         };
         Assert.Equal(expectedResult, result, _intersectionComparer);
     }
@@ -88,38 +88,27 @@ public class SphereTests
     [Fact]
     public void SphereDefaultTransformation()
     {
-        var sphere = new Sphere();
+        var shape = new Sphere();
 
         var expectedResult = Matrix.Identity();
-        Assert.Equal(expectedResult, sphere.Transform, _matrixComparer);
-    }
-
-    [Fact]
-    public void ChangeSphereTransformation()
-    {
-        var sphere = new Sphere();
-        var transform = _factory.Translation(2, 3, 4);
-
-        sphere.Transform = transform;
-
-        Assert.Same(transform, sphere.Transform);
+        Assert.Equal(expectedResult, shape.Transform, _matrixComparer);
     }
 
     [Fact]
     public void IntersectingScaledSphereWithRay()
     {
         var ray = new Ray(Tuple.CreatePoint(0, 0, -5), Tuple.CreateVector(0, 0, 1));
-        var sphere = new Sphere()
+        var shape = new Sphere()
         {
             Transform = _factory.Scale(2, 2, 2)
         };
 
-        var result = sphere.Intersects(ray);
+        var result = shape.Intersects(ray);
 
         var expectedResult = new[]
         {
-            new Intersection(3, sphere),
-            new Intersection(7, sphere)
+            new Intersection(3, shape),
+            new Intersection(7, shape)
         };
         Assert.Equal(expectedResult, result, _intersectionComparer);
     }
@@ -166,8 +155,10 @@ public class SphereTests
     [Fact]
     public void NormalOfTranslatedSphere()
     {
-        var sphere = new Sphere();
-        sphere.Transform = _factory.Translation(0, 1, 0);
+        var sphere = new Sphere()
+        {
+            Transform = _factory.Translation(0, 1, 0)
+        };
 
         var result = sphere.NormalAt(Tuple.CreatePoint(0, 1.70711M, -0.70711M));
 
@@ -178,34 +169,15 @@ public class SphereTests
     [Fact]
     public void NormalOfTransformedSphere()
     {
-        var sphere = new Sphere();
-        sphere.Transform = _factory.Scale(1, 0.5M, 1) * _factory.RotationAroundZAxis(Math.PI / 5);
+        var sphere = new Sphere()
+        {
+            Transform = _factory.Scale(1, 0.5M, 1) * _factory.RotationAroundZAxis(Math.PI / 5)
+        };
 
         var result = sphere.NormalAt(Tuple.CreatePoint(0, Convert.ToDecimal(Math.Sqrt(2) / 2),
             -1 * Convert.ToDecimal(Math.Sqrt(2) / 2)));
 
         var expectedResult = Tuple.CreateVector(0, 0.97014M, -0.24254M);
         Assert.Equal(expectedResult, result, _tupleComparer);
-    }
-
-    [Fact]
-    public void DefaultMaterial()
-    {
-        var sphere = new Sphere();
-
-        var expected = new Material();
-
-        Assert.Equal(expected, sphere.Material, _materialComparer);
-    }
-
-    [Fact]
-    public void CustomMaterial()
-    {
-        var sphere = new Sphere();
-        var material = _fixture.Create<Material>();
-
-        sphere.Material = material;
-
-        Assert.Equal(material, sphere.Material, _materialComparer);
     }
 }
