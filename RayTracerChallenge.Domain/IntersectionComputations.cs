@@ -2,11 +2,14 @@ namespace RayTracerChallenge.Domain;
 
 public class IntersectionComputations
 {
+    private const decimal Epsilon = 0.0001M;
+
     public decimal T { get; init; }
     public Sphere Object { get; init; }
     public Tuple Point { get; init; }
     public Tuple EyeVector { get; init; }
     public Tuple NormalVector { get; init; }
+    public Tuple OverPoint { get; set; }
     public bool Inside { get; init; }
 
     public IntersectionComputations(decimal t, Sphere obj,
@@ -35,6 +38,8 @@ public class IntersectionComputations
         if(Inside)
         {
             NormalVector = NormalVector * -1;
-        }        
+        }
+
+        OverPoint = Point + NormalVector * Epsilon;
     }
 }

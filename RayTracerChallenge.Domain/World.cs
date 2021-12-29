@@ -56,9 +56,11 @@ public class World
         {
             throw new NullReferenceException($"{nameof(Light)} must not be null");
         }
+        var isShadowed = IsShadowed(computations.OverPoint);
 
         return computations.Object.Material.Lighting(computations.Point,
-            Light, computations.EyeVector, computations.NormalVector);
+            Light, computations.EyeVector, computations.NormalVector,
+            isShadowed);
     }
 
     public Color ColorAt(Ray ray)
