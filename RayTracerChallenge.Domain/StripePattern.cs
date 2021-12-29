@@ -5,7 +5,8 @@ public class StripePattern : Pattern
     public Color First { get; }
     public Color Second { get; }
 
-    public StripePattern(Color first, Color second)
+    public StripePattern(Color first, Color second, Matrix? transform = null)
+        : base(transform)
     {
         First = first;
         Second = second;

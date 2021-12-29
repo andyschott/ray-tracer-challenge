@@ -5,6 +5,8 @@ namespace RayTracerChallenge.Domain.Tests;
 
 public class StripePatternTests
 {
+    private readonly TransformationFactory _factory = new TransformationFactory();
+
     private readonly IFixture _fixture = new Fixture();
 
     private readonly ColorComparer _colorComparer = new ColorComparer();
@@ -64,5 +66,46 @@ public class StripePatternTests
         var result = pattern.ColorAt(point);
 
         Assert.Equal(expectFirstColor ? pattern.First : pattern.Second, result);
+    }
+
+    [Fact]
+    public void ObjectTransformation()
+    {
+        var shape = new TestShape
+        {
+            Transform = _factory.Scale(2, 2, 2)
+        };
+        var pattern = new StripePattern(Color.White, Color.Black);
+
+        var result = pattern.ColorAt(shape, Tuple.CreatePoint(1.5M, 0, 0));
+
+        Assert.Equal(Color.White, result, _colorComparer);
+    }
+
+    [Fact]
+    public void PatternTransformation()
+    {
+        var shape = new TestShape();
+        var pattern = new StripePattern(Color.White, Color.Black,
+            _factory.Scale(2, 2, 2));
+        
+        var result = pattern.ColorAt(shape, Tuple.CreatePoint(1.5M, 0, 0));
+
+        Assert.Equal(Color.White, result, _colorComparer);
+    }
+
+    [Fact]
+    public void ObjectAndShapeTransformation()
+    {
+        var shape = new TestShape
+        {
+            Transform = _factory.Scale(2, 2, 2)
+        };
+        var pattern = new StripePattern(Color.White, Color.Black,
+            _factory.Translation(0.5M, 0, 0));
+
+        var result = pattern.ColorAt(shape, Tuple.CreatePoint(2.5M, 0, 0));
+
+        Assert.Equal(Color.White, result, _colorComparer);
     }
 }
