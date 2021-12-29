@@ -56,9 +56,11 @@ public class World
         {
             throw new NullReferenceException($"{nameof(Light)} must not be null");
         }
+        var isShadowed = IsShadowed(computations.OverPoint);
 
         return computations.Object.Material.Lighting(computations.Point,
-            Light, computations.EyeVector, computations.NormalVector);
+            Light, computations.EyeVector, computations.NormalVector,
+            isShadowed);
     }
 
     public Color ColorAt(Ray ray)
@@ -72,5 +74,28 @@ public class World
 
         var computations = hit.PrepareComputations(ray);
         return ShadeHit(computations);
+    }
+
+    public bool IsShadowed(Tuple point)
+    {
+        if(!point.IsPoint)
+        {
+            throw new ArgumentException($"{nameof(point)} must be a point");
+        }
+
+        if(Light is null)
+        {
+            return false;
+        }
+
+        var vector = Light.Position - point;
+        var distance = vector.Magnitude();
+        var direction = vector.Normalize();
+
+        var ray = new Ray(point, direction);
+        var intersections = Intersect(ray);
+
+        var hit = intersections.Hit();
+        return hit?.T < distance;
     }
 }

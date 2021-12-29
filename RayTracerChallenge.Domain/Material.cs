@@ -2,13 +2,6 @@ namespace RayTracerChallenge.Domain;
 
 public class Material
 {
-    private static readonly Color _black = new Color
-    {
-        Red = 0,
-        Green = 0,
-        Blue = 0
-    };
-
     public Color Color { get; init; } = new Color
     {
         Red = 1,
@@ -21,7 +14,7 @@ public class Material
     public decimal Specular { get; init; } = 0.9M;
     public decimal Shininess { get; init; } = 200.0M;
 
-    public Color Lighting(Tuple point, Light light, Tuple eye, Tuple normal)
+    public Color Lighting(Tuple point, Light light, Tuple eye, Tuple normal, bool inShadow = false)
     {
         if(!point.IsPoint)
         {
@@ -52,10 +45,10 @@ public class Material
         // light vector and the normal vector. A negative number means the
         // light is on the other side of the surface.
         var lightDotNormal = lightVector.DotProduct(normal);
-        if(lightDotNormal < 0)
+        if(lightDotNormal < 0 || inShadow)
         {
-            diffuse = _black;
-            specular = _black;
+            diffuse = Color.Black;
+            specular = Color.Black;
         }
         else
         {
@@ -70,7 +63,7 @@ public class Material
 
             if(reflectDotEye <= 0)
             {
-                specular = _black;
+                specular = Color.Black;
             }
             else
             {

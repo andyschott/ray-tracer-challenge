@@ -8,6 +8,8 @@ public class WorldTests
 {
     private readonly IFixture _fixture = new Fixture();
 
+    private readonly TransformationFactory _factory = new TransformationFactory();
+
     private readonly LightComparer _lightComparer = new LightComparer();
     private readonly ColorComparer _colorComparer = new ColorComparer();
 
@@ -171,5 +173,92 @@ public class WorldTests
         var result = world.ColorAt(ray);
 
         Assert.Equal(world.Objects.ElementAt(1).Material.Color, result, _colorComparer);
+    }
+
+    [Fact]
+    public void IsShadowedMustTakePoint()
+    {
+        var world = _fixture.Build<World>()
+            .With(world => world.Light, _fixture.CreateLight())
+            .Create();
+        var vector = _fixture.CreateVector();
+
+        Assert.Throws<ArgumentException>(() => world.IsShadowed(vector));
+    }
+
+    [Fact]
+    public void NoShadows()
+    {
+        var world = World.Default();
+        var position = Tuple.CreatePoint(0, 10, 0);
+
+        var result = world.IsShadowed(position);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void NoShadowWithoutLight()
+    {
+        var world = _fixture.Build<World>()
+            .Without(world => world.Light)
+            .Create();
+        var position = _fixture.CreatePoint();
+
+        var result = world.IsShadowed(position);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void NoShadowWhenBehindLight()
+    {
+        var world = World.Default();
+        var position = Tuple.CreatePoint(-20, 20, -20);
+
+        var result = world.IsShadowed(position);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void NoShadowWhenObjectBehindPoint()
+    {
+        var world = World.Default();
+        var position = Tuple.CreatePoint(-2, 2, -2);
+
+        var result = world.IsShadowed(position);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void IntersectionWithShadow()
+    {
+        var world = new World
+        {
+            Light = new Light(Tuple.CreatePoint(0, 0, -10), Color.White),
+            Objects = new[]
+            {
+                new Sphere(),
+                new Sphere
+                {
+                    Transform = _factory.Translation(0, 0, 10)
+                }
+            }
+        };
+        var ray = new Ray(Tuple.CreatePoint(0, 0, 5), Tuple.CreateVector(0, 0, 1));
+        var intersection = new Intersection(4, world.Objects.ElementAt(1));
+        var computations = intersection.PrepareComputations(ray);
+
+        var result = world.ShadeHit(computations);
+
+        var expectedResult = new Color
+        {
+            Red = 0.1M,
+            Green = 0.1M,
+            Blue = 0.1M
+        };
+        Assert.Equal(expectedResult, result, _colorComparer);
     }
 }

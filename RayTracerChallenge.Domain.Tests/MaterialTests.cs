@@ -155,4 +155,25 @@ public class MaterialTests
             }
         },
     };
+
+    [Fact]
+    public void LightingWithShadow()
+    {
+        var material = new Material();
+        var position = Tuple.CreatePoint(0, 0, 0);
+        var eye = Tuple.CreateVector(0, 0, -1);
+        var normal = Tuple.CreateVector(0, 0, -1);
+
+        var light = new Light(Tuple.CreatePoint(0, 0, -10), Color.White);
+
+        var result = material.Lighting(position, light, eye, normal, true);
+
+        var expectedResult = new Color
+        {
+            Red = 0.1M,
+            Green = 0.1M,
+            Blue = 0.1M
+        };
+        Assert.Equal(expectedResult, result, _colorComparer);
+    }
 }

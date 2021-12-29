@@ -4,6 +4,8 @@ namespace RayTracerChallenge.Domain.Tests;
 
 public class IntersectionTests
 {
+    private readonly TransformationFactory _factory = new TransformationFactory();
+
     private readonly TupleComparer _tupleComparer = new TupleComparer();
 
     [Fact]
@@ -121,5 +123,20 @@ public class IntersectionTests
         Assert.Equal(expectedNormal, result.NormalVector, _tupleComparer);
 
         Assert.True(result.Inside);
+    }
+
+    [Fact]
+    public void HitShouldOffsetPoint()
+    {
+        var ray = new Ray(Tuple.CreatePoint(0, 0, -5), Tuple.CreateVector(0, 0, 1));
+        var sphere = new Sphere
+        {
+            Transform = _factory.Translation(0, 0, 1)
+        };
+        var intersection = new Intersection(5, sphere);
+        var computations = intersection.PrepareComputations(ray);
+
+        Assert.True(computations.OverPoint.Z < -0.0001M / 2);
+        Assert.True(computations.Point.Z > computations.OverPoint.Z);
     }
 }

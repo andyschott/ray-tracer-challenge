@@ -15,4 +15,10 @@ public static class FixtureExtensions
             .With(tuple => tuple.W, Tuple.Vector)
             .Create();
     }
+
+    public static Light CreateLight(this IFixture fixture)
+    {
+        return new Light(fixture.CreatePoint(),
+            fixture.Create<Color>());
+    }
 }
