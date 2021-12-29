@@ -1,6 +1,6 @@
 namespace RayTracerChallenge.Domain;
 
-public class StripePattern
+public class StripePattern : Pattern
 {
     public Color First { get; }
     public Color Second { get; }
@@ -11,7 +11,7 @@ public class StripePattern
         Second = second;
     }
 
-    public Color ColorAt(Tuple point)
+    public override Color ColorAt(Tuple point)
     {
         if(!point.IsPoint)
         {
@@ -25,6 +25,4 @@ public class StripePattern
 
         return Second;
     }
-
-    public Color this[Tuple point] => ColorAt(point);
 }

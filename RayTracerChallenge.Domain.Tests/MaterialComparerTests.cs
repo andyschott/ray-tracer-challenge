@@ -14,6 +14,8 @@ public sealed class MaterialComparerTests : IDisposable
 
     public MaterialComparerTests()
     {
+        _fixture.Customize<Material>(c => c.Without(m => m.Pattern));
+
         _mockColorComparer = _repository.Create<IEqualityComparer<Color>>();
         _comparer = new MaterialComparer(_mockColorComparer.Object);
     }
@@ -56,6 +58,7 @@ public sealed class MaterialComparerTests : IDisposable
         var diffuse = _fixture.Create<decimal>();
         var specular = _fixture.Create<decimal>();
         var shininess = _fixture.Create<decimal>();
+        var pattern = _fixture.Create<StripePattern>();
 
         var x = new Material
         {
@@ -63,7 +66,8 @@ public sealed class MaterialComparerTests : IDisposable
             Ambient = ambient,
             Diffuse = diffuse,
             Specular = specular,
-            Shininess = shininess
+            Shininess = shininess,
+            Pattern = pattern
         };
         var y = new Material
         {
@@ -71,7 +75,8 @@ public sealed class MaterialComparerTests : IDisposable
             Ambient = ambient,
             Diffuse = diffuse,
             Specular = specular,
-            Shininess = shininess
+            Shininess = shininess,
+            Pattern = pattern
         };
 
         _mockColorComparer.Setup(comparer => comparer.Equals(x.Color, y.Color))
@@ -94,12 +99,14 @@ public sealed class MaterialComparerTests : IDisposable
             .With(m => m.Diffuse, diffuse)
             .With(m => m.Specular, specular)
             .With(m => m.Shininess, shininess)
+            .Without(m => m.Pattern)
             .Create();
         var y = _fixture.Build<Material>()
             .With(m => m.Ambient, ambient)
             .With(m => m.Diffuse, diffuse)
             .With(m => m.Specular, specular)
             .With(m => m.Shininess, shininess)
+            .Without(m => m.Pattern)
             .Create();
 
         _mockColorComparer.Setup(comparer => comparer.Equals(x.Color, y.Color))
@@ -122,12 +129,14 @@ public sealed class MaterialComparerTests : IDisposable
             .With(m => m.Diffuse, diffuse)
             .With(m => m.Specular, specular)
             .With(m => m.Shininess, shininess)
+            .Without(m => m.Pattern)
             .Create();
         var y = _fixture.Build<Material>()
             .With(m => m.Color, color)
             .With(m => m.Diffuse, diffuse)
             .With(m => m.Specular, specular)
             .With(m => m.Shininess, shininess)
+            .Without(m => m.Pattern)
             .Create();
 
         _mockColorComparer.Setup(comparer => comparer.Equals(x.Color, y.Color))
@@ -150,12 +159,14 @@ public sealed class MaterialComparerTests : IDisposable
             .With(m => m.Ambient, ambient)
             .With(m => m.Specular, specular)
             .With(m => m.Shininess, shininess)
+            .Without(m => m.Pattern)
             .Create();
         var y = _fixture.Build<Material>()
             .With(m => m.Color, color)
             .With(m => m.Ambient, ambient)
             .With(m => m.Specular, specular)
             .With(m => m.Shininess, shininess)
+            .Without(m => m.Pattern)
             .Create();
 
         _mockColorComparer.Setup(comparer => comparer.Equals(x.Color, y.Color))
@@ -178,12 +189,14 @@ public sealed class MaterialComparerTests : IDisposable
             .With(m => m.Ambient, ambient)
             .With(m => m.Diffuse, diffuse)
             .With(m => m.Shininess, shininess)
+            .Without(m => m.Pattern)
             .Create();
         var y = _fixture.Build<Material>()
             .With(m => m.Color, color)
             .With(m => m.Ambient, ambient)
             .With(m => m.Diffuse, diffuse)
             .With(m => m.Shininess, shininess)
+            .Without(m => m.Pattern)
             .Create();
 
         _mockColorComparer.Setup(comparer => comparer.Equals(x.Color, y.Color))
@@ -206,12 +219,47 @@ public sealed class MaterialComparerTests : IDisposable
             .With(m => m.Ambient, ambient)
             .With(m => m.Diffuse, diffuse)
             .With(m => m.Specular, specular)
+            .Without(m => m.Pattern)
             .Create();
         var y = _fixture.Build<Material>()
             .With(m => m.Color, color)
             .With(m => m.Ambient, ambient)
             .With(m => m.Diffuse, diffuse)
             .With(m => m.Specular, specular)
+            .Without(m => m.Pattern)
+            .Create();
+
+        _mockColorComparer.Setup(comparer => comparer.Equals(x.Color, y.Color))
+            .Returns(false)
+            .Verifiable();
+
+        Assert.False(_comparer.Equals(x, y));
+    }
+
+    [Fact]
+    public void PatternsAreDifferent()
+    {
+        var color = _fixture.Create<Color>();
+        var ambient = _fixture.Create<decimal>();
+        var diffuse = _fixture.Create<decimal>();
+        var specular = _fixture.Create<decimal>();
+        var shininess = _fixture.Create<decimal>();
+
+        var x = _fixture.Build<Material>()
+            .With(m => m.Color, color)
+            .With(m => m.Ambient, ambient)
+            .With(m => m.Diffuse, diffuse)
+            .With(m => m.Specular, specular)
+            .With(m => m.Shininess, shininess)
+            .With(m => m.Pattern, _fixture.Create<StripePattern>())
+            .Create();
+        var y = _fixture.Build<Material>()
+            .With(m => m.Color, color)
+            .With(m => m.Ambient, ambient)
+            .With(m => m.Diffuse, diffuse)
+            .With(m => m.Specular, specular)
+            .With(m => m.Shininess, shininess)
+            .With(m => m.Pattern, _fixture.Create<StripePattern>())
             .Create();
 
         _mockColorComparer.Setup(comparer => comparer.Equals(x.Color, y.Color))

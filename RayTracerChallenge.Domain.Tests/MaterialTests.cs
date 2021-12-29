@@ -13,6 +13,7 @@ public class MaterialTests
     {
         _fixture.Register(() => new Light(_fixture.CreatePoint(),
             _fixture.Create<Color>()));
+        _fixture.Customize<Material>(c => c.Without(m => m.Pattern));
     }
 
     [Fact]
@@ -175,5 +176,27 @@ public class MaterialTests
             Blue = 0.1M
         };
         Assert.Equal(expectedResult, result, _colorComparer);
+    }
+
+    [Theory]
+    [InlineData(0.9, 0, 0, true)]
+    [InlineData(1.1, 0, 0, false)]
+    public void LightingWithStripePatternApplied(decimal x, decimal y, decimal z, bool expectFirstColor)
+    {
+        var pattern = new StripePattern(Color.White, Color.Black);
+        var material = new Material
+        {
+            Pattern = pattern,
+            Ambient = 1,
+            Diffuse = 0,
+            Specular = 0
+        };
+        var eye = Tuple.CreateVector(0, 0, -1);
+        var normal = Tuple.CreateVector(0, 0, -1);
+        var light = new Light(Tuple.CreatePoint(0, 0, -10), Color.White);
+
+        var result = material.Lighting(Tuple.CreatePoint(x, y, z), light, eye, normal);
+
+        Assert.Equal(expectFirstColor ? pattern.First : pattern.Second, result, _colorComparer);
     }
 }

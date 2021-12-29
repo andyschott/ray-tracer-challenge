@@ -21,6 +21,7 @@ public class WorldTests
             _fixture.CreateVector(), _fixture.CreateVector()));
 
         _fixture.Customizations.Add(new TypeRelay(typeof(Shape), typeof(TestShape)));
+        _fixture.Customize<Material>(c => c.Without(m => m.Pattern));
     }
 
     [Fact]

@@ -34,7 +34,8 @@ public class MaterialComparer : IEqualityComparer<Material>
             Math.Abs(x.Ambient - y.Ambient) < Epsilon &&
             Math.Abs(x.Diffuse - y.Diffuse) < Epsilon &&
             Math.Abs(x.Specular - y.Specular) < Epsilon &&
-            Math.Abs(x.Shininess - y.Shininess) < Epsilon;
+            Math.Abs(x.Shininess - y.Shininess) < Epsilon &&
+            ReferenceEquals(x.Pattern, y.Pattern); // TODO: consider writing pattern comparers
     }
 
     public int GetHashCode([DisallowNull] Material obj)

@@ -7,6 +7,7 @@ public class IntersectionComparerTests : AbstractComparerTests<Intersection>
     public IntersectionComparerTests() : base(new IntersectionComparer())
     {
         _fixture.Customizations.Add(new TypeRelay(typeof(Shape), typeof(TestShape)));
+        _fixture.Customize<Material>(c => c.Without(m => m.Pattern));
     }
 
     [Fact]

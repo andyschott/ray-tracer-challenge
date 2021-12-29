@@ -2,17 +2,13 @@ namespace RayTracerChallenge.Domain;
 
 public class Material
 {
-    public Color Color { get; init; } = new Color
-    {
-        Red = 1,
-        Green = 1,
-        Blue = 1
-    };
+    public Color Color { get; init; } = Color.White;
 
     public decimal Ambient { get; init; } = 0.1M;
     public decimal Diffuse { get; init; } = 0.9M;
     public decimal Specular { get; init; } = 0.9M;
     public decimal Shininess { get; init; } = 200.0M;
+    public Pattern? Pattern { get; init; } = null;
 
     public Color Lighting(Tuple point, Light light, Tuple eye, Tuple normal, bool inShadow = false)
     {
@@ -30,7 +26,7 @@ public class Material
         }
 
         // combine the surface color with the light's color and intensity
-        var effectiveColor = Color * light.Intensity;
+        var effectiveColor = ColorAt(point) * light.Intensity;
 
         // find the direction of the light source
         var lightVector = (light.Position - point).Normalize();
@@ -76,4 +72,6 @@ public class Material
         // add the three contributions together to get the final shading
         return ambient + diffuse + specular;
     }
+
+    private Color ColorAt(Tuple point) => Pattern?.ColorAt(point) ?? Color;
 }
