@@ -1,4 +1,7 @@
-namespace RayTracerChallenge.Domain.Tests;
+using RayTracerChallenge.Domain.Patterns;
+
+namespace RayTracerChallenge.Domain.Tests.Patterns;
+
 public class GradientPatternTests
 {
     private readonly ColorComparer _colorComparer = new ColorComparer();

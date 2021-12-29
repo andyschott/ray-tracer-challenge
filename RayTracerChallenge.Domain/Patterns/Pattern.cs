@@ -1,4 +1,4 @@
-namespace RayTracerChallenge.Domain;
+namespace RayTracerChallenge.Domain.Patterns;
 
 public abstract class Pattern
 {

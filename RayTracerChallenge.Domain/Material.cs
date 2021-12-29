@@ -1,3 +1,5 @@
+using RayTracerChallenge.Domain.Patterns;
+
 namespace RayTracerChallenge.Domain;
 
 public class Material

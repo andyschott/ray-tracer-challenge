@@ -1,7 +1,8 @@
 using System;
 using RayTracerChallenge.Domain.Tests.Extensions;
+using RayTracerChallenge.Domain.Patterns;
 
-namespace RayTracerChallenge.Domain.Tests;
+namespace RayTracerChallenge.Domain.Tests.Patterns;
 
 public class StripePatternTests
 {

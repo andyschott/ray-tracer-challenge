@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using RayTracerChallenge.Domain.Patterns;
 
 namespace RayTracerChallenge.Domain.Tests;
 
