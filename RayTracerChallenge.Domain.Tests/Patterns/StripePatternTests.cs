@@ -54,7 +54,7 @@ public class StripePatternTests
 
     [Theory]
     [InlineData(0, 0, 0, true)]
-    [InlineData(0, 0, 0, true)]
+    [InlineData(0.9, 0, 0, true)]
     [InlineData(1, 0, 0, false)]
     [InlineData(-0.1, 0, 0, false)]
     [InlineData(-1, 0, 0, false)]

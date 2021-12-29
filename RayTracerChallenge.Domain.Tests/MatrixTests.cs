@@ -71,8 +71,8 @@ public class MatrixTests
     [InlineData(4, 4, 4, 2)]
     public void MatricesDifferentDimensions(int m1Width, int m1Height, int m2Width, int m2Height)
     {
-        var matrix1 = new Matrix(4, 4);
-        var matrix2 = new Matrix(2, 4);
+        var matrix1 = new Matrix(m1Width, m1Height);
+        var matrix2 = new Matrix(m2Width, m2Height);
 
         Assert.Throws<ArgumentException>(() => matrix1.Multiply(matrix2));
     }
