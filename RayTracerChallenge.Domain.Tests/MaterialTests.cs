@@ -38,40 +38,43 @@ public class MaterialTests
     [Fact]
     public void LightingPointMustBePoint()
     {
-        var point = _fixture.CreateVector();
+        var shape = new TestShape();
         var light = _fixture.Create<Light>();
+        var point = _fixture.CreateVector();
         var eye = _fixture.CreateVector();
         var normal = _fixture.CreateVector();
 
         var material = _fixture.Create<Material>();
 
-        Assert.Throws<ArgumentException>(() => material.Lighting(point, light, eye, normal));
+        Assert.Throws<ArgumentException>(() => material.Lighting(shape, light, point, eye, normal));
     }
 
     [Fact]
     public void EyeMustBeVector()
     {
-        var point = _fixture.CreatePoint();
+        var shape = new TestShape();
         var light = _fixture.Create<Light>();
+        var point = _fixture.CreatePoint();
         var eye = _fixture.CreatePoint();
         var normal = _fixture.CreateVector();
 
         var material = _fixture.Create<Material>();
 
-        Assert.Throws<ArgumentException>(() => material.Lighting(point, light, eye, normal));
+        Assert.Throws<ArgumentException>(() => material.Lighting(shape, light, point, eye, normal));
     }
 
     [Fact]
     public void NormalMustBeVector()
     {
-        var point = _fixture.CreatePoint();
+        var shape = new TestShape();
         var light = _fixture.Create<Light>();
+        var point = _fixture.CreatePoint();
         var eye = _fixture.CreateVector();
         var normal = _fixture.CreatePoint();
 
         var material = _fixture.Create<Material>();
 
-        Assert.Throws<ArgumentException>(() => material.Lighting(point, light, eye, normal));
+        Assert.Throws<ArgumentException>(() => material.Lighting(shape, light, point, eye, normal));
     }
 
     [Theory]
@@ -80,15 +83,16 @@ public class MaterialTests
         Color expectedResult)
     {
         var material = new Material();
-        var position = Tuple.CreatePoint(0, 0, 0);
+        var shape = new TestShape();
         var light = new Light(lightPosition, new Color
         {
             Red = 1,
             Green = 1,
             Blue = 1
         });
+        var position = Tuple.CreatePoint(0, 0, 0);
 
-        var result = material.Lighting(position, light, eye, normal);
+        var result = material.Lighting(shape, light, position, eye, normal);
 
         Assert.Equal(expectedResult, result, _colorComparer);
     }
@@ -161,13 +165,14 @@ public class MaterialTests
     public void LightingWithShadow()
     {
         var material = new Material();
+        var shape = new TestShape();
         var position = Tuple.CreatePoint(0, 0, 0);
         var eye = Tuple.CreateVector(0, 0, -1);
         var normal = Tuple.CreateVector(0, 0, -1);
 
         var light = new Light(Tuple.CreatePoint(0, 0, -10), Color.White);
 
-        var result = material.Lighting(position, light, eye, normal, true);
+        var result = material.Lighting(shape, light, position, eye, normal, true);
 
         var expectedResult = new Color
         {
@@ -191,11 +196,12 @@ public class MaterialTests
             Diffuse = 0,
             Specular = 0
         };
+        var shape = new TestShape();
         var eye = Tuple.CreateVector(0, 0, -1);
         var normal = Tuple.CreateVector(0, 0, -1);
         var light = new Light(Tuple.CreatePoint(0, 0, -10), Color.White);
 
-        var result = material.Lighting(Tuple.CreatePoint(x, y, z), light, eye, normal);
+        var result = material.Lighting(shape, light, Tuple.CreatePoint(x, y, z), eye, normal);
 
         Assert.Equal(expectFirstColor ? pattern.First : pattern.Second, result, _colorComparer);
     }

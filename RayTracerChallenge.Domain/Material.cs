@@ -10,7 +10,7 @@ public class Material
     public decimal Shininess { get; init; } = 200.0M;
     public Pattern? Pattern { get; init; } = null;
 
-    public Color Lighting(Tuple point, Light light, Tuple eye, Tuple normal, bool inShadow = false)
+    public Color Lighting(Shape shape, Light light, Tuple point, Tuple eye, Tuple normal, bool inShadow = false)
     {
         if(!point.IsPoint)
         {
@@ -26,7 +26,7 @@ public class Material
         }
 
         // combine the surface color with the light's color and intensity
-        var effectiveColor = ColorAt(point) * light.Intensity;
+        var effectiveColor = ColorAt(shape, point) * light.Intensity;
 
         // find the direction of the light source
         var lightVector = (light.Position - point).Normalize();
@@ -73,5 +73,5 @@ public class Material
         return ambient + diffuse + specular;
     }
 
-    private Color ColorAt(Tuple point) => Pattern?.ColorAt(point) ?? Color;
+    private Color ColorAt(Shape shape, Tuple point) => Pattern?.ColorAt(shape, point) ?? Color;
 }

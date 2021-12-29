@@ -58,8 +58,8 @@ public class World
         }
         var isShadowed = IsShadowed(computations.OverPoint);
 
-        return computations.Object.Material.Lighting(computations.Point,
-            Light, computations.EyeVector, computations.NormalVector,
+        return computations.Object.Material.Lighting(computations.Object, Light,
+            computations.Point, computations.EyeVector, computations.NormalVector,
             isShadowed);
     }
 

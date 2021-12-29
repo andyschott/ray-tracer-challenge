@@ -53,7 +53,7 @@ public static class Chapter6
                     var normal = hit.Object.NormalAt(point);
                     var eye = ray.Direction;
 
-                    var color = hit.Object.Material.Lighting(point, light, eye, normal);
+                    var color = hit.Object.Material.Lighting(hit.Object, light, point, eye, normal);
                     canvas.WritePixel(x, y, color);
                 }
             }
