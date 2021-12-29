@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using RayTracerChallenge.Domain.Patterns;
 
 namespace RayTracerChallenge;
 
@@ -29,12 +30,12 @@ public static class Chapter7
     {
         var wallMaterial = new Material
         {
-            Color = new Color
+            Pattern = new SolidPattern(new Color
             {
                 Red = 1,
                 Green = 0.9M,
                 Blue = 0.9M
-            },
+            }),
             Specular = 0
         };
 
@@ -67,12 +68,12 @@ public static class Chapter7
             Transform = _factory.Translation(-0.5M, 1, 0.5M),
             Material = new Material
             {
-                Color = new Color
+                Pattern = new SolidPattern(new Color
                 {
                     Red = 0.1M,
                     Green = 1,
                     Blue = 0.5M
-                },
+                }),
                 Diffuse = 0.7M,
                 Specular = 0.3M
             }
@@ -84,12 +85,12 @@ public static class Chapter7
                 _factory.Scale(0.5M, 0.5M, 0.5M),
             Material = new Material
             {
-                Color = new Color
+                Pattern = new SolidPattern(new Color
                 {
                     Red = 0.5M,
                     Green = 1,
                     Blue = 0.1M
-                },
+                }),
                 Diffuse = 0.7M,
                 Specular = 0.3M
             }
@@ -101,12 +102,12 @@ public static class Chapter7
                 _factory.Scale(0.33M, 0.33M, 0.33M),
             Material = new Material
             {
-                Color = new Color
+                Pattern = new SolidPattern(new Color
                 {
                     Red = 1,
                     Green = 0.8M,
                     Blue = 0.1M
-                },
+                }),
                 Diffuse = 0.7M,
                 Specular = 0.3M
             }

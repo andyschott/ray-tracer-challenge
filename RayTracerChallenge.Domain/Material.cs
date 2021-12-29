@@ -4,13 +4,11 @@ namespace RayTracerChallenge.Domain;
 
 public class Material
 {
-    public Color Color { get; init; } = Color.White;
-
     public decimal Ambient { get; init; } = 0.1M;
     public decimal Diffuse { get; init; } = 0.9M;
     public decimal Specular { get; init; } = 0.9M;
     public decimal Shininess { get; init; } = 200.0M;
-    public Pattern? Pattern { get; init; } = null;
+    public Pattern Pattern { get; init; } = new SolidPattern(Color.White);
 
     public Color Lighting(Shape shape, Light light, Tuple point, Tuple eye, Tuple normal, bool inShadow = false)
     {
@@ -28,7 +26,8 @@ public class Material
         }
 
         // combine the surface color with the light's color and intensity
-        var effectiveColor = ColorAt(shape, point) * light.Intensity;
+        var color = Pattern.ColorAt(shape, point);
+        var effectiveColor = color * light.Intensity;
 
         // find the direction of the light source
         var lightVector = (light.Position - point).Normalize();
@@ -74,6 +73,4 @@ public class Material
         // add the three contributions together to get the final shading
         return ambient + diffuse + specular;
     }
-
-    private Color ColorAt(Shape shape, Tuple point) => Pattern?.ColorAt(shape, point) ?? Color;
 }

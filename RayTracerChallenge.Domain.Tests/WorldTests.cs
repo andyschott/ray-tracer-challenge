@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using AutoFixture.Kernel;
+using RayTracerChallenge.Domain.Patterns;
 using RayTracerChallenge.Domain.Tests.Extensions;
 
 namespace RayTracerChallenge.Domain.Tests;
@@ -157,16 +158,16 @@ public class WorldTests
     public void ColorWhenIntersectionBehindRay()
     {
         var world = World.Default(null, new Material
-            {
-                Color = new Color
+        {
+                Ambient = 1,
+                Diffuse = 0.7M,
+                Specular = 0.2M,
+                Pattern = new SolidPattern(new Color
                 {
                     Red = 0.8M,
                     Green = 1.0M,
                     Blue = 0.6M
-                },
-                Ambient = 1,
-                Diffuse = 0.7M,
-                Specular = 0.2M
+                })
             }, new Material
             {
                 Ambient = 1
@@ -176,7 +177,9 @@ public class WorldTests
 
         var result = world.ColorAt(ray);
 
-        Assert.Equal(world.Objects.ElementAt(1).Material.Color, result, _colorComparer);
+        var solidPattern = (SolidPattern)world.Objects.ElementAt(1).Material.Pattern;
+
+        Assert.Equal(solidPattern.Color, result, _colorComparer);
     }
 
     [Fact]
