@@ -1,3 +1,4 @@
+using System;
 using Moq.Protected;
 using RayTracerChallenge.Domain.Extensions;
 
@@ -143,5 +144,19 @@ public class IntersectionTests
 
         Assert.True(computations.OverPoint.Z < -0.0001M / 2);
         Assert.True(computations.Point.Z > computations.OverPoint.Z);
+    }
+
+    [Fact]
+    public void PrecomputeReflectionVector()
+    {
+        var shape = new Plane();
+        var ray = new Ray(Tuple.CreatePoint(0, 1, -1),
+            Tuple.CreateVector(0, Convert.ToDecimal(-1 * Math.Sqrt(2) / 2), Convert.ToDecimal(Math.Sqrt(2) / 2)));
+        var intersection = new Intersection(Convert.ToDecimal(Math.Sqrt(2)), shape);
+        var computations = intersection.PrepareComputations(ray);
+
+        var expectedResult = Tuple.CreateVector(0, Convert.ToDecimal(Math.Sqrt(2) / 2), Convert.ToDecimal(Math.Sqrt(2) / 2));
+
+        Assert.Equal(expectedResult, computations.ReflectVector, _tupleComparer);
     }
 }

@@ -19,7 +19,8 @@ public class WorldTests
     {
         _fixture.Register(() => new IntersectionComputations(_fixture.Create<decimal>(),
             _fixture.Create<Shape>(), _fixture.CreatePoint(),
-            _fixture.CreateVector(), _fixture.CreateVector()));
+            _fixture.CreateVector(), _fixture.CreateVector(),
+            _fixture.CreateVector()));
 
         _fixture.Customizations.Add(new TypeRelay(typeof(Shape), typeof(TestShape)));
         _fixture.Customize<Material>(c => c.Without(m => m.Pattern));
