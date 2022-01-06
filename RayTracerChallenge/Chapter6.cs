@@ -1,3 +1,5 @@
+using RayTracerChallenge.Domain.Patterns;
+
 namespace RayTracerChallenge;
 
 public static class Chapter6
@@ -18,12 +20,12 @@ public static class Chapter6
         {
             Material = new Material
             {
-                Color = new Color
+                Pattern = new SolidPattern(new Color
                 {
                     Red = 1,
                     Green = 0.2M,
                     Blue = 1
-                }
+                })
             }
         };
 
@@ -53,7 +55,7 @@ public static class Chapter6
                     var normal = hit.Object.NormalAt(point);
                     var eye = ray.Direction;
 
-                    var color = hit.Object.Material.Lighting(point, light, eye, normal);
+                    var color = hit.Object.Material.Lighting(hit.Object, light, point, eye, normal);
                     canvas.WritePixel(x, y, color);
                 }
             }

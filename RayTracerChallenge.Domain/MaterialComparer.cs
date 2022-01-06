@@ -1,23 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
+using RayTracerChallenge.Domain.Patterns;
 
 namespace RayTracerChallenge.Domain;
 
 public class MaterialComparer : IEqualityComparer<Material>
 {
-    private readonly IEqualityComparer<Color> _colorComparer;
-
     private const decimal Epsilon = 0.0001M;
-
-    public MaterialComparer()
-        : this(new ColorComparer())
-    {
-    }
-
-    // Called directly for testing only
-    internal MaterialComparer(IEqualityComparer<Color> colorComparer)
-    {
-        _colorComparer = colorComparer;
-    }
 
     public bool Equals(Material? x, Material? y)
     {
@@ -30,17 +18,16 @@ public class MaterialComparer : IEqualityComparer<Material>
             return false;
         }
 
-        return _colorComparer.Equals(x.Color, y.Color) &&
-            Math.Abs(x.Ambient - y.Ambient) < Epsilon &&
+        // TODO: consider writing pattern comparers
+        return Math.Abs(x.Ambient - y.Ambient) < Epsilon &&
             Math.Abs(x.Diffuse - y.Diffuse) < Epsilon &&
             Math.Abs(x.Specular - y.Specular) < Epsilon &&
-            Math.Abs(x.Shininess - y.Shininess) < Epsilon;
+            Math.Abs(x.Shininess - y.Shininess) < Epsilon; 
     }
 
     public int GetHashCode([DisallowNull] Material obj)
     {
-        return HashCode.Combine(_colorComparer.GetHashCode(obj.Color),
-            obj.Ambient, obj.Diffuse, obj.Specular,
+        return HashCode.Combine(obj.Ambient, obj.Diffuse, obj.Specular,
             obj.Shininess);
     }
 }

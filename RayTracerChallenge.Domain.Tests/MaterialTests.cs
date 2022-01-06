@@ -1,5 +1,6 @@
 using System;
 using RayTracerChallenge.Domain.Tests.Extensions;
+using RayTracerChallenge.Domain.Patterns;
 
 namespace RayTracerChallenge.Domain.Tests;
 
@@ -13,6 +14,7 @@ public class MaterialTests
     {
         _fixture.Register(() => new Light(_fixture.CreatePoint(),
             _fixture.Create<Color>()));
+        _fixture.Customize<Material>(c => c.Without(m => m.Pattern));
     }
 
     [Fact]
@@ -20,57 +22,57 @@ public class MaterialTests
     {
         var material = new Material();
 
-        var black = new Color
-        {
-            Red = 1,
-            Green = 1,
-            Blue = 1
-        };
-
-        Assert.Equal(black, material.Color, _colorComparer);
         Assert.Equal(0.1M, material.Ambient);
         Assert.Equal(0.9M, material.Diffuse);
         Assert.Equal(0.9M, material.Specular);
         Assert.Equal(200.0M, material.Shininess);
+
+        Assert.IsType<SolidPattern>(material.Pattern);
+
+        var solidPattern = (SolidPattern)material.Pattern;
+        Assert.Equal(Color.White, solidPattern.Color, _colorComparer);
     }
 
     [Fact]
     public void LightingPointMustBePoint()
     {
-        var point = _fixture.CreateVector();
+        var shape = new TestShape();
         var light = _fixture.Create<Light>();
+        var point = _fixture.CreateVector();
         var eye = _fixture.CreateVector();
         var normal = _fixture.CreateVector();
 
         var material = _fixture.Create<Material>();
 
-        Assert.Throws<ArgumentException>(() => material.Lighting(point, light, eye, normal));
+        Assert.Throws<ArgumentException>(() => material.Lighting(shape, light, point, eye, normal));
     }
 
     [Fact]
     public void EyeMustBeVector()
     {
-        var point = _fixture.CreatePoint();
+        var shape = new TestShape();
         var light = _fixture.Create<Light>();
+        var point = _fixture.CreatePoint();
         var eye = _fixture.CreatePoint();
         var normal = _fixture.CreateVector();
 
         var material = _fixture.Create<Material>();
 
-        Assert.Throws<ArgumentException>(() => material.Lighting(point, light, eye, normal));
+        Assert.Throws<ArgumentException>(() => material.Lighting(shape, light, point, eye, normal));
     }
 
     [Fact]
     public void NormalMustBeVector()
     {
-        var point = _fixture.CreatePoint();
+        var shape = new TestShape();
         var light = _fixture.Create<Light>();
+        var point = _fixture.CreatePoint();
         var eye = _fixture.CreateVector();
         var normal = _fixture.CreatePoint();
 
         var material = _fixture.Create<Material>();
 
-        Assert.Throws<ArgumentException>(() => material.Lighting(point, light, eye, normal));
+        Assert.Throws<ArgumentException>(() => material.Lighting(shape, light, point, eye, normal));
     }
 
     [Theory]
@@ -79,15 +81,16 @@ public class MaterialTests
         Color expectedResult)
     {
         var material = new Material();
-        var position = Tuple.CreatePoint(0, 0, 0);
+        var shape = new TestShape();
         var light = new Light(lightPosition, new Color
         {
             Red = 1,
             Green = 1,
             Blue = 1
         });
+        var position = Tuple.CreatePoint(0, 0, 0);
 
-        var result = material.Lighting(position, light, eye, normal);
+        var result = material.Lighting(shape, light, position, eye, normal);
 
         Assert.Equal(expectedResult, result, _colorComparer);
     }
@@ -160,13 +163,14 @@ public class MaterialTests
     public void LightingWithShadow()
     {
         var material = new Material();
+        var shape = new TestShape();
         var position = Tuple.CreatePoint(0, 0, 0);
         var eye = Tuple.CreateVector(0, 0, -1);
         var normal = Tuple.CreateVector(0, 0, -1);
 
         var light = new Light(Tuple.CreatePoint(0, 0, -10), Color.White);
 
-        var result = material.Lighting(position, light, eye, normal, true);
+        var result = material.Lighting(shape, light, position, eye, normal, true);
 
         var expectedResult = new Color
         {
@@ -175,5 +179,28 @@ public class MaterialTests
             Blue = 0.1M
         };
         Assert.Equal(expectedResult, result, _colorComparer);
+    }
+
+    [Theory]
+    [InlineData(0.9, 0, 0, true)]
+    [InlineData(1.1, 0, 0, false)]
+    public void LightingWithStripePatternApplied(decimal x, decimal y, decimal z, bool expectFirstColor)
+    {
+        var pattern = new StripePattern(Color.White, Color.Black);
+        var material = new Material
+        {
+            Pattern = pattern,
+            Ambient = 1,
+            Diffuse = 0,
+            Specular = 0
+        };
+        var shape = new TestShape();
+        var eye = Tuple.CreateVector(0, 0, -1);
+        var normal = Tuple.CreateVector(0, 0, -1);
+        var light = new Light(Tuple.CreatePoint(0, 0, -10), Color.White);
+
+        var result = material.Lighting(shape, light, Tuple.CreatePoint(x, y, z), eye, normal);
+
+        Assert.Equal(expectFirstColor ? pattern.First : pattern.Second, result, _colorComparer);
     }
 }

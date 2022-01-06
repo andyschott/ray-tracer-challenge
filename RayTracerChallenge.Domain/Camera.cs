@@ -2,14 +2,17 @@ namespace RayTracerChallenge.Domain;
 
 public class Camera
 {
-    public int Width { get; init; }
-    public int Height { get; init; }
-    public double FieldOfView { get; init; }
-    public Matrix Transform { get; init; }
+    public int Width { get; }
+    public int Height { get; }
+    public double FieldOfView { get; }
+    public Matrix Transform { get; }
 
-    public decimal PixelSize { get; init; }
-    public decimal HalfWidth { get; init; }
-    public decimal HalfHeight { get; init; }
+    public decimal PixelSize { get; }
+    public decimal HalfWidth { get; }
+    public decimal HalfHeight { get; }
+
+    private readonly Matrix _inverseTransform;
+    private readonly Tuple _origin;
 
     public Camera(int width, int height, double fieldOfView, Matrix? transform = null)
     {
@@ -17,6 +20,9 @@ public class Camera
         Height = height;
         FieldOfView = fieldOfView;
         Transform = transform ?? Matrix.Identity();
+
+        _inverseTransform = Transform.Invert();
+        _origin = _inverseTransform * Tuple.CreatePoint(0, 0, 0);
 
         (HalfWidth, HalfHeight, PixelSize) = ComputeDimensions(width, height, fieldOfView);
     }
@@ -58,12 +64,10 @@ public class Camera
         // using the camera matrix, transform the canvas point and the origin,
         // and then compute the ray's direction vector
         // (this assumes the camera is at z = -1)
-        var inverseCameraTransform = Transform.Invert();
-        var pixel = inverseCameraTransform * Tuple.CreatePoint(worldX, worldY, -1);
-        var origin = inverseCameraTransform * Tuple.CreatePoint(0, 0, 0);
-        var direction = (pixel - origin).Normalize();
+        var pixel = _inverseTransform * Tuple.CreatePoint(worldX, worldY, -1);
+        var direction = (pixel - _origin).Normalize();
 
-        return new Ray(origin, direction);
+        return new Ray(_origin, direction);
     }
 
     public Canvas Render(World world)

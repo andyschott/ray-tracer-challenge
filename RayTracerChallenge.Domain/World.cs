@@ -1,4 +1,5 @@
 using RayTracerChallenge.Domain.Extensions;
+using RayTracerChallenge.Domain.Patterns;
 
 namespace RayTracerChallenge.Domain;
 
@@ -21,14 +22,14 @@ public class World
         {
             Material = material1 ?? new Material
             {
-                Color = new Color
+                Diffuse = 0.7M,
+                Specular = 0.2M,
+                Pattern = new SolidPattern(new Color
                 {
                     Red = 0.8M,
                     Green = 1.0M,
                     Blue = 0.6M
-                },
-                Diffuse = 0.7M,
-                Specular = 0.2M
+                })
             }
         };
         var s2 = new Sphere
@@ -58,8 +59,8 @@ public class World
         }
         var isShadowed = IsShadowed(computations.OverPoint);
 
-        return computations.Object.Material.Lighting(computations.Point,
-            Light, computations.EyeVector, computations.NormalVector,
+        return computations.Object.Material.Lighting(computations.Object, Light,
+            computations.Point, computations.EyeVector, computations.NormalVector,
             isShadowed);
     }
 

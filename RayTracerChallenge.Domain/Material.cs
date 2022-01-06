@@ -1,20 +1,16 @@
+using RayTracerChallenge.Domain.Patterns;
+
 namespace RayTracerChallenge.Domain;
 
 public class Material
 {
-    public Color Color { get; init; } = new Color
-    {
-        Red = 1,
-        Green = 1,
-        Blue = 1
-    };
-
     public decimal Ambient { get; init; } = 0.1M;
     public decimal Diffuse { get; init; } = 0.9M;
     public decimal Specular { get; init; } = 0.9M;
     public decimal Shininess { get; init; } = 200.0M;
+    public Pattern Pattern { get; init; } = new SolidPattern(Color.White);
 
-    public Color Lighting(Tuple point, Light light, Tuple eye, Tuple normal, bool inShadow = false)
+    public Color Lighting(Shape shape, Light light, Tuple point, Tuple eye, Tuple normal, bool inShadow = false)
     {
         if(!point.IsPoint)
         {
@@ -30,7 +26,8 @@ public class Material
         }
 
         // combine the surface color with the light's color and intensity
-        var effectiveColor = Color * light.Intensity;
+        var color = Pattern.ColorAt(shape, point);
+        var effectiveColor = color * light.Intensity;
 
         // find the direction of the light source
         var lightVector = (light.Position - point).Normalize();

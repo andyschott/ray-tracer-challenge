@@ -19,6 +19,7 @@ public class ShapeTests
     {
         _fixture.Customizations.Add(new TypeRelay(typeof(Shape), typeof(TestShape)));
         _fixture.Customize<TestShape>(c => c.OmitAutoProperties());
+        _fixture.Customize<Material>(c => c.Without(m => m.Pattern));
     }
 
     [Fact]
