@@ -16,7 +16,8 @@ public class Intersection
         var point = ray.Position(T);
         var eyeVector = ray.Direction * -1;
         var normalVector = Object.NormalAt(point);
+        var reflectVector = ray.Direction.Reflect(normalVector);
 
-        return new IntersectionComputations(T, Object, point, eyeVector, normalVector);
+        return new IntersectionComputations(T, Object, point, eyeVector, normalVector, reflectVector);
     }
 }

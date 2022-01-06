@@ -3,7 +3,7 @@ using RayTracerChallenge.Domain.Patterns;
 
 namespace RayTracerChallenge;
 
-public static class Chapter9
+public static class Chapter10
 {
     private static readonly TransformationFactory _factory = new TransformationFactory();
 
@@ -41,8 +41,23 @@ public static class Chapter9
 
         var floor = new Plane
         {
-            Transform = _factory.Scale(10, 0.01M, 10),
-            Material = wallMaterial
+            Transform = _factory.RotationAroundYAxis(Math.PI / 4),
+            Material = new Material
+            {
+                Pattern = new CheckerPattern(new Color
+                {
+                    Red = 0.75M,
+                    Green = 0.75M,
+                    Blue = 0.75M
+                }, new Color
+                {
+                    Red = 0.25M,
+                    Green = 0.25M,
+                    Blue = 0.25M
+                }),
+                Specular = 0,
+                Reflective = 1,
+            }
         };
 
         var leftWall = new Plane

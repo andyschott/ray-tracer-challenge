@@ -26,7 +26,7 @@ public static class Chapter7
         return writer.Save(canvas);
     }
 
-    private static IEnumerable<Sphere> CreateObjects()
+    private static IList<Shape> CreateObjects()
     {
         var wallMaterial = new Material
         {
@@ -113,7 +113,7 @@ public static class Chapter7
             }
         };
 
-        return new[]
+        return new List<Shape>
         {
             floor,
             leftWall,

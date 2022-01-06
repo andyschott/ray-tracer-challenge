@@ -19,7 +19,8 @@ public class WorldTests
     {
         _fixture.Register(() => new IntersectionComputations(_fixture.Create<decimal>(),
             _fixture.Create<Shape>(), _fixture.CreatePoint(),
-            _fixture.CreateVector(), _fixture.CreateVector()));
+            _fixture.CreateVector(), _fixture.CreateVector(),
+            _fixture.CreateVector()));
 
         _fixture.Customizations.Add(new TypeRelay(typeof(Shape), typeof(TestShape)));
         _fixture.Customize<Material>(c => c.Without(m => m.Pattern));
@@ -267,5 +268,136 @@ public class WorldTests
             Blue = 0.1M
         };
         Assert.Equal(expectedResult, result, _colorComparer);
+    }
+
+    [Fact]
+    public void ReflectedColorOfNonReflectiveMaterial()
+    {
+        var world = World.Default(material2: new Material
+        {
+            Ambient = 1
+        });
+        var ray = new Ray(Tuple.CreatePoint(0, 0, 0), Tuple.CreateVector(0, 0, 1));
+        var intersection = new Intersection(1, world.Objects.ElementAt(1));
+        var computations = intersection.PrepareComputations(ray);
+
+        var result = world.ReflectedColor(computations);
+
+        Assert.Equal(Color.Black, result, _colorComparer);
+    }
+
+    [Fact]
+    public void ReflectedColorOfReflectiveMaterial()
+    {
+        var world = World.Default();
+        var shape = new Plane
+        {
+            Material = new Material
+            {
+                Reflective = 0.5M
+            },
+            Transform = _factory.Translation(0, -1, 0)
+        };
+        world.Objects.Add(shape);
+
+        var ray = new Ray(Tuple.CreatePoint(0, 0, -3),
+            Tuple.CreateVector(0, Convert.ToDecimal(-1 * Math.Sqrt(2) / 2), Convert.ToDecimal(Math.Sqrt(2) / 2)));
+        var intersection = new Intersection(Convert.ToDecimal(Math.Sqrt(2)), shape);
+        var computations = intersection.PrepareComputations(ray);
+
+        var result = world.ReflectedColor(computations);
+
+        var expectedResult = new Color
+        {
+            Red = 0.19032M,
+            Green = 0.2379M,
+            Blue = 0.14274M
+        };
+        Assert.Equal(expectedResult, result, _colorComparer);
+    }
+
+    [Fact]
+    public void ShadeHitWithReflectiveMaterial()
+    {
+        var world = World.Default();
+        var shape = new Plane
+        {
+            Material = new Material
+            {
+                Reflective = 0.5M
+            },
+            Transform = _factory.Translation(0, -1, 0)
+        };
+        world.Objects.Add(shape);
+
+        var ray = new Ray(Tuple.CreatePoint(0, 0, -3),
+            Tuple.CreateVector(0, Convert.ToDecimal(-1 * Math.Sqrt(2) / 2), Convert.ToDecimal(Math.Sqrt(2) / 2)));
+        var intersection = new Intersection(Convert.ToDecimal(Math.Sqrt(2)), shape);
+        var computations = intersection.PrepareComputations(ray);
+
+        var result = world.ShadeHit(computations);
+
+        var expectedResult = new Color
+        {
+            Red = 0.87677M,
+            Green = 0.92436M,
+            Blue = 0.82918M
+        };
+        Assert.Equal(expectedResult, result, _colorComparer);
+    }
+
+    [Fact]
+    public void ColorWithMutuallyReflectiveSurfaces()
+    {
+        var world = World.Default(new Light(Tuple.CreatePoint(0, 0, 0), Color.White));
+        var lower = new Plane
+        {
+            Material = new Material
+            {
+                Reflective = 1
+            },
+            Transform = _factory.Translation(0, -1, 0)
+        };
+        world.Objects.Add(lower);
+
+        var upper = new Plane
+        {
+            Material = new Material
+            {
+                Reflective = 1
+            },
+            Transform = _factory.Translation(0, 1, 0)
+        };
+        world.Objects.Add(upper);
+
+        var ray = new Ray(Tuple.CreatePoint(0, 0, 0), Tuple.CreateVector(0, 1, 0));
+
+        var exception = Record.Exception(() => world.ColorAt(ray));
+        
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void ReflectedColorAtMaximumRecursiveDepth()
+    {
+        var world = World.Default();
+        var shape = new Plane
+        {
+            Material = new Material
+            {
+                Reflective = 0.5M
+            },
+            Transform = _factory.Translation(0, -1, 0)
+        };
+        world.Objects.Add(shape);
+
+        var ray = new Ray(Tuple.CreatePoint(0, 0, -3),
+            Tuple.CreateVector(0, Convert.ToDecimal(-1 * Math.Sqrt(2) / 2), Convert.ToDecimal(Math.Sqrt(2) / 2)));
+        var intersection = new Intersection(Convert.ToDecimal(Math.Sqrt(2)), shape);
+        var computations = intersection.PrepareComputations(ray);
+
+        var result = world.ReflectedColor(computations, 0);
+
+        Assert.Equal(Color.Black, result, _colorComparer);
     }
 }

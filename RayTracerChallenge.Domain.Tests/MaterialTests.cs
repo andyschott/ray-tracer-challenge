@@ -26,6 +26,7 @@ public class MaterialTests
         Assert.Equal(0.9M, material.Diffuse);
         Assert.Equal(0.9M, material.Specular);
         Assert.Equal(200.0M, material.Shininess);
+        Assert.Equal(0.0M, material.Reflective);
 
         Assert.IsType<SolidPattern>(material.Pattern);
 

@@ -11,9 +11,11 @@ public class IntersectionComputations
     public Tuple NormalVector { get; init; }
     public Tuple OverPoint { get; set; }
     public bool Inside { get; init; }
+    public Tuple ReflectVector { get; init; }
 
     public IntersectionComputations(decimal t, Shape obj,
-        Tuple point, Tuple eyeVector, Tuple normalVector)
+        Tuple point, Tuple eyeVector, Tuple normalVector,
+        Tuple reflectVector)
     {
         if(!point.IsPoint)
         {
@@ -27,12 +29,17 @@ public class IntersectionComputations
         {
             throw new ArgumentException($"{nameof(normalVector)} must be a vector");
         }
+        if(!reflectVector.IsVector)
+        {
+            throw new ArgumentException($"{nameof(reflectVector)} must be a vector");
+        }
 
         T = t;
         Object = obj;
         Point = point;
         EyeVector = eyeVector;
         NormalVector = normalVector;
+        ReflectVector = reflectVector;
 
         Inside = normalVector.DotProduct(eyeVector) < 0;
         if(Inside)

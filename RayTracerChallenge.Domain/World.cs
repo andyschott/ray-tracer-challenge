@@ -6,9 +6,11 @@ namespace RayTracerChallenge.Domain;
 public class World
 {
     public Light? Light { get; set; } = null;
-    public IEnumerable<Shape> Objects { get; set; } = Enumerable.Empty<Shape>();
+    public IList<Shape> Objects { get; set; } = new List<Shape>();
 
     private static readonly TransformationFactory _factory = new TransformationFactory();
+
+    private const int DefaultReflectionRecursions = 4;
 
     public static World Default(Light? light = null, Material? material1 = null, Material? material2 = null)
     {
@@ -41,7 +43,7 @@ public class World
         return new World
         {
             Light = light,
-            Objects = new[] { s1, s2 }
+            Objects = new List<Shape> { s1, s2 }
         };
     }
 
@@ -51,7 +53,7 @@ public class World
             .OrderBy(intersection => intersection.T);
     }
 
-    public Color ShadeHit(IntersectionComputations computations)
+    public Color ShadeHit(IntersectionComputations computations, int remaining = DefaultReflectionRecursions)
     {
         if(Light is null)
         {
@@ -59,12 +61,15 @@ public class World
         }
         var isShadowed = IsShadowed(computations.OverPoint);
 
-        return computations.Object.Material.Lighting(computations.Object, Light,
+        var surface = computations.Object.Material.Lighting(computations.Object, Light,
             computations.Point, computations.EyeVector, computations.NormalVector,
             isShadowed);
+        var reflected = ReflectedColor(computations, remaining);
+
+        return surface + reflected;
     }
 
-    public Color ColorAt(Ray ray)
+    public Color ColorAt(Ray ray, int remaining = DefaultReflectionRecursions)
     {
         var intersections = Intersect(ray);
         var hit = intersections.Hit();
@@ -74,7 +79,20 @@ public class World
         }
 
         var computations = hit.PrepareComputations(ray);
-        return ShadeHit(computations);
+        return ShadeHit(computations, remaining);
+    }
+
+    public Color ReflectedColor(IntersectionComputations computations, int remaining = DefaultReflectionRecursions)
+    {
+        if(remaining == 0 || computations.Object.Material.Reflective == 0.0M)
+        {
+            return Color.Black;
+        }
+
+        var reflectedRay = new Ray(computations.OverPoint, computations.ReflectVector);
+        var color = ColorAt(reflectedRay, remaining - 1);
+
+        return color * computations.Object.Material.Reflective;
     }
 
     public bool IsShadowed(Tuple point)
