@@ -10,6 +10,8 @@ public class World
 
     private static readonly TransformationFactory _factory = new TransformationFactory();
 
+    private const int DefaultReflectionRecursions = 4;
+
     public static World Default(Light? light = null, Material? material1 = null, Material? material2 = null)
     {
         light ??= new Light(Tuple.CreatePoint(-10, 10, -10), new Color
@@ -51,7 +53,7 @@ public class World
             .OrderBy(intersection => intersection.T);
     }
 
-    public Color ShadeHit(IntersectionComputations computations)
+    public Color ShadeHit(IntersectionComputations computations, int remaining = DefaultReflectionRecursions)
     {
         if(Light is null)
         {
@@ -62,12 +64,12 @@ public class World
         var surface = computations.Object.Material.Lighting(computations.Object, Light,
             computations.Point, computations.EyeVector, computations.NormalVector,
             isShadowed);
-        var reflected = ReflectedColor(computations);
+        var reflected = ReflectedColor(computations, remaining);
 
         return surface + reflected;
     }
 
-    public Color ColorAt(Ray ray)
+    public Color ColorAt(Ray ray, int remaining = DefaultReflectionRecursions)
     {
         var intersections = Intersect(ray);
         var hit = intersections.Hit();
@@ -77,18 +79,18 @@ public class World
         }
 
         var computations = hit.PrepareComputations(ray);
-        return ShadeHit(computations);
+        return ShadeHit(computations, remaining);
     }
 
-    public Color ReflectedColor(IntersectionComputations computations)
+    public Color ReflectedColor(IntersectionComputations computations, int remaining = DefaultReflectionRecursions)
     {
-        if(computations.Object.Material.Reflective == 0.0M)
+        if(remaining == 0 || computations.Object.Material.Reflective == 0.0M)
         {
             return Color.Black;
         }
 
         var reflectedRay = new Ray(computations.OverPoint, computations.ReflectVector);
-        var color = ColorAt(reflectedRay);
+        var color = ColorAt(reflectedRay, remaining - 1);
 
         return color * computations.Object.Material.Reflective;
     }

@@ -345,4 +345,59 @@ public class WorldTests
         };
         Assert.Equal(expectedResult, result, _colorComparer);
     }
+
+    [Fact]
+    public void ColorWithMutuallyReflectiveSurfaces()
+    {
+        var world = World.Default(new Light(Tuple.CreatePoint(0, 0, 0), Color.White));
+        var lower = new Plane
+        {
+            Material = new Material
+            {
+                Reflective = 1
+            },
+            Transform = _factory.Translation(0, -1, 0)
+        };
+        world.Objects.Add(lower);
+
+        var upper = new Plane
+        {
+            Material = new Material
+            {
+                Reflective = 1
+            },
+            Transform = _factory.Translation(0, 1, 0)
+        };
+        world.Objects.Add(upper);
+
+        var ray = new Ray(Tuple.CreatePoint(0, 0, 0), Tuple.CreateVector(0, 1, 0));
+
+        var exception = Record.Exception(() => world.ColorAt(ray));
+        
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void ReflectedColorAtMaximumRecursiveDepth()
+    {
+        var world = World.Default();
+        var shape = new Plane
+        {
+            Material = new Material
+            {
+                Reflective = 0.5M
+            },
+            Transform = _factory.Translation(0, -1, 0)
+        };
+        world.Objects.Add(shape);
+
+        var ray = new Ray(Tuple.CreatePoint(0, 0, -3),
+            Tuple.CreateVector(0, Convert.ToDecimal(-1 * Math.Sqrt(2) / 2), Convert.ToDecimal(Math.Sqrt(2) / 2)));
+        var intersection = new Intersection(Convert.ToDecimal(Math.Sqrt(2)), shape);
+        var computations = intersection.PrepareComputations(ray);
+
+        var result = world.ReflectedColor(computations, 0);
+
+        Assert.Equal(Color.Black, result, _colorComparer);
+    }
 }
