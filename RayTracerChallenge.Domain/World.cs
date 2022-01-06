@@ -6,7 +6,7 @@ namespace RayTracerChallenge.Domain;
 public class World
 {
     public Light? Light { get; set; } = null;
-    public IEnumerable<Shape> Objects { get; set; } = Enumerable.Empty<Shape>();
+    public IList<Shape> Objects { get; set; } = new List<Shape>();
 
     private static readonly TransformationFactory _factory = new TransformationFactory();
 
@@ -41,7 +41,7 @@ public class World
         return new World
         {
             Light = light,
-            Objects = new[] { s1, s2 }
+            Objects = new List<Shape> { s1, s2 }
         };
     }
 
@@ -75,6 +75,19 @@ public class World
 
         var computations = hit.PrepareComputations(ray);
         return ShadeHit(computations);
+    }
+
+    public Color ReflectedColor(IntersectionComputations computations)
+    {
+        if(computations.Object.Material.Reflective == 0.0M)
+        {
+            return Color.Black;
+        }
+
+        var reflectedRay = new Ray(computations.OverPoint, computations.ReflectVector);
+        var color = ColorAt(reflectedRay);
+
+        return color * computations.Object.Material.Reflective;
     }
 
     public bool IsShadowed(Tuple point)

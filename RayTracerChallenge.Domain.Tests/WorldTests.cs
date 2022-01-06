@@ -269,4 +269,50 @@ public class WorldTests
         };
         Assert.Equal(expectedResult, result, _colorComparer);
     }
+
+    [Fact]
+    public void ReflectedColorOfNonReflectiveMaterial()
+    {
+        var world = World.Default(material2: new Material
+        {
+            Ambient = 1
+        });
+        var ray = new Ray(Tuple.CreatePoint(0, 0, 0), Tuple.CreateVector(0, 0, 1));
+        var intersection = new Intersection(1, world.Objects.ElementAt(1));
+        var computations = intersection.PrepareComputations(ray);
+
+        var result = world.ReflectedColor(computations);
+
+        Assert.Equal(Color.Black, result, _colorComparer);
+    }
+
+    [Fact]
+    public void ReflectedColorOfReflectiveMaterial()
+    {
+        var world = World.Default();
+        var shape = new Plane
+        {
+            Material = new Material
+            {
+                Reflective = 0.5M
+            },
+            Transform = _factory.Translation(0, -1, 0)
+        };
+        world.Objects.Add(shape);
+
+        var ray = new Ray(Tuple.CreatePoint(0, 0, -3),
+            Tuple.CreateVector(0, Convert.ToDecimal(-1 * Math.Sqrt(2) / 2), Convert.ToDecimal(Math.Sqrt(2) / 2)));
+        var intersection = new Intersection(Convert.ToDecimal(Math.Sqrt(2)), shape);
+        var computations = intersection.PrepareComputations(ray);
+
+        var result = world.ReflectedColor(computations);
+
+        var expectedResult = new Color
+        {
+            Red = 0.19032M,
+            Green = 0.2379M,
+            Blue = 0.14274M
+        };
+        Assert.Equal(expectedResult, result, _colorComparer);
+    }
 }
