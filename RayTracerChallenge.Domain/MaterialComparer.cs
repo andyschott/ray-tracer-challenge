@@ -22,12 +22,13 @@ public class MaterialComparer : IEqualityComparer<Material>
         return Math.Abs(x.Ambient - y.Ambient) < Epsilon &&
             Math.Abs(x.Diffuse - y.Diffuse) < Epsilon &&
             Math.Abs(x.Specular - y.Specular) < Epsilon &&
-            Math.Abs(x.Shininess - y.Shininess) < Epsilon; 
+            Math.Abs(x.Shininess - y.Shininess) < Epsilon &&
+            Math.Abs(x.Reflective - y.Reflective) < Epsilon;
     }
 
     public int GetHashCode([DisallowNull] Material obj)
     {
         return HashCode.Combine(obj.Ambient, obj.Diffuse, obj.Specular,
-            obj.Shininess);
+            obj.Shininess, obj.Reflective);
     }
 }

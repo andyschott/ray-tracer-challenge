@@ -9,6 +9,7 @@ public class Material
     public decimal Specular { get; init; } = 0.9M;
     public decimal Shininess { get; init; } = 200.0M;
     public Pattern Pattern { get; init; } = new SolidPattern(Color.White);
+    public decimal Reflective { get; init; } = 0.0M;
 
     public Color Lighting(Shape shape, Light light, Tuple point, Tuple eye, Tuple normal, bool inShadow = false)
     {
