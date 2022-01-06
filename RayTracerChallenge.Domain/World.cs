@@ -59,9 +59,12 @@ public class World
         }
         var isShadowed = IsShadowed(computations.OverPoint);
 
-        return computations.Object.Material.Lighting(computations.Object, Light,
+        var surface = computations.Object.Material.Lighting(computations.Object, Light,
             computations.Point, computations.EyeVector, computations.NormalVector,
             isShadowed);
+        var reflected = ReflectedColor(computations);
+
+        return surface + reflected;
     }
 
     public Color ColorAt(Ray ray)

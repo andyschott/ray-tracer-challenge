@@ -315,4 +315,34 @@ public class WorldTests
         };
         Assert.Equal(expectedResult, result, _colorComparer);
     }
+
+    [Fact]
+    public void ShadeHitWithReflectiveMaterial()
+    {
+        var world = World.Default();
+        var shape = new Plane
+        {
+            Material = new Material
+            {
+                Reflective = 0.5M
+            },
+            Transform = _factory.Translation(0, -1, 0)
+        };
+        world.Objects.Add(shape);
+
+        var ray = new Ray(Tuple.CreatePoint(0, 0, -3),
+            Tuple.CreateVector(0, Convert.ToDecimal(-1 * Math.Sqrt(2) / 2), Convert.ToDecimal(Math.Sqrt(2) / 2)));
+        var intersection = new Intersection(Convert.ToDecimal(Math.Sqrt(2)), shape);
+        var computations = intersection.PrepareComputations(ray);
+
+        var result = world.ShadeHit(computations);
+
+        var expectedResult = new Color
+        {
+            Red = 0.87677M,
+            Green = 0.92436M,
+            Blue = 0.82918M
+        };
+        Assert.Equal(expectedResult, result, _colorComparer);
+    }
 }
