@@ -1,6 +1,6 @@
 using Tuple = RayTracerChallenge.Domain.Tuple;
 
-namespace RayTracerChallenge.Chapter01;
+namespace RayTracerChallenge;
 
 public record Projectile(Tuple Position,
     Tuple Velocity);
