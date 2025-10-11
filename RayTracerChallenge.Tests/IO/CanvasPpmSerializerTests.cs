@@ -1,7 +1,7 @@
 using RayTracerChallenge.Domain;
 using RayTracerChallenge.IO;
 
-namespace RayTracerChallenge.Tests.Domain;
+namespace RayTracerChallenge.Tests.IO;
 
 public class CanvasPpmSerializerTests
 {
