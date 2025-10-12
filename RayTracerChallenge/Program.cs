@@ -1,49 +1,30 @@
-﻿using RayTracerChallenge;
-using RayTracerChallenge.Domain;
+﻿using RayTracerChallenge.Domain;
+using RayTracerChallenge.Extensions;
 using RayTracerChallenge.IO;
-using Environment = RayTracerChallenge.Environment;
 using Tuple = RayTracerChallenge.Domain.Tuple;
 
-// Projectile starts one unit above the origin
-// Velocity is normalized to 1 unit per tick
-var p = new Projectile(Tuple.CreatePoint(0, 1, 0),
-    Tuple.CreateVector(1, 1.8M, 0).Normalize() * 11.25M);
-        
-// Gravity -0.1 unit per tick
-// Wind -0.01 unit per tick
-var e = new Environment(Tuple.CreateVector(0, -0.1M, 0),
-    Tuple.CreateVector(-0.01M, 0, 0));
+var c = new Canvas(500, 500);
+var white = new Color(1, 1, 1);
 
-var c = new Canvas(900, 550);
-var red = new Color(1, 0.69M, 0.69M);
+var clockRadius = c.Width * 3 / 8;
+var translate = Matrix.Identity
+    .Scale(clockRadius, 0, clockRadius)
+    .Translate(250, 0, 250);
 
-while (p.Position.Y > 0)
+var twelve = Tuple.CreatePoint(0, 0, 1);
+for (var i = 1; i < 12; i++)
 {
-    WriteProjectile(p.Position);
-    p = Tick(e, p);
+    var r = translate * Matrix.Identity
+        .RotateY(i * Math.PI / 6);
+    var point = r * twelve;
+    c.WritePixel((int)point.X, (int)point.Z, white);
 }
+
+twelve = translate * twelve;
+c.WritePixel((int)twelve.X, (int)twelve.Z, white);
 
 var ppm = new CanvasPpmSerializer()
     .Serialize(c);
 using var writer = new StreamWriter("output.ppm");
 writer.Write(ppm);
 
-return;
-
-static Projectile Tick(Environment environment,
-    Projectile projectile)
-{
-    var position = projectile.Position + projectile.Velocity;
-    var velocity = projectile.Velocity +
-                   environment.Gravity + environment.Wind;
-        
-    return new Projectile(position, velocity);
-}
-
-void WriteProjectile(Tuple position)
-{
-    var x = (int)Math.Floor(position.X);
-    var y = (int)Math.Floor(c.Height - position.Y);
-
-    c[x, y] = red;
-}

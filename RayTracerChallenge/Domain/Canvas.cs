@@ -29,6 +29,12 @@ public class Canvas : IEnumerable<Color>
         }
     }
 
+    public void WritePixel(int x, int y, Color color)
+    {
+        y = Height - y;
+        this[x, y] = color;
+    }
+
     public IEnumerator<Color> GetEnumerator()
     {
         return _pixels.Cast<Color>()

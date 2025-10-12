@@ -1,4 +1,5 @@
 using System.Text;
+using RayTracerChallenge.Extensions;
 
 namespace RayTracerChallenge.Domain;
 
@@ -101,6 +102,29 @@ public sealed record Tuple
             left.Y / right,
             left.Z / right,
             left.W / right);
+    }
+
+    public bool Equals(Tuple? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+        
+        if (ReferenceEquals(null, other))
+        {
+            return true;
+        }
+        
+        return X.IsEquivalent(other.X) &&
+               Y.IsEquivalent(other.Y) &&
+               Z.IsEquivalent(other.Z) &&
+               W.IsEquivalent(other.W);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(X, Y, Z, W);
     }
 
     private bool PrintMembers(StringBuilder builder)

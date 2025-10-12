@@ -1,3 +1,5 @@
+using RayTracerChallenge.Extensions;
+
 namespace RayTracerChallenge.Domain;
 
 public sealed record Matrix
@@ -13,7 +15,7 @@ public sealed record Matrix
         set => _values[y, x] = value;
     }
 
-    public static Matrix Identity = new Matrix(4, 4)
+    public static readonly Matrix Identity = new Matrix(4, 4)
     {
         [0, 0] = 1,
         [0, 1] = 0,
@@ -40,8 +42,28 @@ public sealed record Matrix
         _values = new decimal[height, width];
     }
 
+    public Matrix(Matrix other)
+    {
+        Width = other.Width;
+        Height = other.Height;
+        _values = new decimal[Height, Width];
+
+        for (var y = 0; y < Height; y++)
+        {
+            for (var x = 0; x < Width; x++)
+            {
+                this[y, x] = other[y, x];
+            }
+        }
+    }
+
     public bool Equals(Matrix? other)
     {
+        if (other is null)
+        {
+            return false;
+        }
+        
         if (ReferenceEquals(null, other))
         {
             return true;
@@ -57,8 +79,7 @@ public sealed record Matrix
         {
             for (var x = 0; x < Width; x++)
             {
-                var diff = Math.Abs(this[y, x] - other[y, x]);
-                if (diff > 0.00001M)
+                if (!this[y, x].IsEquivalent(other[y, x]))
                 {
                     return false;
                 }
