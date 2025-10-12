@@ -8,9 +8,8 @@ public class CanvasPpmSerializer : ICanvasSerializer
     private const int MaxColorValue = 255;
     private const int MaxLineLength = 70;
     
-    public string Serialize(Canvas canvas)
+    public void Serialize(Canvas canvas, TextWriter writer)
     {
-        using var writer = new StringWriter();
         writer.WriteLine(Identifier);
         writer.WriteLine($"{canvas.Width} {canvas.Height}");
         writer.WriteLine($"{MaxColorValue}");
@@ -23,8 +22,8 @@ public class CanvasPpmSerializer : ICanvasSerializer
                 var green = Convert(pixel.Green);
                 var blue = Convert(pixel.Blue);
 
-                return (red, green, blue);
-            }).Select(pixel => $"{pixel.red} {pixel.green} {pixel.blue}");
+                return $"{red} {green} {blue}";
+            });
 
             var line = string.Join(' ', pixels);
             var span = line.AsSpan();
@@ -44,13 +43,11 @@ public class CanvasPpmSerializer : ICanvasSerializer
                 index += chunk.Length + 1;
             }
         }
-        
-        return writer.ToString();
     }
 
     private static IEnumerable<Color> GetPixels(Canvas canvas, int y)
     {
-        for(var x = 0; x < canvas.Width; ++x)
+        for(var x = 0; x < canvas.Width; x++)
         {
             yield return canvas[x, y];
         }
@@ -61,7 +58,7 @@ public class CanvasPpmSerializer : ICanvasSerializer
         value = Math.Min(1, value);
         value = Math.Max(0, value);
 
-        value = value * MaxColorValue;
+        value *= MaxColorValue;
         return (int)Math.Round(value, 0);
     }
 }

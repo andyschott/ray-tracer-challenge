@@ -17,7 +17,7 @@ public class CanvasPpmSerializerTests
             [4, 2] = new Color(-0.5M, 0, 1)
         };
 
-        var ppm = _serializer.Serialize(c);
+        var ppm = Serialize(c);
         
         var lines = ppm.Split(System.Environment.NewLine);
         Assert.Equal(7, lines.Length);
@@ -43,7 +43,7 @@ public class CanvasPpmSerializerTests
             }
         }
         
-        var ppm = _serializer.Serialize(c);
+        var ppm = Serialize(c);
 
         var lines = ppm.Split(System.Environment.NewLine);
         Assert.Equal(8, lines.Length);
@@ -58,8 +58,15 @@ public class CanvasPpmSerializerTests
     public void FileEndsWithNewLine()
     {
         var c = new Canvas(5, 3);
-        var ppm = _serializer.Serialize(c);
+        var ppm = Serialize(c);
 
         Assert.EndsWith(System.Environment.NewLine, ppm);
+    }
+
+    private string Serialize(Canvas canvas)
+    {
+        using var writer = new StringWriter();
+        _serializer.Serialize(canvas, writer);
+        return writer.ToString();
     }
 }

@@ -23,8 +23,7 @@ for (var i = 1; i < 12; i++)
 twelve = translate * twelve;
 c.WritePixel((int)twelve.X, (int)twelve.Z, white);
 
-var ppm = new CanvasPpmSerializer()
-    .Serialize(c);
 using var writer = new StreamWriter("output.ppm");
-writer.Write(ppm);
+new CanvasPpmSerializer()
+    .Serialize(c, writer);
 

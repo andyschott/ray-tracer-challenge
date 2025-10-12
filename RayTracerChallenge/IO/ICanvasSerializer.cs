@@ -4,5 +4,5 @@ namespace RayTracerChallenge.IO;
 
 public interface ICanvasSerializer
 {
-    string Serialize(Canvas canvas);
+    void Serialize(Canvas canvas, TextWriter writer);
 }
