@@ -1,8 +1,9 @@
 using System.Security.AccessControl;
+using RayTracerChallenge.Extensions;
 
 namespace RayTracerChallenge.Domain;
 
-public record Color(
+public sealed record Color(
     decimal Red,
     decimal Green,
     decimal Blue)
@@ -33,6 +34,28 @@ public record Color(
         return new Color(left.Red * right.Red,
             left.Green * right.Green,
             left.Blue * right.Blue);
+    }
+
+    public bool Equals(Color? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+        
+        return Red.IsEquivalent(other.Red) &&
+               Green.IsEquivalent(other.Green) &&
+               Blue.IsEquivalent(other.Blue);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Red, Green, Blue);
     }
 }
     

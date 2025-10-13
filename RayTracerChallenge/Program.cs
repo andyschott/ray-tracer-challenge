@@ -4,7 +4,6 @@ using RayTracerChallenge.IO;
 using Tuple = RayTracerChallenge.Domain.Tuple;
 
 var c = new Canvas(500, 500);
-var red = new Color(1, 0, 0);
 
 var rayOrigin = Tuple.CreatePoint(0, 0, -5);
 var wallZ = 10M;
@@ -12,7 +11,16 @@ var wallSize = 7M;
 var pixelSize = wallSize / c.Width;
 var half = wallSize / 2;
 
-var shape = new Sphere();
+var shape = new Sphere
+{
+    Material = new Material
+    {
+        Color = new Color(1, 0.2M, 1)
+    }
+};
+
+var light = new PointLight(Tuple.CreatePoint(-10, 10, -10),
+    new Color(1, 1, 1));
 
 Log("Tracing rays...");
 var stopWatch = Stopwatch.StartNew();
@@ -33,9 +41,19 @@ for (var y = 0; y < c.Height; y++)
         var r = new Ray(rayOrigin,
             (position - rayOrigin).Normalize());
         var xs = shape.Intersects(r);
-        if (xs.Hit() is not null)
+        var hit = xs.Hit();
+        if (hit is not null)
         {
-            c[x, y] = red;
+            var point = r.CalculatePosition(hit.T);
+            var normal = hit.Sphere.NormalAt(point);
+            var eye = -r.Direction;
+            
+            var color = hit.Sphere.Material.Lighting(
+                light,
+                point,
+                eye,
+                normal);
+            c[x, y] = color;
         }
     }
 }

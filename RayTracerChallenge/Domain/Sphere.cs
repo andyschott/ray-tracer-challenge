@@ -1,8 +1,16 @@
 namespace RayTracerChallenge.Domain;
 
-public class Sphere
+public record Sphere
 {
-    public Matrix Transform { get; set; } = Matrix.Identity;
+    public Matrix Transform { get; init; }
+    public Material Material { get; init; }
+
+    public Sphere(Matrix? transform = null,
+        Material? material = null)
+    {
+        Transform = transform ?? Matrix.Identity;
+        Material = material ?? new Material();
+    }
     
     public Intersections Intersects(Ray ray)
     {
@@ -31,4 +39,22 @@ public class Sphere
             new Intersection(t1, this),
             new Intersection(t2, this),
         ];
-    }}
+    }
+
+    public Tuple NormalAt(Tuple point)
+    {
+        var objectPoint = Transform.Inverse() * point;
+        // Assumes the sphere is at the origin
+        var objectNormal = objectPoint - Tuple.CreatePoint(0, 0, 0);
+
+        // Should technically use Transform.Submatrix(3, 3) here
+        // instead of Transform
+        var worldNormal = Transform.Inverse().Transpose() * objectNormal;
+        worldNormal = worldNormal with
+        {
+            W = 0
+        };
+        
+        return worldNormal.Normalize();
+    }
+}

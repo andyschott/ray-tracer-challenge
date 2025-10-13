@@ -66,6 +66,11 @@ public sealed record Tuple
             Z * other.X - X * other.Z,
             X * other.Y - Y * other.X);
     }
+
+    public Tuple Reflect(Tuple normal)
+    {
+        return this - normal * 2 * Dot(normal);
+    }
     
     public static Tuple operator +(Tuple left, Tuple right)
     {

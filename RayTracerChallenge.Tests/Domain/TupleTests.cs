@@ -202,4 +202,29 @@ public class TupleTests
         expectedResult = Tuple.CreateVector(1, -2, 1);
         Assert.Equal(expectedResult, cross);
     }
+
+    [Fact]
+    public void ReflectingVectorApproachingAt45Degrees()
+    {
+        var v = Tuple.CreateVector(1, -1, 0);
+        var n = Tuple.CreateVector(0, 1, 0);
+
+        var r = v.Reflect(n);
+        var expectedResult = Tuple.CreateVector(1, 1, 0);
+        
+        Assert.Equal(expectedResult, r);
+    }
+
+    [Fact]
+    public void RelfectingVectorOffOfSlantedSurface()
+    {
+        var v = Tuple.CreateVector(0, -1, 0);
+        var n = Tuple.CreateVector((decimal)Math.Sqrt(2)/2,
+            (decimal)Math.Sqrt(2)/2, 0);
+
+        var r = v.Reflect(n);
+        var expectedResult = Tuple.CreateVector(1, 0, 0);
+        
+        Assert.Equal(expectedResult, r);
+    }
 }
