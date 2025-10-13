@@ -25,38 +25,38 @@ var light = new PointLight(Tuple.CreatePoint(-10, 10, -10),
 Log("Tracing rays...");
 var stopWatch = Stopwatch.StartNew();
 
-for (var y = 0; y < c.Height; y++)
+await c.Render((x, y) =>
 {
     // Compute the world Y coordinate (top = +half, bottom = -half)
     var worldY = half - pixelSize * y;
-
-    for (var x = 0; x < c.Width; x++)
+    
+    // Compute the world X coordinate (left = -half, right = half)
+    var worldX = -half + pixelSize * x;
+        
+    // Describe the point on the wall that the ray will target
+    var position = Tuple.CreatePoint(worldX, worldY, wallZ);
+        
+    var r = new Ray(rayOrigin,
+        (position - rayOrigin).Normalize());
+    var xs = shape.Intersects(r);
+    var hit = xs.Hit();
+    if (hit is not null)
     {
-        // Compute the world X coordinate (left = -half, right = half)
-        var worldX = -half + pixelSize * x;
-        
-        // Describe the point on the wall that the ray will target
-        var position = Tuple.CreatePoint(worldX, worldY, wallZ);
-        
-        var r = new Ray(rayOrigin,
-            (position - rayOrigin).Normalize());
-        var xs = shape.Intersects(r);
-        var hit = xs.Hit();
-        if (hit is not null)
-        {
-            var point = r.CalculatePosition(hit.T);
-            var normal = hit.Sphere.NormalAt(point);
-            var eye = -r.Direction;
+        var point = r.CalculatePosition(hit.T);
+        var normal = hit.Sphere.NormalAt(point);
+        var eye = -r.Direction;
             
-            var color = hit.Sphere.Material.Lighting(
-                light,
-                point,
-                eye,
-                normal);
-            c[x, y] = color;
-        }
+        var color = hit.Sphere.Material.Lighting(
+            light,
+            point,
+            eye,
+            normal);
+        return color;
     }
-}
+
+    return new Color(0, 0, 0);
+});
+
 stopWatch.Stop();
 Log($"Done. Took {stopWatch.ElapsedMilliseconds}ms");
 
