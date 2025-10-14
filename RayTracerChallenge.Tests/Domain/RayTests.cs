@@ -36,8 +36,8 @@ public class RayTests
         expectedResult = Tuple.CreatePoint(1, 3, 4);
         Assert.Equal(expectedResult, result);
         
-        result = ray.CalculatePosition(2.5M);
-        expectedResult = Tuple.CreatePoint(4.5M, 3, 4);
+        result = ray.CalculatePosition(2.5);
+        expectedResult = Tuple.CreatePoint(4.5, 3, 4);
         Assert.Equal(expectedResult, result);
     }
 

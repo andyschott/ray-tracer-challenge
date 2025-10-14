@@ -8,9 +8,9 @@ public class IntersectionTests
     public void IntersectionConstructedSuccessfully()
     {
         var s = new Sphere();
-        var i = new Intersection(3.5M, s);
+        var i = new Intersection(3.5, s);
         
-        Assert.Equal(3.5M, i.T);
+        Assert.Equal(3.5, i.T);
         Assert.Same(s, i.Sphere);
     }
 }

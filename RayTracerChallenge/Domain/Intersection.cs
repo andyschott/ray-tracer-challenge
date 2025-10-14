@@ -1,4 +1,4 @@
 namespace RayTracerChallenge.Domain;
 
-public record Intersection(decimal T,
+public record Intersection(double T,
     Sphere Sphere);

@@ -111,10 +111,7 @@ public class SphereTests
     {
         var transform = Matrix.Identity
             .Translate(2, 3, 4);
-        var s = new Sphere
-        {
-            Transform = transform
-        };
+        var s = new Sphere(transform);
         
         Assert.Same(transform, s.Transform);
     }
@@ -124,11 +121,8 @@ public class SphereTests
     {
         var r = new Ray(Tuple.CreatePoint(0, 0, -5), 
             Tuple.CreateVector(0, 0, 1));
-        var s = new Sphere
-        {
-            Transform = Matrix.Identity
-                .Scale(2, 2, 2)
-        };
+        var s = new Sphere(Matrix.Identity
+                .Scale(2, 2, 2));
         
         var xs = s.Intersects(r);
         var expectedResult = new Intersection[]
@@ -145,11 +139,8 @@ public class SphereTests
     {
         var r = new Ray(Tuple.CreatePoint(0, 0, -5), 
             Tuple.CreateVector(0, 0, 1));
-        var s = new Sphere
-        {
-            Transform = Matrix.Identity
-                .Translate(5, 0, 0)
-        };
+        var s = new Sphere(Matrix.Identity
+                .Translate(5, 0, 0));
         
         var xs = s.Intersects(r);
         
@@ -157,8 +148,8 @@ public class SphereTests
     }
 
     [Theory, MemberData((nameof(NormalOnSphereData)))]
-    public void NormalOnSphere(decimal x, decimal y, decimal z,
-        decimal normalX, decimal normalY, decimal normalZ)
+    public void NormalOnSphere(double x, double y, double z,
+        double normalX, double normalY, double normalZ)
     {
         var s = new Sphere();
         
@@ -168,14 +159,14 @@ public class SphereTests
         Assert.Equal(expectedResult, n);
     }
 
-    public static TheoryData<decimal, decimal, decimal, decimal, decimal, decimal> NormalOnSphereData => new()
+    public static TheoryData<double, double, double, double, double, double> NormalOnSphereData => new()
     {
         { 1, 0, 0, 1, 0, 0 },
         { 0, 1, 0, 0, 1, 0 },
         { 0, 0, 1, 0, 0, 1 },
         {
-            0.5773502692M, 0.5773502692M, 0.5773502692M,
-            0.5773502692M, 0.5773502692M, 0.5773502692M
+            0.5773502692, 0.5773502692, 0.5773502692,
+            0.5773502692, 0.5773502692, 0.5773502692
         }
     };
 
@@ -184,8 +175,8 @@ public class SphereTests
     {
         var s = new Sphere();
         
-        var n = s.NormalAt(Tuple.CreatePoint(0.5773502692M,
-            0.5773502692M, 0.5773502692M));
+        var n = s.NormalAt(Tuple.CreatePoint(0.5773502692,
+            0.5773502692, 0.5773502692));
         var expectedResult = n.Normalize();
         
         Assert.Equal(expectedResult, n);
@@ -194,13 +185,10 @@ public class SphereTests
     [Fact]
     public void ComputeNormalOfTranslatedSphere()
     {
-        var s = new Sphere
-        {
-            Transform = Matrix.Identity.Translate(0, 1, 0)
-        };
+        var s = new Sphere(Matrix.Identity.Translate(0, 1, 0));
         
-        var n = s.NormalAt(Tuple.CreatePoint(0, 1.70711M, -0.70711M));
-        var expectedResult = Tuple.CreateVector(0, 0.70711M, -0.70711M);
+        var n = s.NormalAt(Tuple.CreatePoint(0, 1.70711, -0.70711));
+        var expectedResult = Tuple.CreateVector(0, 0.70711, -0.70711);
         
         Assert.Equal(expectedResult, n);
     }
@@ -208,17 +196,14 @@ public class SphereTests
     [Fact]
     public void ComputeNormalOfTransformedSphere()
     {
-        var s = new Sphere
-        {
-            Transform = Matrix.Identity
+        var s = new Sphere(Matrix.Identity
                 .RotateZ(Math.PI / 5)
-                .Scale(1, 0.5M, 1)
-        };
+                .Scale(1, 0.5, 1));
         
         var n = s.NormalAt(Tuple.CreatePoint(0,
-            (decimal)Math.Sqrt(2)/2,
-            -(decimal)Math.Sqrt(2)/2));
-        var expectedResult = Tuple.CreateVector(0, 0.97014M, -0.24254M);
+            Math.Sqrt(2)/2,
+            -Math.Sqrt(2)/2));
+        var expectedResult = Tuple.CreateVector(0, 0.97014, -0.24254);
         
         Assert.Equal(expectedResult, n);
     }

@@ -5,18 +5,18 @@ namespace RayTracerChallenge.Domain;
 
 public sealed record Tuple
 {
-    public decimal X { get; init; }
-    public decimal Y { get; init; }
-    public decimal Z { get; init; }
-    public decimal W { get; init; }
+    public double X { get; init; }
+    public double Y { get; init; }
+    public double Z { get; init; }
+    public double W { get; init; }
     
-    public bool IsPoint => W is 1.0M;
-    public bool IsVector => W is 0.0M;
+    public bool IsPoint => W is 1.0;
+    public bool IsVector => W is 0.0;
     
     public static Tuple ZeroVector { get; } =
         Tuple.CreateVector(0, 0, 0);
 
-    public Tuple(decimal x, decimal y, decimal z, decimal w)
+    public Tuple(double x, double y, double z, double w)
     {
         X = x;
         Y = y;
@@ -24,12 +24,12 @@ public sealed record Tuple
         W = w;
     }
     
-    public static Tuple CreatePoint(decimal x, decimal y, decimal z)
-        => new(x, y, z, 1.0M);
-    public static Tuple CreateVector(decimal x, decimal y, decimal z)
-        => new(x, y, z, 0.0M);
+    public static Tuple CreatePoint(double x, double y, double z)
+        => new(x, y, z, 1.0);
+    public static Tuple CreateVector(double x, double y, double z)
+        => new(x, y, z, 0.0);
 
-    public decimal Magnitude
+    public double Magnitude
     {
         get
         {
@@ -39,7 +39,7 @@ public sealed record Tuple
             var w = W * W;
             var sum = x + y + z + w;
 
-            return (decimal)Math.Sqrt((double)sum);
+            return Math.Sqrt(sum);
         }
     }
 
@@ -52,7 +52,7 @@ public sealed record Tuple
             W / magnitude);
     }
 
-    public decimal Dot(Tuple other)
+    public double Dot(Tuple other)
     {
         return X * other.X +
                Y * other.Y +
@@ -93,7 +93,7 @@ public sealed record Tuple
         return new Tuple(-tuple.X, -tuple.Y, -tuple.Z, -tuple.W);
     }
 
-    public static Tuple operator *(Tuple left, decimal right)
+    public static Tuple operator *(Tuple left, double right)
     {
         return new Tuple(left.X * right,
             left.Y * right,
@@ -101,7 +101,7 @@ public sealed record Tuple
             left.W * right);
     }
 
-    public static Tuple operator /(Tuple left, decimal right)
+    public static Tuple operator /(Tuple left, double right)
     {
         return new Tuple(left.X / right,
             left.Y / right,

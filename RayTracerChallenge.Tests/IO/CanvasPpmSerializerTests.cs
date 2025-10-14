@@ -12,14 +12,14 @@ public class CanvasPpmSerializerTests
     {
         var c = new Canvas(5, 3)
         {
-            [0, 0] = new Color(1.5M, 0, 0),
-            [2, 1] = new Color(0, 0.5M, 0),
-            [4, 2] = new Color(-0.5M, 0, 1)
+            [0, 0] = new Color(1.5, 0, 0),
+            [2, 1] = new Color(0, 0.5, 0),
+            [4, 2] = new Color(-0.5, 0, 1)
         };
 
         var ppm = Serialize(c);
         
-        var lines = ppm.Split(System.Environment.NewLine);
+        var lines = ppm.Split(Environment.NewLine);
         Assert.Equal(7, lines.Length);
         
         Assert.Equal("P3", lines[0]);
@@ -39,13 +39,13 @@ public class CanvasPpmSerializerTests
         {
             for (var y = 0; y < c.Height; y++)
             {
-                c[x, y] = new Color(1, 0.8M, 0.6M);
+                c[x, y] = new Color(1, 0.8, 0.6);
             }
         }
         
         var ppm = Serialize(c);
 
-        var lines = ppm.Split(System.Environment.NewLine);
+        var lines = ppm.Split(Environment.NewLine);
         Assert.Equal(8, lines.Length);
         
         Assert.Equal("255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204", lines[3]);
@@ -60,7 +60,7 @@ public class CanvasPpmSerializerTests
         var c = new Canvas(5, 3);
         var ppm = Serialize(c);
 
-        Assert.EndsWith(System.Environment.NewLine, ppm);
+        Assert.EndsWith(Environment.NewLine, ppm);
     }
 
     private string Serialize(Canvas canvas)

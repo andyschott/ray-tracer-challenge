@@ -1,8 +1,8 @@
 namespace RayTracerChallenge.Extensions;
 
-static class DecimalExtensions
+static class DoubleExtensions
 {
-    public static bool IsEquivalent(this decimal left, decimal right)
+    public static bool IsEquivalent(this double left, double right)
     {
         var diff = Math.Abs(left - right);
         return diff < Constants.Epsilon;

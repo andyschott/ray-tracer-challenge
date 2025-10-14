@@ -23,26 +23,26 @@ public static class MatrixExtensions
     }
 
     public static Matrix Scale(this Matrix matrix,
-        decimal x, decimal y, decimal z)
+        double x, double y, double z)
     {
         var transform = TransformationFactory.Scale(x, y, z);
         return transform * matrix;
     }
 
     public static Matrix Translate(this Matrix matrix,
-        decimal x, decimal y, decimal z)
+        double x, double y, double z)
     {
         var transform = TransformationFactory.Translation(x, y, z);
         return transform * matrix;
     }
 
     public static Matrix Shearing(this Matrix matrix,
-        decimal xToy,
-        decimal xToz,
-        decimal yToX,
-        decimal yToz,
-        decimal zToX,
-        decimal zToY)
+        double xToy,
+        double xToz,
+        double yToX,
+        double yToz,
+        double zToX,
+        double zToY)
     {
         var transform = TransformationFactory.Shearing(
             xToy, xToz, yToX, yToz, zToX, zToY);

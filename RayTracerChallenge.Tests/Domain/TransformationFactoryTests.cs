@@ -99,8 +99,8 @@ public class TransformationFactoryTests
         
         var result = halfQuarter * p;
         var expectedResult = Tuple.CreatePoint(0,
-            (decimal)Math.Sqrt(2) / 2,
-            (decimal)Math.Sqrt(2) / 2);
+            Math.Sqrt(2) / 2,
+            Math.Sqrt(2) / 2);
         Assert.Equal(expectedResult, result);
         
         result = fullQuarter * p;
@@ -117,8 +117,8 @@ public class TransformationFactoryTests
         
         var result = inverse * p;
         var expectedResult = Tuple.CreatePoint(0,
-            (decimal)Math.Sqrt(2) / 2,
-            -(decimal)Math.Sqrt(2) / 2);
+            Math.Sqrt(2) / 2,
+            -Math.Sqrt(2) / 2);
         Assert.Equal(expectedResult, result);
     }
 
@@ -130,9 +130,9 @@ public class TransformationFactoryTests
         var fullQuarter = TransformationFactory.RotationY(Math.PI / 2);
         
         var result = halfQuarter * p;
-        var expectedResult = Tuple.CreatePoint((decimal)Math.Sqrt(2) / 2,
+        var expectedResult = Tuple.CreatePoint(Math.Sqrt(2) / 2,
             0,
-            (decimal)Math.Sqrt(2) / 2);
+            Math.Sqrt(2) / 2);
         Assert.Equal(expectedResult, result);
         
         result = fullQuarter * p;
@@ -148,8 +148,8 @@ public class TransformationFactoryTests
         var fullQuarter = TransformationFactory.RotationZ(Math.PI / 2);
         
         var result = halfQuarter * p;
-        var expectedResult = Tuple.CreatePoint(-(decimal)Math.Sqrt(2) / 2,
-            (decimal)Math.Sqrt(2) / 2,
+        var expectedResult = Tuple.CreatePoint(-Math.Sqrt(2) / 2,
+            Math.Sqrt(2) / 2,
             0);
         Assert.Equal(expectedResult, result);
         
@@ -166,12 +166,12 @@ public class TransformationFactoryTests
     [InlineData(0, 0, 0, 0, 1, 0, 2, 3, 6)]
     [InlineData(0, 0, 0, 0, 0, 1, 2, 3, 7)]
     public void ShearingXInProportionToY(
-        decimal xToY, decimal xToZ,
-        decimal yToX, decimal yToZ,
-        decimal zToX, decimal zToY,
-        decimal expectedX,
-        decimal expectedY,
-        decimal expectedZ)
+        double xToY, double xToZ,
+        double yToX, double yToZ,
+        double zToX, double zToY,
+        double expectedX,
+        double expectedY,
+        double expectedZ)
     {
         var transform = TransformationFactory.Shearing(xToY,
             xToZ,

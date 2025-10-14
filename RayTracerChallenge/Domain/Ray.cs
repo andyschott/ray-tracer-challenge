@@ -2,7 +2,7 @@ namespace RayTracerChallenge.Domain;
 
 public record Ray(Tuple Origin, Tuple Direction)
 {
-    public Tuple CalculatePosition(decimal t)
+    public Tuple CalculatePosition(double t)
     {
         return Origin + Direction * t;
     }

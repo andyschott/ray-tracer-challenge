@@ -6,8 +6,8 @@ using Tuple = RayTracerChallenge.Domain.Tuple;
 var c = new Canvas(500, 500);
 
 var rayOrigin = Tuple.CreatePoint(0, 0, -5);
-var wallZ = 10M;
-var wallSize = 7M;
+var wallZ = 10D;
+var wallSize = 7D;
 var pixelSize = wallSize / c.Width;
 var half = wallSize / 2;
 
@@ -15,7 +15,7 @@ var shape = new Sphere
 {
     Material = new Material
     {
-        Color = new Color(1, 0.2M, 1)
+        Color = new Color(1, 0.2, 1)
     }
 };
 

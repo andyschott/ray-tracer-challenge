@@ -14,9 +14,9 @@ public class MaterialTests
         var m = new Material();
         
         Assert.Equal(new Color(1, 1, 1), m.Color);
-        Assert.Equal(0.1M, m.Ambient);
-        Assert.Equal(0.9M, m.Diffuse);
-        Assert.Equal(0.9M, m.Specular);
+        Assert.Equal(0.1, m.Ambient);
+        Assert.Equal(0.9, m.Diffuse);
+        Assert.Equal(0.9, m.Specular);
         Assert.Equal(200, m.Shininess);
     }
 
@@ -30,7 +30,7 @@ public class MaterialTests
         
         var result = _material.Lighting(light, _position,
             eyeVector, normalVector);
-        var expectedResult = new Color(1.9M, 1.9M, 1.9M);
+        var expectedResult = new Color(1.9, 1.9, 1.9);
         
         Assert.Equal(expectedResult, result);
     }
@@ -39,7 +39,7 @@ public class MaterialTests
     public void LightingWithEyeBetweenLightAndSurface_EyeOffset()
     {
         var eyeVector = Tuple.CreateVector(0,
-            (decimal)Math.Sqrt(2)/2, -(decimal)Math.Sqrt(2)/2);
+            Math.Sqrt(2)/2, -Math.Sqrt(2)/2);
         var normalVector = Tuple.CreateVector(0, 0, -1);
         var light = new PointLight(Tuple.CreatePoint(0, 0, -10),
             new Color(1, 1, 1));
@@ -61,7 +61,7 @@ public class MaterialTests
         
         var result = _material.Lighting(light, _position,
             eyeVector, normalVector);
-        var expectedResult = new Color(0.7364M, 0.7364M, 0.7364M);
+        var expectedResult = new Color(0.7364, 0.7364, 0.7364);
         
         Assert.Equal(expectedResult, result);
     }
@@ -70,14 +70,14 @@ public class MaterialTests
     public void LightingWithEyeInPathOfReflection()
     {
         var eyeVector = Tuple.CreateVector(0,
-            -(decimal)Math.Sqrt(2)/2, -(decimal)Math.Sqrt(2)/2);
+            -Math.Sqrt(2)/2, -Math.Sqrt(2)/2);
         var normalVector = Tuple.CreateVector(0, 0, -1);
         var light = new PointLight(Tuple.CreatePoint(0, 10, -10),
             new Color(1, 1, 1));
         
         var result = _material.Lighting(light, _position,
             eyeVector, normalVector);
-        var expectedResult = new Color(1.6364M, 1.6364M, 1.6364M);
+        var expectedResult = new Color(1.6364, 1.6364, 1.6364);
         
         Assert.Equal(expectedResult, result);
     }
@@ -92,7 +92,7 @@ public class MaterialTests
         
         var result = _material.Lighting(light, _position,
             eyeVector, normalVector);
-        var expectedResult = new Color(0.1M, 0.1M, 0.1M);
+        var expectedResult = new Color(0.1, 0.1, 0.1);
         
         Assert.Equal(expectedResult, result);
     }

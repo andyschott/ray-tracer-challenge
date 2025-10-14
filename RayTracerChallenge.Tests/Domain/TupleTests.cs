@@ -7,7 +7,7 @@ public class TupleTests
     [Fact]
     public void PointIsATuple()
     {
-        var point = Tuple.CreatePoint(4.3M, -4.2M, 3.1M);
+        var point = Tuple.CreatePoint(4.3, -4.2, 3.1);
 
         Assert.True(point.IsPoint);
         Assert.False(point.IsVector);
@@ -16,7 +16,7 @@ public class TupleTests
     [Fact]
     public void PointIsAVector()
     {
-        var point = Tuple.CreateVector(4.3M, -4.2M, 3.1M);
+        var point = Tuple.CreateVector(4.3, -4.2, 3.1);
 
         Assert.False(point.IsPoint);
         Assert.True(point.IsVector);
@@ -97,8 +97,8 @@ public class TupleTests
     {
         var a = new Tuple(1, -2, 3, -4);
 
-        var result = a * 3.5M;
-        var expectedResult = new Tuple(3.5M, -7, 10.5M, -14);
+        var result = a * 3.5;
+        var expectedResult = new Tuple(3.5, -7, 10.5, -14);
 
         Assert.Equal(expectedResult, result);
     }
@@ -108,8 +108,8 @@ public class TupleTests
     {
         var a = new Tuple(1, -2, 3, -4);
 
-        var result = a * 0.5M;
-        var expectedResult = new Tuple(0.5M, -1, 1.5M, -2);
+        var result = a * 0.5;
+        var expectedResult = new Tuple(0.5, -1, 1.5, -2);
 
         Assert.Equal(expectedResult, result);
     }
@@ -120,26 +120,26 @@ public class TupleTests
         var a = new Tuple(1, -2, 3, -4);
 
         var result = a / 2;
-        var expectedResult = new Tuple(0.5M, -1, 1.5M, -2);
+        var expectedResult = new Tuple(0.5, -1, 1.5, -2);
 
         Assert.Equal(expectedResult, result);
     }
 
     [Theory, MemberData(nameof(ComputeMagnitudeOfVectorData))]
-    public void ComputeMagnitudeOfVector(decimal x, decimal y, decimal z,
-        decimal expectedResult)
+    public void ComputeMagnitudeOfVector(double x, double y, double z,
+        double expectedResult)
     {
         var v = Tuple.CreateVector(x, y, z);
 
         Assert.Equal(expectedResult, v.Magnitude, 4);
     }
 
-    public static TheoryData<decimal, decimal, decimal, decimal> ComputeMagnitudeOfVectorData => new()
+    public static TheoryData<double, double, double, double> ComputeMagnitudeOfVectorData => new()
     {
         { 1, 0, 0, 1 },
         { 0, 1, 0, 1 },
-        {1, 2, 3, 3.7416573868M },
-        { -1, -2, -3, 3.7416573868M }
+        {1, 2, 3, 3.7416573868 },
+        { -1, -2, -3, 3.7416573868 }
     };
 
     [Theory, MemberData(nameof(NormalizeVectorData))]
@@ -161,9 +161,9 @@ public class TupleTests
         },
         {
             Tuple.CreateVector(1, 2, 3),
-            Tuple.CreateVector(0.2672612419M,
-                0.5345224838M,
-                0.8017837257M)
+            Tuple.CreateVector(0.2672612419,
+                0.5345224838,
+                0.8017837257)
         }
     };
 
@@ -219,8 +219,8 @@ public class TupleTests
     public void RelfectingVectorOffOfSlantedSurface()
     {
         var v = Tuple.CreateVector(0, -1, 0);
-        var n = Tuple.CreateVector((decimal)Math.Sqrt(2)/2,
-            (decimal)Math.Sqrt(2)/2, 0);
+        var n = Tuple.CreateVector(Math.Sqrt(2)/2,
+            Math.Sqrt(2)/2, 0);
 
         var r = v.Reflect(n);
         var expectedResult = Tuple.CreateVector(1, 0, 0);

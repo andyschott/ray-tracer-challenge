@@ -2,9 +2,9 @@ namespace RayTracerChallenge.Domain;
 
 public static class TransformationFactory
 {
-    public static Matrix Translation(decimal x,
-        decimal y,
-        decimal z)
+    public static Matrix Translation(double x,
+        double y,
+        double z)
     {
         return new Matrix(Matrix.Identity)
         {
@@ -14,9 +14,9 @@ public static class TransformationFactory
         };
     }
 
-    public static Matrix Scale(decimal x,
-        decimal y,
-        decimal z)
+    public static Matrix Scale(double x,
+        double y,
+        double z)
     {
         return new Matrix(Matrix.Identity)
         {
@@ -28,8 +28,8 @@ public static class TransformationFactory
 
     public static Matrix RotationX(double radians)
     {
-        var cos = (decimal)Math.Cos(radians);
-        var sin = (decimal)Math.Sin(radians);
+        var cos = Math.Cos(radians);
+        var sin = Math.Sin(radians);
 
         return new Matrix(Matrix.Identity)
         {
@@ -42,8 +42,8 @@ public static class TransformationFactory
 
     public static Matrix RotationY(double radians)
     {
-        var cos = (decimal)Math.Cos(radians);
-        var sin = (decimal)Math.Sin(radians);
+        var cos = Math.Cos(radians);
+        var sin = Math.Sin(radians);
 
         return new Matrix(Matrix.Identity)
         {
@@ -56,8 +56,8 @@ public static class TransformationFactory
 
     public static Matrix RotationZ(double radians)
     {
-        var cos = (decimal)Math.Cos(radians);
-        var sin = (decimal)Math.Sin(radians);
+        var cos = Math.Cos(radians);
+        var sin = Math.Sin(radians);
 
         return new Matrix(Matrix.Identity)
         {
@@ -68,12 +68,12 @@ public static class TransformationFactory
         };
     }
 
-    public static Matrix Shearing(decimal xToy,
-        decimal xToz,
-        decimal yToX,
-        decimal yToz,
-        decimal zToX,
-        decimal zToY)
+    public static Matrix Shearing(double xToy,
+        double xToz,
+        double yToX,
+        double yToz,
+        double zToX,
+        double zToY)
     {
         return new Matrix(Matrix.Identity)
         {

@@ -7,9 +7,9 @@ public sealed record Matrix
     public int Width { get; }
     public int Height { get; }
     
-    private readonly decimal[,] _values;
+    private readonly double[,] _values;
 
-    public decimal this[int y, int x]
+    public double this[int y, int x]
     {
         get => _values[y, x];
         set => _values[y, x] = value;
@@ -39,22 +39,15 @@ public sealed record Matrix
     {
         Width = width;
         Height = height;
-        _values = new decimal[height, width];
+        _values = new double[height, width];
     }
 
     public Matrix(Matrix other)
     {
         Width = other.Width;
         Height = other.Height;
-        _values = new decimal[Height, Width];
-
-        for (var y = 0; y < Height; y++)
-        {
-            for (var x = 0; x < Width; x++)
-            {
-                this[y, x] = other[y, x];
-            }
-        }
+        _values = new double[Height, Width];
+        Array.Copy(other._values, _values, other._values.Length);
     }
 
     public bool Equals(Matrix? other)
@@ -118,7 +111,7 @@ public sealed record Matrix
         return result;
     }
 
-    public decimal Determinant()
+    public double Determinant()
     {
         if (this is { Width: 2, Height: 2 })
         {
@@ -126,7 +119,7 @@ public sealed record Matrix
                    this[0, 1] * this[1, 0];
         }
 
-        var determinant = 0M;
+        var determinant = 0D;
         for (var x = 0; x < Width; x++)
         {
             determinant += this[0, x] * Cofactor(0, x);
@@ -164,13 +157,13 @@ public sealed record Matrix
         return result;
     }
 
-    public decimal Minor(int row, int col)
+    public double Minor(int row, int col)
     {
         var submatrix = Submatrix(row, col);
         return submatrix.Determinant();
     }
 
-    public decimal Cofactor(int row, int col)
+    public double Cofactor(int row, int col)
     {
         var minor = Minor(row, col);
         if ((row + col) % 2 == 0)
@@ -184,18 +177,19 @@ public sealed record Matrix
     public bool IsInvertible()
     {
         var determinant = Determinant();
-        return determinant is not 0;
+        return IsInvertible(determinant);
     }
+
+    private static bool IsInvertible(double determinant) => determinant is not 0;
 
     public Matrix Inverse()
     {
-        if (!IsInvertible())
+        var determinant = Determinant();
+        if (!IsInvertible(determinant))
         {
             throw new InvalidOperationException("Matrix is not invertible.");
         }
         
-        var determinant = Determinant();
-
         var result = new Matrix(Width, Height);
         for (var y = 0; y < Height; y++)
         {

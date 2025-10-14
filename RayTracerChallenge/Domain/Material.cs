@@ -3,21 +3,21 @@ namespace RayTracerChallenge.Domain;
 public record Material
 {
     public Color Color { get; init; }
-    public decimal Ambient { get; init; }
-    public decimal Diffuse { get; init; }
-    public decimal Specular { get; init; }
-    public decimal Shininess { get; init; }
+    public double Ambient { get; init; }
+    public double Diffuse { get; init; }
+    public double Specular { get; init; }
+    public double Shininess { get; init; }
 
     public Material(Color? color = null,
-        decimal? ambient = null,
-        decimal? diffuse = null,
-        decimal? specular = null,
-        decimal? shininess = null)
+        double? ambient = null,
+        double? diffuse = null,
+        double? specular = null,
+        double? shininess = null)
     {
         Color = color ?? new Color(1, 1, 1);
-        Ambient = ambient ?? 0.1M;
-        Diffuse = diffuse ?? 0.9M;
-        Specular = specular ?? 0.9M;
+        Ambient = ambient ?? 0.1;
+        Diffuse = diffuse ?? 0.9;
+        Specular = specular ?? 0.9;
         Shininess = shininess ?? 200;
     }
 
@@ -64,7 +64,7 @@ public record Material
             else
             {
                 // Compute the specular contribution
-                var factor = (decimal)Math.Pow((double)reflectDotEye, (double)Shininess);
+                var factor = Math.Pow(reflectDotEye, Shininess);
                 specular = light.Intensity * Specular * factor;
             }
         }
@@ -72,4 +72,4 @@ public record Material
         // Add the three contributions together to get the final shading
         return ambient + diffuse + specular;
     }
-};
+}

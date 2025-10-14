@@ -4,9 +4,9 @@ using RayTracerChallenge.Extensions;
 namespace RayTracerChallenge.Domain;
 
 public sealed record Color(
-    decimal Red,
-    decimal Green,
-    decimal Blue)
+    double Red,
+    double Green,
+    double Blue)
 {
     public static Color operator +(Color left, Color right)
     {
@@ -22,7 +22,7 @@ public sealed record Color(
             left.Blue - right.Blue);
     }
 
-    public static Color operator *(Color left, decimal right)
+    public static Color operator *(Color left, double right)
     {
         return new Color(left.Red * right,
             left.Green * right,

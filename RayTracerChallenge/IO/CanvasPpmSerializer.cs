@@ -53,7 +53,7 @@ public class CanvasPpmSerializer : ICanvasSerializer
         }
     }
     
-    private static int Convert(decimal value)
+    private static int Convert(double value)
     {
         value = Math.Min(1, value);
         value = Math.Max(0, value);

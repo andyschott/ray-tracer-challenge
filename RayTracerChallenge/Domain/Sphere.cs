@@ -2,22 +2,30 @@ namespace RayTracerChallenge.Domain;
 
 public record Sphere
 {
-    public Matrix Transform { get; init; }
+    private readonly Matrix _inverseTransform;
+    private readonly Matrix _inverseTransposeTransform;
+
+    public Matrix Transform { get; }
+
     public Material Material { get; init; }
+    
+    private readonly Tuple _origin = Tuple.CreatePoint(0, 0, 0);
 
     public Sphere(Matrix? transform = null,
         Material? material = null)
     {
         Transform = transform ?? Matrix.Identity;
+        _inverseTransform = transform?.Inverse() ?? Matrix.Identity;
+        _inverseTransposeTransform = _inverseTransform.Transpose();
+        
         Material = material ?? new Material();
     }
     
     public Intersections Intersects(Ray ray)
     {
-        ray = ray.Transform(Transform.Inverse());
+        ray = ray.Transform(_inverseTransform);
         
-        // Assumes sphere is at the origin
-        var sphereToRay = ray.Origin - Tuple.CreatePoint(0, 0, 0);
+        var sphereToRay = ray.Origin - _origin;
         
         var a = ray.Direction.Dot(ray.Direction);
         var b = 2 * ray.Direction.Dot(sphereToRay);
@@ -29,7 +37,7 @@ public record Sphere
             return [];
         }
 
-        var discriminantSqrt = (decimal)Math.Sqrt((double)discriminant);
+        var discriminantSqrt = Math.Sqrt(discriminant);
         var doubleA = 2 * a;
         var t1 = (-b - discriminantSqrt) / doubleA;
         var t2 = (-b + discriminantSqrt) / doubleA;
@@ -43,13 +51,12 @@ public record Sphere
 
     public Tuple NormalAt(Tuple point)
     {
-        var objectPoint = Transform.Inverse() * point;
-        // Assumes the sphere is at the origin
-        var objectNormal = objectPoint - Tuple.CreatePoint(0, 0, 0);
+        var objectPoint = _inverseTransform * point;
+        var objectNormal = objectPoint - _origin;
 
         // Should technically use Transform.Submatrix(3, 3) here
         // instead of Transform
-        var worldNormal = Transform.Inverse().Transpose() * objectNormal;
+        var worldNormal = _inverseTransposeTransform * objectNormal;
         worldNormal = worldNormal with
         {
             W = 0
