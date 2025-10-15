@@ -29,35 +29,6 @@ public class Canvas : IEnumerable<Color>
         }
     }
 
-    public async Task Render(Func<int, int, Color> renderer)
-    {
-        var logicalProcessors = Environment.ProcessorCount;
-        var pairs = Enumerable.Range(0, Height)
-            .SelectMany(y =>
-            {
-                var something = Enumerable.Range(0, Width);
-                return something.Select(x => (x, y)).ToArray();
-            }).ToArray();
-        var chunks = pairs.Chunk(logicalProcessors);
-        foreach (var chunk in chunks)
-        {
-            var tasks = chunk.Select(pair =>
-            {
-                return Task.Run(() =>
-                {
-                    var color = renderer(pair.x, pair.y);
-                    return (pair.x, pair.y, color);
-                });
-            }).ToArray();
-            
-            var results = await Task.WhenAll(tasks);
-            foreach (var (x, y, color) in results)
-            {
-                this[x, y] = color;
-            }
-        }
-    }
-
     public IEnumerator<Color> GetEnumerator()
     {
         return _pixels.Cast<Color>()

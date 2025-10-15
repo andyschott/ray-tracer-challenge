@@ -1,69 +1,83 @@
 ﻿using System.Diagnostics;
 using RayTracerChallenge.Domain;
+using RayTracerChallenge.Extensions;
 using RayTracerChallenge.IO;
 using Tuple = RayTracerChallenge.Domain.Tuple;
 
-var c = new Canvas(500, 500);
-
-var rayOrigin = Tuple.CreatePoint(0, 0, -5);
-var wallZ = 10D;
-var wallSize = 7D;
-var pixelSize = wallSize / c.Width;
-var half = wallSize / 2;
-
-var shape = new Sphere
+var floor = new Sphere(Matrix.Identity.Scale(10, 0.01, 10))
 {
     Material = new Material
     {
-        Color = new Color(1, 0.2, 1)
+        Color = new Color(1, 0.9, 0.9),
+        Specular = 0,
     }
 };
 
-var light = new PointLight(Tuple.CreatePoint(-10, 10, -10),
-    new Color(1, 1, 1));
+var leftWall = new Sphere(Matrix.Identity.Scale(10, 0.01, 10)
+    .RotateX(Math.PI / 2)
+    .RotateY(-Math.PI / 4)
+    .Translate(0, 0, 5))
+{
+    Material = floor.Material
+};
+
+var rightWall = new Sphere(Matrix.Identity.Scale(10, 0.01, 10)
+    .RotateX(Math.PI / 2)
+    .RotateY(Math.PI / 4)
+    .Translate(0, 0, 5))
+{
+    Material = floor.Material
+};
+
+var middle = new Sphere(Matrix.Identity.Translate(-0.5, 1, 0.5))
+{
+    Material = new Material
+    {
+        Color = new Color(1, 0, 1),
+        Diffuse = 0.7,
+        Specular = 0.3
+    }
+};
+
+var right = new Sphere(Matrix.Identity.Scale(0.5, 0.5, 0.5)
+    .Translate(1.5, 0.5, -0.5))
+{
+    Material = middle.Material
+};
+
+var left = new Sphere(Matrix.Identity.Scale(0.33, 0.33, 0.33)
+    .Translate(-1.5, 0.33, -0.75))
+{
+    Material = middle.Material
+};
+
+var world = new World
+{
+    Light = new PointLight(Tuple.CreatePoint(-10, 10, -10),
+        new Color(1, 1, 1))
+};
+world.Objects.Add(floor);
+world.Objects.Add(leftWall);
+world.Objects.Add(rightWall);
+world.Objects.Add(middle);
+world.Objects.Add(right);
+world.Objects.Add(left);
+
+var camera = new Camera(2000, 1000, Math.PI / 3,
+    TransformationFactory.View(Tuple.CreatePoint(0, 1.5, -5),
+        Tuple.CreatePoint(0, 1, 0),
+        Tuple.CreatePoint(0, 1, 0)));
 
 Log("Tracing rays...");
 var stopWatch = Stopwatch.StartNew();
-
-await c.Render((x, y) =>
-{
-    // Compute the world Y coordinate (top = +half, bottom = -half)
-    var worldY = half - pixelSize * y;
-    
-    // Compute the world X coordinate (left = -half, right = half)
-    var worldX = -half + pixelSize * x;
-        
-    // Describe the point on the wall that the ray will target
-    var position = Tuple.CreatePoint(worldX, worldY, wallZ);
-        
-    var r = new Ray(rayOrigin,
-        (position - rayOrigin).Normalize());
-    var xs = shape.Intersects(r);
-    var hit = xs.Hit();
-    if (hit is not null)
-    {
-        var point = r.CalculatePosition(hit.T);
-        var normal = hit.Sphere.NormalAt(point);
-        var eye = -r.Direction;
-            
-        var color = hit.Sphere.Material.Lighting(
-            light,
-            point,
-            eye,
-            normal);
-        return color;
-    }
-
-    return new Color(0, 0, 0);
-});
-
+var canvas = await camera.Render(world);
 stopWatch.Stop();
 Log($"Done. Took {stopWatch.ElapsedMilliseconds}ms");
 
 Log("Saving canvas to disk...");
-using var writer = new StreamWriter("output.ppm");
+await using var writer = new StreamWriter("output.ppm");
 new CanvasPpmSerializer()
-    .Serialize(c, writer);
+    .Serialize(canvas, writer);
 Log("Done.");
 
 return;

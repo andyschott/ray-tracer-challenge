@@ -224,4 +224,73 @@ public class TransformationFactoryTests
         
         Assert.Equal(expectedResult, result);
     }
+
+    [Fact]
+    public void ViewTransformationForDefaultOrientation()
+    {
+        var from = Tuple.CreatePoint(0, 0, 0);
+        var to = Tuple.CreatePoint(0, 0, -1);
+        var up = Tuple.CreateVector(0, 1, 0);
+        
+        var result = TransformationFactory.View(from, to, up);
+        
+        Assert.Equal(Matrix.Identity, result);
+    }
+
+    [Fact]
+    public void ViewTransformationLookingInPositiveZ()
+    {
+        var from = Tuple.CreatePoint(0, 0, 0);
+        var to = Tuple.CreatePoint(0, 0, 1);
+        var up = Tuple.CreateVector(0, 1, 0);
+        
+        var result = TransformationFactory.View(from, to, up);
+        var expectedResult = Matrix.Identity.Scale(-1, 1, -1);
+        
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void ViewTransformationMovesTheWorld()
+    {
+        var from = Tuple.CreatePoint(0, 0, 8);
+        var to = Tuple.CreatePoint(0, 0, 0);
+        var up = Tuple.CreateVector(0, 1, 0);
+        
+        var result = TransformationFactory.View(from, to, up);
+        var expectedResult = Matrix.Identity.Translate(0, 0, -8);
+        
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void ArbitraryViewTransformation()
+    {
+        var from = Tuple.CreatePoint(1, 3, 2);
+        var to = Tuple.CreatePoint(4, -2, 8);
+        var up = Tuple.CreateVector(1, 1, 0);
+        
+        var result = TransformationFactory.View(from, to, up);
+        var expectedResult = new Matrix(4, 4)
+        {
+            [0, 0] = -0.50709,
+            [0, 1] = 0.50709,
+            [0, 2] = 0.67612,
+            [0, 3] = -2.36643,
+            [1, 0] = 0.76772,
+            [1, 1] = 0.60609,
+            [1, 2] = 0.12122,
+            [1, 3] = -2.82843,
+            [2, 0] = -0.35857,
+            [2, 1] = 0.597617,
+            [2, 2] = -0.71714,
+            [2, 3] = 0,
+            [3, 0] = 0,
+            [3, 1] = 0,
+            [3, 2] = 0,
+            [3, 3] = 1,
+        };
+
+        Assert.Equal(expectedResult, result);
+    }
 }
