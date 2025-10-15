@@ -1,4 +1,5 @@
 using RayTracerChallenge.Domain;
+using RayTracerChallenge.Extensions;
 using Tuple = RayTracerChallenge.Domain.Tuple;
 
 namespace RayTracerChallenge.Tests.Domain;
@@ -60,5 +61,18 @@ public class IntersectionTests
         Assert.Equal(expectedNormalVector, result.NormalVector);
         
         Assert.True(result.IsInside);
+    }
+    
+    [Fact]
+    public void HitShouldOffsetPoint()
+    {
+        var r = new Ray(Tuple.CreatePoint(0, 0, -5),
+            Tuple.CreateVector(0, 0, 1));
+        var s = new Sphere(Matrix.Identity.Translate(0, 0, 1));
+        var i = new Intersection(5, s);
+        var comps = i.PrepareComputations(r);
+        
+        Assert.True(comps.OverPoint.Z < -0.00001 / 2);
+        Assert.True(comps.Point.Z > comps.OverPoint.Z);
     }
 }

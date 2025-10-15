@@ -70,11 +70,14 @@ public class World
         {
             return new Color(0, 0, 0);
         }
+
+        var isShadowed = IsShadowed(comps.OverPoint);
         
         return comps.Object.Material.Lighting(Light,
             comps.Point,
             comps.EyeVector,
-            comps.NormalVector);
+            comps.NormalVector,
+            isShadowed);
     }
 
     public Color ColorAt(Ray ray)
@@ -88,5 +91,22 @@ public class World
 
         var comps = hit.PrepareComputations(ray);
         return ShadeHit(comps);
+    }
+
+    public bool IsShadowed(Tuple point)
+    {
+        if (Light is null)
+        {
+            return true;
+        }
+        
+        var v = Light.Position - point;
+        var distance = v.Magnitude;
+        var direction = v.Normalize();
+        
+        var r = new Ray(point, direction);
+        var xs = Intersect(r);
+        var hit = xs.Hit();
+        return hit?.T < distance;
     }
 }

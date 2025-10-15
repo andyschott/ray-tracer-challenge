@@ -10,7 +10,8 @@ public record Intersection(
         Tuple Point,
         Tuple EyeVector,
         Tuple NormalVector,
-        bool IsInside);
+        bool IsInside,
+        Tuple OverPoint);
 
     public Computation PrepareComputations(Ray ray)
     {
@@ -25,11 +26,14 @@ public record Intersection(
             normalVector = -normalVector;
         }
         
+        var overPoint = point + normalVector * 0.00001;
+        
         return new Computation(T,
             Sphere,
             point,
             eyeVector,
             normalVector,
-            inside);
+            inside,
+            overPoint);
     }
 }

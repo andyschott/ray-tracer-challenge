@@ -1,4 +1,6 @@
 using RayTracerChallenge.Domain;
+using RayTracerChallenge.Extensions;
+using Tuple = RayTracerChallenge.Domain.Tuple;
 
 namespace RayTracerChallenge.Tests.Domain;
 

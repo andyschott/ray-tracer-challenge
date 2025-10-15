@@ -90,6 +90,32 @@ public class WorldTests
     }
 
     [Fact]
+    public void ShadingWhenIntersectionIsInShadow()
+    {
+        var w = new World
+        {
+            Light = new PointLight(Tuple.CreatePoint(0, 0, -10),
+                new Color(1, 1, 1))
+        };
+
+        var s1 = new Sphere();
+        w.Objects.Add(s1);
+        
+        var s2 = new Sphere(Matrix.Identity.Translate(0, 0, 10));
+        w.Objects.Add(s2);
+        
+        var r = new Ray(Tuple.CreatePoint(0, 0, 5),
+            Tuple.CreateVector(0, 0, 1));
+        var i = new Intersection(4, s2);
+        var comps = i.PrepareComputations(r);
+        
+        var result = w.ShadeHit(comps);
+        var expectedResult = new Color(0.1, 0.1, 0.1);
+        
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
     public void ColorWhenRayMisses()
     {
         var w = World.DefaultWorld();
@@ -149,5 +175,23 @@ public class WorldTests
         var result = w.ColorAt(r);
         
         Assert.Equal(inner.Material.Color, result);
+    }
+
+    [Theory]
+    [InlineData(0, 10, 0, false)]
+    [InlineData(10, -10, 10, true)]
+    [InlineData(-20, 20, -20, false)]
+    [InlineData(-2, 2, -2, false)]
+    public void IsShadowed_TestCases(double x,
+        double y,
+        double z,
+        bool expectedResult)
+    {
+        var w = World.DefaultWorld();
+        var p = Tuple.CreatePoint(x, y, z);
+
+        var result = w.IsShadowed(p);
+        
+        Assert.Equal(expectedResult, result);
     }
 }

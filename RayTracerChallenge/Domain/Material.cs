@@ -24,7 +24,8 @@ public record Material
     public Color Lighting(PointLight light,
         Tuple position,
         Tuple eyeVector,
-        Tuple normalVector)
+        Tuple normalVector,
+        bool inShadow = false)
     {
         // Combine surface color with light's color and intensity
         var effectiveColor = Color * light.Intensity;
@@ -34,6 +35,11 @@ public record Material
         
         // Compute the ambient contribution
         var ambient = effectiveColor * Ambient;
+
+        if (inShadow)
+        {
+            return ambient;
+        }
 
         Color diffuse, specular;
         

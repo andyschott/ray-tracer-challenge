@@ -96,4 +96,19 @@ public class MaterialTests
         
         Assert.Equal(expectedResult, result);
     }
+
+    [Fact]
+    public void LightingWithSurfaceInShadow()
+    {
+        var eyeVector = Tuple.CreateVector(0, 0, -1);
+        var normalVector = Tuple.CreateVector(0, 0, -1);
+        var light = new PointLight(Tuple.CreatePoint(0, 0, -10),
+            new Color(1, 1, 1));
+        
+        var result = _material.Lighting(light, _position,
+            eyeVector, normalVector, true);
+        var expectedResult = new Color(0.1, 0.1, 0.1);
+        
+        Assert.Equal(expectedResult, result);
+    }
 }
