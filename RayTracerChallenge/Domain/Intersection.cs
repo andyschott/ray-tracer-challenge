@@ -2,11 +2,11 @@ namespace RayTracerChallenge.Domain;
 
 public record Intersection(
     double T,
-    Sphere Sphere)
+    Shape Shape)
 {
     public record Computation(
         double T,
-        Sphere Object,
+        Shape Shape,
         Tuple Point,
         Tuple EyeVector,
         Tuple NormalVector,
@@ -17,7 +17,7 @@ public record Intersection(
     {
         var point = ray.CalculatePosition(T);
         var eyeVector = -ray.Direction;
-        var normalVector = Sphere.NormalAt(point);
+        var normalVector = Shape.NormalAt(point);
 
         var inside = false;
         if (normalVector.Dot(eyeVector) < 0)
@@ -26,10 +26,10 @@ public record Intersection(
             normalVector = -normalVector;
         }
         
-        var overPoint = point + normalVector * 0.00001;
+        var overPoint = point + normalVector * Constants.Epsilon;
         
         return new Computation(T,
-            Sphere,
+            Shape,
             point,
             eyeVector,
             normalVector,

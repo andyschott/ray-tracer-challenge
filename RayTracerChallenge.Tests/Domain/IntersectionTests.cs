@@ -13,7 +13,7 @@ public class IntersectionTests
         var i = new Intersection(3.5, s);
         
         Assert.Equal(3.5, i.T);
-        Assert.Same(s, i.Sphere);
+        Assert.Same(s, i.Shape);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class IntersectionTests
         var result = i.PrepareComputations(r);
         
         Assert.Equal(i.T, result.T);
-        Assert.Same(shape, result.Object);
+        Assert.Same(shape, result.Shape);
 
         var expectedPoint = Tuple.CreatePoint(0, 0, -1);
         Assert.Equal(expectedPoint, result.Point);
@@ -72,7 +72,7 @@ public class IntersectionTests
         var i = new Intersection(5, s);
         var comps = i.PrepareComputations(r);
         
-        Assert.True(comps.OverPoint.Z < -0.00001 / 2);
+        Assert.True(comps.OverPoint.Z < -Constants.Epsilon / 2);
         Assert.True(comps.Point.Z > comps.OverPoint.Z);
     }
 }

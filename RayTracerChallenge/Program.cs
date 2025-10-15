@@ -4,29 +4,23 @@ using RayTracerChallenge.Extensions;
 using RayTracerChallenge.IO;
 using Tuple = RayTracerChallenge.Domain.Tuple;
 
-var floor = new Sphere(Matrix.Identity.Scale(10, 0.01, 10))
+var floor = new Plane
 {
     Material = new Material
     {
-        Color = new Color(1, 0.9, 0.9),
+        Color = new Color(0.2, 0.41, 0),
         Specular = 0,
     }
 };
 
-var leftWall = new Sphere(Matrix.Identity.Scale(10, 0.01, 10)
-    .RotateX(Math.PI / 2)
-    .RotateY(-Math.PI / 4)
+var wall = new Plane(Matrix.Identity.RotateX(Math.PI / 2)
     .Translate(0, 0, 5))
 {
-    Material = floor.Material
-};
-
-var rightWall = new Sphere(Matrix.Identity.Scale(10, 0.01, 10)
-    .RotateX(Math.PI / 2)
-    .RotateY(Math.PI / 4)
-    .Translate(0, 0, 5))
-{
-    Material = floor.Material
+    Material = new Material
+    {
+        Color = new Color(0.5, 1, 0),
+        Specular = 0
+    }
 };
 
 var middle = new Sphere(Matrix.Identity.Translate(-0.5, 1, 0.5))
@@ -56,14 +50,13 @@ var world = new World
     Light = new PointLight(Tuple.CreatePoint(-10, 10, -10),
         new Color(1, 1, 1))
 };
-world.Objects.Add(floor);
-world.Objects.Add(leftWall);
-world.Objects.Add(rightWall);
-world.Objects.Add(middle);
-world.Objects.Add(right);
-world.Objects.Add(left);
+world.Shapes.Add(floor);
+world.Shapes.Add(wall);
+world.Shapes.Add(middle);
+world.Shapes.Add(right);
+world.Shapes.Add(left);
 
-var camera = new Camera(2000, 1000, Math.PI / 3,
+var camera = new Camera(1000, 500, Math.PI / 3,
     TransformationFactory.View(Tuple.CreatePoint(0, 1.5, -5),
         Tuple.CreatePoint(0, 1, 0),
         Tuple.CreatePoint(0, 1, 0)));

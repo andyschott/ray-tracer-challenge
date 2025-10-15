@@ -11,7 +11,7 @@ public class WorldTests
     {
         var w = new World();
         
-        Assert.Empty(w.Objects);
+        Assert.Empty(w.Shapes);
         Assert.Null(w.Light);
     }
 
@@ -38,7 +38,7 @@ public class WorldTests
         };
         
         Assert.Equal(expectedLight, w.Light);
-        Assert.Equal(expectedObjects, w.Objects);
+        Assert.Equal(expectedObjects, w.Shapes);
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public class WorldTests
         var w = World.DefaultWorld();
         var r = new Ray(Tuple.CreatePoint(0, 0, -5),
             Tuple.CreateVector(0, 0, 1));
-        var i = new Intersection(4, w.Objects.First());
+        var i = new Intersection(4, w.Shapes.First());
 
         var comps = i.PrepareComputations(r);
         var result = w.ShadeHit(comps);
@@ -80,7 +80,7 @@ public class WorldTests
             new Color(1, 1, 1));
         var r = new Ray(Tuple.CreatePoint(0, 0, 0),
             Tuple.CreateVector(0, 0, 1));
-        var i = new Intersection(0.5, w.Objects.ElementAt(1));
+        var i = new Intersection(0.5, w.Shapes.ElementAt(1));
         
         var comps = i.PrepareComputations(r);
         var result = w.ShadeHit(comps);
@@ -99,10 +99,10 @@ public class WorldTests
         };
 
         var s1 = new Sphere();
-        w.Objects.Add(s1);
+        w.Shapes.Add(s1);
         
         var s2 = new Sphere(Matrix.Identity.Translate(0, 0, 10));
-        w.Objects.Add(s2);
+        w.Shapes.Add(s2);
         
         var r = new Ray(Tuple.CreatePoint(0, 0, 5),
             Tuple.CreateVector(0, 0, 1));
@@ -158,7 +158,7 @@ public class WorldTests
                 Specular = 0.2,
             }
         };
-        w.Objects.Add(outer);
+        w.Shapes.Add(outer);
         var inner = new Sphere(Matrix.Identity
             .Scale(0.5, 0.5, 0.5))
         {
@@ -167,7 +167,7 @@ public class WorldTests
                 Ambient = 1
             }
         };
-        w.Objects.Add(inner);
+        w.Shapes.Add(inner);
 
         var r = new Ray(Tuple.CreatePoint(0, 0, 0.75),
             Tuple.CreateVector(0, 0, -1));

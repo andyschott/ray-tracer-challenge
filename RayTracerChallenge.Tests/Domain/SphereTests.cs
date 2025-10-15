@@ -96,7 +96,7 @@ public class SphereTests
         var xs = s.Intersects(ray);
         
         Assert.Equal(2, xs.Count);
-        Assert.All(xs, (i) => Assert.Same(s, i.Sphere));
+        Assert.All(xs, (i) => Assert.Same(s, i.Shape));
     }
 
     [Fact]

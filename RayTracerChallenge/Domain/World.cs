@@ -4,9 +4,9 @@ namespace RayTracerChallenge.Domain;
 
 public class World
 {
-    private readonly List<Sphere> _objects = [];
+    private readonly List<Shape> _shapes = [];
 
-    public IList<Sphere> Objects => _objects;
+    public IList<Shape> Shapes => _shapes;
     public PointLight? Light { get; set; }
 
     public static PointLight DefaultLight { get; } =
@@ -30,8 +30,8 @@ public class World
         {
             Light = DefaultLight
         };
-        w._objects.Add(s1);
-        w._objects.Add(s2);
+        w._shapes.Add(s1);
+        w._shapes.Add(s2);
 
         return w;
     }
@@ -40,7 +40,7 @@ public class World
     {
         var intersections = new List<Intersection>();
 
-        foreach (var obj in Objects)
+        foreach (var obj in Shapes)
         {
             var xs = obj.Intersects(ray);
             var hits = xs.Hits();
@@ -73,7 +73,7 @@ public class World
 
         var isShadowed = IsShadowed(comps.OverPoint);
         
-        return comps.Object.Material.Lighting(Light,
+        return comps.Shape.Material.Lighting(Light,
             comps.Point,
             comps.EyeVector,
             comps.NormalVector,
