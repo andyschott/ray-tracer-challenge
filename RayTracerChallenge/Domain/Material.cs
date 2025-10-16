@@ -7,28 +7,34 @@ public record Material
     public double Diffuse { get; init; }
     public double Specular { get; init; }
     public double Shininess { get; init; }
+    public Pattern? Pattern { get; init; }
 
     public Material(Color? color = null,
         double? ambient = null,
         double? diffuse = null,
         double? specular = null,
-        double? shininess = null)
+        double? shininess = null,
+        Pattern? pattern = null)
     {
         Color = color ?? new Color(1, 1, 1);
         Ambient = ambient ?? 0.1;
         Diffuse = diffuse ?? 0.9;
         Specular = specular ?? 0.9;
         Shininess = shininess ?? 200;
+        Pattern = pattern;
     }
 
-    public Color Lighting(PointLight light,
+    public Color Lighting(Shape shape,
+        PointLight light,
         Tuple position,
         Tuple eyeVector,
         Tuple normalVector,
         bool inShadow = false)
     {
+        var color = Pattern?.ColorAtForObject(shape, position) ?? Color;
+        
         // Combine surface color with light's color and intensity
-        var effectiveColor = Color * light.Intensity;
+        var effectiveColor = color * light.Intensity;
         
         // Find the direction to the light source
         var lightVector = (light.Position - position).Normalize();

@@ -27,10 +27,15 @@ public abstract record Shape
 
         return CalculateIntersection(ray);
     }
+
+    public Tuple ConvertToObjectSpace(Tuple point)
+    {
+        return InverseTransform * point;
+    }
     
     public Tuple NormalAt(Tuple point)
     {
-        var objectPoint = InverseTransform * point;
+        var objectPoint = ConvertToObjectSpace(point);
         var objectNormal = CalculateNormal(objectPoint);
 
         // Should technically use Transform.Submatrix(3, 3) here

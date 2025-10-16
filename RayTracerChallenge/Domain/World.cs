@@ -73,8 +73,9 @@ public class World
 
         var isShadowed = IsShadowed(comps.OverPoint);
         
-        return comps.Shape.Material.Lighting(Light,
-            comps.Point,
+        return comps.Shape.Material.Lighting(comps.Shape,
+            Light,
+            comps.OverPoint,
             comps.EyeVector,
             comps.NormalVector,
             isShadowed);
