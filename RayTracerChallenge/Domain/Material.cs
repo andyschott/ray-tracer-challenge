@@ -7,6 +7,9 @@ public record Material
     public double Diffuse { get; init; }
     public double Specular { get; init; }
     public double Shininess { get; init; }
+    public double Reflective { get; init; }
+    public double Transparency { get; init; }
+    public double RefractiveIndex { get; init; }
     public Pattern? Pattern { get; init; }
 
     public Material(Color? color = null,
@@ -14,6 +17,9 @@ public record Material
         double? diffuse = null,
         double? specular = null,
         double? shininess = null,
+        double? reflective = null,
+        double? transparency = null,
+        double? refractiveIndex = null,
         Pattern? pattern = null)
     {
         Color = color ?? new Color(1, 1, 1);
@@ -21,6 +27,9 @@ public record Material
         Diffuse = diffuse ?? 0.9;
         Specular = specular ?? 0.9;
         Shininess = shininess ?? 200;
+        Reflective = reflective ?? 0;
+        Transparency = transparency ?? 0;
+        RefractiveIndex = refractiveIndex ?? 1;
         Pattern = pattern;
     }
 

@@ -7,6 +7,20 @@ public record Sphere : Shape
     : base(transform, material)
     {
     }
+
+    public static Sphere Glass(Matrix?  transform = null,
+        double transparency = 1,
+        double refractiveIndex = 1.5)
+    {
+        return new Sphere(transform ?? Matrix.Identity)
+        {
+            Material = new Material
+            {
+                Transparency = transparency,
+                RefractiveIndex = refractiveIndex,
+            }
+        };
+    }
     
     protected override Intersections CalculateIntersection(Ray ray)
     {

@@ -8,10 +8,11 @@ var floor = new Plane
 {
     Material = new Material
     {
-        Color = new Color(0.2, 0.41, 0),
+        Color = new Color(0.133333, 0.36, 0.85),
         Specular = 0,
-        Pattern = new CheckersPattern(new Color(0.2, 0.41, 0),
-            new Color(1, 1, 1))
+        Reflective = 1,
+        RefractiveIndex = 1.333,
+        Transparency = 0.5,
     }
 };
 
@@ -20,10 +21,8 @@ var wall = new Plane(Matrix.Identity.RotateX(Math.PI / 2)
 {
     Material = new Material
     {
-        Color = new Color(0.5, 1, 0),
-        Specular = 0,
-        Pattern = new CheckersPattern(new Color(0.5, 1, 0),
-            new Color(1, 1, 0))
+        Color = new Color(0, 0, 1),
+        Specular = 0
     }
 };
 
@@ -33,9 +32,7 @@ var middle = new Sphere(Matrix.Identity.Translate(-0.5, 1, 0.5))
     {
         Color = new Color(1, 0, 1),
         Diffuse = 0.7,
-        Specular = 0.3,
-        // Pattern = new GradientPattern(new Color(0, 0, 1),
-        //     new Color(1, 0, 1))
+        Specular = 0.3
     }
 };
 

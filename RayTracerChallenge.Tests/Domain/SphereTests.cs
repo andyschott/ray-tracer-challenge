@@ -227,4 +227,14 @@ public class SphereTests
         
         Assert.Same(m, s.Material);
     }
+
+    [Fact]
+    public void GlassSphereIsTransparent()
+    {
+        var s = Sphere.Glass();
+        
+        Assert.Equal(Matrix.Identity, s.Transform);
+        Assert.Equal(1, s.Material.Transparency);
+        Assert.Equal(1.5, s.Material.RefractiveIndex);
+    }
 }
