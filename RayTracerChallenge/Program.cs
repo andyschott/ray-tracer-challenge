@@ -12,7 +12,7 @@ var floor = new Plane
         Specular = 0,
         Reflective = 1,
         RefractiveIndex = 1.333,
-        Transparency = 0.5,
+        Transparency = 1.5,
     }
 };
 
@@ -48,6 +48,19 @@ var left = new Sphere(Matrix.Identity.Scale(0.33, 0.33, 0.33)
     Material = middle.Material
 };
 
+var cube = new Cube(Matrix.Identity.Translate(-3, 3, 0.5)
+    .RotateZ(Math.PI / 4))
+{
+    Material = new Material
+    {
+        Color = new Color(1, 1, 0),
+        Diffuse = 0.7,
+        Specular = 0.3,
+        Transparency = 1,
+        Reflective = 1
+    }
+};
+
 var world = new World
 {
     Light = new PointLight(Tuple.CreatePoint(-10, 10, -10),
@@ -58,9 +71,10 @@ world.Shapes.Add(wall);
 world.Shapes.Add(middle);
 world.Shapes.Add(right);
 world.Shapes.Add(left);
+world.Shapes.Add(cube);
 
 var camera = new Camera(1000, 500, Math.PI / 3,
-    TransformationFactory.View(Tuple.CreatePoint(0, 1.5, -5),
+    TransformationFactory.View(Tuple.CreatePoint(0, 3, -10),
         Tuple.CreatePoint(0, 1, 0),
         Tuple.CreatePoint(0, 1, 0)));
 
