@@ -66,4 +66,15 @@ public class CubeTests
         
         Assert.Equal(expectedResult, result);
     }
+    
+    [Fact]
+    public void BoundsOfACube()
+    {
+        var s = new Sphere();
+        
+        var result = s.GetBounds();
+        var expected = new Bounds(-1, -1, -1, 1, 1, 1);
+        
+        Assert.Equal(expected, result);
+    }
 }

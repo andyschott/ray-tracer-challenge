@@ -6,6 +6,7 @@ public record Cylinder : Shape
     public double Maximum { get; init; } = double.PositiveInfinity;
     public bool Closed { get; init; }
     
+    
     public Cylinder(Matrix? transform = null,
         Material? material = null)
         : base(transform, material)
@@ -57,6 +58,12 @@ public record Cylinder : Shape
         IntersectCaps(ray, xs);
 
         return xs;
+    }
+
+    public override Bounds GetBounds()
+    {
+        return new Bounds(-1, Minimum, -1,
+            1, Maximum, 1);
     }
 
     protected override Tuple CalculateNormal(Tuple objectPoint)

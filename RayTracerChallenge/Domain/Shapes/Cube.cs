@@ -2,6 +2,9 @@ namespace RayTracerChallenge.Domain.Shapes;
 
 public record Cube : Shape
 {
+    private static readonly Bounds _bounds = new Bounds(-1, -1, -1,
+        1, 1, 1);
+
     public Cube(Matrix? transform = null,
         Material? material = null)
     : base(transform, material)
@@ -10,9 +13,12 @@ public record Cube : Shape
     
     protected override Intersections CalculateIntersection(Ray ray)
     {
-        var (xMin, xMax) = CheckAxis(ray.Origin.X, ray.Direction.X);
-        var (yMin, yMax) = CheckAxis(ray.Origin.Y, ray.Direction.Y);
-        var (zMin, zMax) = CheckAxis(ray.Origin.Z, ray.Direction.Z);
+        var (xMin, xMax) = Helpers.CheckAxis(ray.Origin.X, ray.Direction.X,
+            _bounds.Minimum.X, _bounds.Maximum.X);
+        var (yMin, yMax) = Helpers.CheckAxis(ray.Origin.Y, ray.Direction.Y,
+            _bounds.Minimum.Y, _bounds.Maximum.Y);
+        var (zMin, zMax) = Helpers.CheckAxis(ray.Origin.Z, ray.Direction.Z,
+            _bounds.Minimum.Z, _bounds.Maximum.Z);
         
         var min = Math.Max(xMin, Math.Max(yMin, zMin));
         var max = Math.Min(xMax, Math.Min(yMax, zMax));
@@ -49,30 +55,5 @@ public record Cube : Shape
         return Tuple.CreateVector(0, 0, objectPoint.Z);
     }
 
-    private static (double min, double max) CheckAxis(double origin, double direction)
-    {
-        var minNumerator = -1 - origin;
-        var maxNumerator = 1 - origin;
-
-        double min;
-        double max;
-
-        if (Math.Abs(direction) >= Constants.Epsilon)
-        {
-            min = minNumerator / direction;
-            max = maxNumerator / direction;
-        }
-        else
-        {
-            min = minNumerator * double.PositiveInfinity;
-            max = maxNumerator * double.PositiveInfinity;
-        }
-
-        if (min > max)
-        {
-            (min, max) = (max, min);
-        }
-        
-        return (min, max);
-    }
+    public override Bounds GetBounds() => _bounds;
 }

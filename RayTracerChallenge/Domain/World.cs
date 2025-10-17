@@ -51,20 +51,7 @@ public class World
             var hits = xs.Hits();
             intersections.AddRange(hits);
         }
-        intersections.Sort((left, right) =>
-        {
-            if (left.T < right.T)
-            {
-                return -1;
-            }
-
-            if (left.T > right.T)
-            {
-                return 1;
-            }
-
-            return 0;
-        });
+        intersections.Sort();
 
         return new Intersections(intersections);
     }

@@ -73,4 +73,16 @@ public class PlaneTests
         Assert.Equal(1, intersection.T);
         Assert.Same(p, intersection.Shape);
     }
+
+    [Fact]
+    public void BoundsOfAPlane()
+    {
+        var p = new Plane();
+        
+        var result = p.GetBounds();
+        var expectedResult = new Bounds(double.NegativeInfinity, 0, double.NegativeInfinity,
+            double.PositiveInfinity, 0, double.PositiveInfinity);
+        
+        Assert.Equal(expectedResult, result);
+    }
 }

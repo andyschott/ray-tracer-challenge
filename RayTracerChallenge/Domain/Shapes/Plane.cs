@@ -2,7 +2,10 @@ namespace RayTracerChallenge.Domain.Shapes;
 
 public record Plane : Shape
 {
-    private static Tuple _normal = Tuple.CreateVector(0, 1, 0);
+    private static readonly Tuple _normal = Tuple.CreateVector(0, 1, 0);
+    private static readonly Bounds _bounds = new Bounds(double.NegativeInfinity, 0, double.NegativeInfinity,
+        double.PositiveInfinity, 0, double.PositiveInfinity);
+    
     public Plane(Matrix? transform = null,
         Material? material = null)
     : base(transform, material)
@@ -24,4 +27,6 @@ public record Plane : Shape
     {
         return _normal;
     }
+
+    public override Bounds GetBounds() => _bounds;
 }

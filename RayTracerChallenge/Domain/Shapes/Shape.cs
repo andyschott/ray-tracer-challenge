@@ -9,9 +9,11 @@ public abstract record Shape
 
     public Material Material { get; init; }
     
+    public Group? Parent { get; set; }
+    
     protected readonly Tuple Origin = Tuple.CreatePoint(0, 0, 0);
     
-    public Shape(Matrix? transform = null,
+    protected Shape(Matrix? transform = null,
         Material? material = null)
     {
         Transform = transform ?? Matrix.Identity;
@@ -30,7 +32,28 @@ public abstract record Shape
 
     public Tuple ConvertToObjectSpace(Tuple point)
     {
+        if (Parent is not null)
+        {
+            point = Parent.ConvertToObjectSpace(point);
+        }
         return InverseTransform * point;
+    }
+
+    public Tuple ConvertNormalToWorld(Tuple normal)
+    {
+        var worldNormal = InverseTransposeTransform * normal;
+        worldNormal = worldNormal with
+        {
+            W = 0
+        };
+        worldNormal = worldNormal.Normalize();
+
+        if (Parent is not null)
+        {
+            worldNormal = Parent.ConvertNormalToWorld(worldNormal);
+        }
+        
+        return worldNormal;
     }
     
     public Tuple NormalAt(Tuple point)
@@ -38,16 +61,10 @@ public abstract record Shape
         var objectPoint = ConvertToObjectSpace(point);
         var objectNormal = CalculateNormal(objectPoint);
 
-        // Should technically use Transform.Submatrix(3, 3) here
-        // instead of Transform
-        var worldNormal = InverseTransposeTransform * objectNormal;
-        worldNormal = worldNormal with
-        {
-            W = 0
-        };
-        
-        return worldNormal.Normalize();
+        return ConvertNormalToWorld(objectNormal);
     }
+    
+    public abstract Bounds GetBounds();
 
     protected abstract Intersections CalculateIntersection(Ray ray);
     protected abstract Tuple CalculateNormal(Tuple objectPoint);

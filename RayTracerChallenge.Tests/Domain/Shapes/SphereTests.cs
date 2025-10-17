@@ -238,4 +238,22 @@ public class SphereTests
         Assert.Equal(1, s.Material.Transparency);
         Assert.Equal(1.5, s.Material.RefractiveIndex);
     }
+
+    [Fact]
+    public void ShapeHasParent()
+    {
+        var s = new Sphere();
+        Assert.Null(s.Parent);
+    }
+
+    [Fact]
+    public void BoundsOfASphere()
+    {
+        var s = new Sphere();
+        
+        var result = s.GetBounds();
+        var expected = new Bounds(-1, -1, -1, 1, 1, 1);
+        
+        Assert.Equal(expected, result);
+    }
 }

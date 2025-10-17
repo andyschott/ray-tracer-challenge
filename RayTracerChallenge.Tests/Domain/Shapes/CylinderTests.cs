@@ -139,4 +139,30 @@ public class CylinderTests
         
         Assert.Equal(expectedResult, result);
     }
+
+    [Fact]
+    public void BoundsOfUnCappedCylinder()
+    {
+        var c = new Cylinder();
+        var result = c.GetBounds();
+        var expectedResult = new Bounds(-1, double.NegativeInfinity, -1,
+            1, double.PositiveInfinity, 1);
+        
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void BoundsOfCappedCylinder()
+    {
+        var c = new Cylinder
+        {
+            Minimum = 2,
+            Maximum = 3,
+        };
+        var result = c.GetBounds();
+        var expectedResult = new Bounds(-1, 2, -1,
+            1, 3, 1);
+        
+        Assert.Equal(expectedResult, result);
+    }
 }

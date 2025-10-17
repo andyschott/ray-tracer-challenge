@@ -4,7 +4,7 @@ using RayTracerChallenge.Domain.Shapes;
 using RayTracerChallenge.Extensions;
 using RayTracerChallenge.IO;
 using Tuple = RayTracerChallenge.Domain.Tuple;
-
+/*
 var floor = new Plane
 {
     Material = new Material
@@ -70,22 +70,23 @@ var cylinder = new Cylinder(Matrix.Identity.Translate(4, 0, 0.5))
     Maximum = 2,
     Closed = true
 };
-
+*/
 var world = new World
 {
     Light = new PointLight(Tuple.CreatePoint(-10, 10, -10),
-        new Color(1, 1, 1))
+        new Color(1, 0.65, 0))
 };
-world.Shapes.Add(floor);
-world.Shapes.Add(wall);
-world.Shapes.Add(middle);
-world.Shapes.Add(right);
-world.Shapes.Add(left);
-world.Shapes.Add(cube);
-world.Shapes.Add(cylinder);
+// world.Shapes.Add(floor);
+// world.Shapes.Add(wall);
+// world.Shapes.Add(middle);
+// world.Shapes.Add(right);
+// world.Shapes.Add(left);
+// world.Shapes.Add(cube);
+// world.Shapes.Add(cylinder);
+world.Shapes.Add(Hexagon(Matrix.Identity.Scale(3, 3, 3)));
 
 var camera = new Camera(1000, 500, Math.PI / 3,
-    TransformationFactory.View(Tuple.CreatePoint(0, 3, -10),
+    TransformationFactory.View(Tuple.CreatePoint(0, 5, -10),
         Tuple.CreatePoint(0, 1, 0),
         Tuple.CreatePoint(0, 1, 0)));
 
@@ -106,4 +107,46 @@ return;
 static void Log(string str)
 {
     Console.WriteLine($"[{DateTime.Now}] {str}");
+}
+
+static Shape HexagonCorner()
+{
+    return new Sphere(Matrix.Identity.Scale(0.25, 0.25, 0.25)
+        .Translate(0, 0, -1));
+}
+
+static Shape HexagonEdge()
+{
+    var edge = new Cylinder(Matrix.Identity.Scale(0.25, 1, 0.25)
+        .RotateZ(-1 * Math.PI / 2)
+        .RotateY(-1 * Math.PI / 6)
+        .Translate(0, 0, -1))
+    {
+        Minimum = 0,
+        Maximum = 1
+    };
+
+    return edge;
+}
+
+static Shape HexagonSide(Matrix transform)
+{
+    var side = new Group(transform)
+    {
+        HexagonCorner(),
+        HexagonEdge()
+    };
+    return side;
+}
+
+static Shape Hexagon(Matrix transform)
+{
+    var hexagon = new Group(transform);
+    for (var n = 0; n < 6; n++)
+    {
+        var side = HexagonSide(Matrix.Identity.RotateY(n * (Math.PI / 3)));
+        hexagon.Add(side);
+    }
+    
+    return hexagon;
 }

@@ -4,7 +4,7 @@ namespace RayTracerChallenge.Domain;
 
 public record Intersection(
     double T,
-    Shape Shape)
+    Shape Shape) : IComparable<Intersection>
 {
     public record Computation(
         double T,
@@ -124,5 +124,25 @@ public record Intersection(
         }
         
         return (n1, n2);
+    }
+
+    public int CompareTo(Intersection? other)
+    {
+        if (other is null)
+        {
+            return 1;
+        }
+
+        if (T < other.T)
+        {
+            return -1;
+        }
+
+        if (T > other.T)
+        {
+            return 1;
+        }
+
+        return 0;
     }
 }

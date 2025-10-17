@@ -12,7 +12,8 @@ public record Camera
     private readonly double _halfWidth;
     private readonly double _halfHeight;
     private readonly Matrix _inverseTransform;
-    
+    private readonly Tuple _origin;
+
     public Camera(int horizontalSize,
         int verticalSize,
         double fieldOfView,
@@ -23,7 +24,8 @@ public record Camera
         FieldOfView = fieldOfView;
         Transform = transform ?? Matrix.Identity;
         _inverseTransform = Transform.Inverse();
-        
+        _origin = _inverseTransform * Tuple.CreatePoint(0, 0, 0);
+
         var halfView = Math.Tan(FieldOfView / 2);
         var aspect = (double)HorizontalSize / VerticalSize;
         if (aspect >= 1)
@@ -55,10 +57,9 @@ public record Camera
         // and then compute the ray's direction vector
         // (canvas is at Z = -1)
         var pixel = _inverseTransform * Tuple.CreatePoint(worldX, worldY, -1);
-        var origin = _inverseTransform * Tuple.CreatePoint(0, 0, 0);
-        var direction = (pixel - origin).Normalize();
+        var direction = (pixel - _origin).Normalize();
 
-        return new Ray(origin, direction);
+        return new Ray(_origin, direction);
     }
 
     public async Task<Canvas> Render(World world)

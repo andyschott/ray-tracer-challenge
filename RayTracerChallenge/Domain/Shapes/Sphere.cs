@@ -2,6 +2,9 @@ namespace RayTracerChallenge.Domain.Shapes;
 
 public record Sphere : Shape
 {
+    private static readonly Bounds _bounds = new Bounds(-1, -1, -1,
+        1, 1, 1);
+    
     public Sphere(Matrix? transform = null,
         Material? material = null)
     : base(transform, material)
@@ -52,4 +55,6 @@ public record Sphere : Shape
     {
         return objectPoint - Origin;
     }
+
+    public override Bounds GetBounds() => _bounds;
 }
