@@ -1,3 +1,6 @@
+using RayTracerChallenge.Domain.Patterns;
+using RayTracerChallenge.Domain.Shapes;
+
 namespace RayTracerChallenge.Domain;
 
 public record Material

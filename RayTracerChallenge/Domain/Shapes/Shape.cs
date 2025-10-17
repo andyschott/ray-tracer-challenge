@@ -1,4 +1,4 @@
-namespace RayTracerChallenge.Domain;
+namespace RayTracerChallenge.Domain.Shapes;
 
 public abstract record Shape
 {

@@ -1,3 +1,5 @@
+using RayTracerChallenge.Domain.Shapes;
+
 namespace RayTracerChallenge.Domain;
 
 public record Intersection(

@@ -1,4 +1,5 @@
 using RayTracerChallenge.Domain;
+using RayTracerChallenge.Domain.Shapes;
 using RayTracerChallenge.Extensions;
 using Tuple = RayTracerChallenge.Domain.Tuple;
 

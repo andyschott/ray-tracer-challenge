@@ -1,4 +1,6 @@
-namespace RayTracerChallenge.Domain;
+using RayTracerChallenge.Domain.Shapes;
+
+namespace RayTracerChallenge.Domain.Patterns;
 
 public abstract record Pattern
 {

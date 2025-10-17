@@ -1,8 +1,9 @@
 using RayTracerChallenge.Domain;
+using RayTracerChallenge.Domain.Shapes;
 using RayTracerChallenge.Extensions;
 using Tuple = RayTracerChallenge.Domain.Tuple;
 
-namespace RayTracerChallenge.Tests.Domain;
+namespace RayTracerChallenge.Tests.Domain.Shapes;
 
 public class SphereTests
 {

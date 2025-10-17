@@ -1,3 +1,4 @@
+using RayTracerChallenge.Domain.Shapes;
 using RayTracerChallenge.Extensions;
 
 namespace RayTracerChallenge.Domain;

@@ -1,7 +1,8 @@
 using RayTracerChallenge.Domain;
+using RayTracerChallenge.Domain.Shapes;
 using Tuple = RayTracerChallenge.Domain.Tuple;
 
-namespace RayTracerChallenge.Tests.Domain;
+namespace RayTracerChallenge.Tests.Domain.Shapes;
 
 public class PlaneTests
 {

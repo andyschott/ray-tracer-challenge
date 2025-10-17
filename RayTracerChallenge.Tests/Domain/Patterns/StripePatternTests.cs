@@ -1,8 +1,10 @@
 using RayTracerChallenge.Domain;
+using RayTracerChallenge.Domain.Patterns;
+using RayTracerChallenge.Domain.Shapes;
 using RayTracerChallenge.Extensions;
 using Tuple = RayTracerChallenge.Domain.Tuple;
 
-namespace RayTracerChallenge.Tests.Domain;
+namespace RayTracerChallenge.Tests.Domain.Patterns;
 
 public class StripePatternTests
 {

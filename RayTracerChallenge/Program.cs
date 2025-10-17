@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using RayTracerChallenge.Domain;
+using RayTracerChallenge.Domain.Shapes;
 using RayTracerChallenge.Extensions;
 using RayTracerChallenge.IO;
 using Tuple = RayTracerChallenge.Domain.Tuple;
@@ -48,17 +49,26 @@ var left = new Sphere(Matrix.Identity.Scale(0.33, 0.33, 0.33)
     Material = middle.Material
 };
 
-var cube = new Cube(Matrix.Identity.Translate(-3, 3, 0.5)
-    .RotateZ(Math.PI / 4))
+var cube = new Cube(Matrix.Identity.Translate(-4, 1, 0.5))
 {
     Material = new Material
     {
         Color = new Color(1, 1, 0),
         Diffuse = 0.7,
         Specular = 0.3,
-        Transparency = 1,
-        Reflective = 1
     }
+};
+
+var cylinder = new Cylinder(Matrix.Identity.Translate(4, 0, 0.5))
+{
+    Material = new Material
+    {
+        Color = new Color(0.2, 0.41, 0),
+        Ambient = 1
+    },
+    Minimum = 0,
+    Maximum = 2,
+    Closed = true
 };
 
 var world = new World
@@ -72,6 +82,7 @@ world.Shapes.Add(middle);
 world.Shapes.Add(right);
 world.Shapes.Add(left);
 world.Shapes.Add(cube);
+world.Shapes.Add(cylinder);
 
 var camera = new Camera(1000, 500, Math.PI / 3,
     TransformationFactory.View(Tuple.CreatePoint(0, 3, -10),
