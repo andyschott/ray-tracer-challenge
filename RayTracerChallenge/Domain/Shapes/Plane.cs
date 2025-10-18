@@ -23,7 +23,7 @@ public record Plane : Shape
         return [new Intersection(t, this)];
     }
 
-    protected override Tuple CalculateNormal(Tuple objectPoint)
+    protected override Tuple CalculateNormal(Tuple objectPoint, Intersection hit)
     {
         return _normal;
     }

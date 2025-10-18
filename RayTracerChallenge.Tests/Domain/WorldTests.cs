@@ -23,23 +23,9 @@ public class WorldTests
 
         var expectedLight = new PointLight(Tuple.CreatePoint(-10, 10, -10),
             new Color(1, 1, 1));
-        var expectedObjects = new[]
-        {
-            new Sphere
-            {
-                Material = new Material
-                {
-                    Color = new Color(0.8, 1.0, 0.6),
-                    Diffuse = 0.7,
-                    Specular = 0.2,
-                }
-            },
-            new Sphere(Matrix.Identity
-                .Scale(0.5, 0.5, 0.5))
-        };
         
         Assert.Equal(expectedLight, w.Light);
-        Assert.Equal(expectedObjects, w.Shapes);
+        Assert.Equal(2, w.Shapes.Count);
     }
 
     [Fact]

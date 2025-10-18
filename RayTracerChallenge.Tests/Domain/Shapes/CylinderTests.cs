@@ -52,7 +52,7 @@ public class CylinderTests
         var c = new Cylinder();
         var pt = Tuple.CreatePoint(x, y, z);
 
-        var result = c.NormalAt(pt);
+        var result = c.NormalAt(pt, new Intersection(1, c));
         var expectedResult = Tuple.CreateVector(nx, ny, nz);
         
         Assert.Equal(expectedResult, result);
@@ -134,7 +134,7 @@ public class CylinderTests
         };
         var pt = Tuple.CreatePoint(x, y, z);
         
-        var result = c.NormalAt(pt);
+        var result = c.NormalAt(pt, new Intersection(1, c));
         var expectedResult = Tuple.CreateVector(nx, ny, nz);
         
         Assert.Equal(expectedResult, result);

@@ -35,7 +35,7 @@ public record Cube : Shape
         ];
     }
 
-    protected override Tuple CalculateNormal(Tuple objectPoint)
+    protected override Tuple CalculateNormal(Tuple objectPoint, Intersection hit)
     {
         var absX = Math.Abs(objectPoint.X);
         var absY = Math.Abs(objectPoint.Y);

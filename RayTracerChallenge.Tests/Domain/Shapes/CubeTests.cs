@@ -61,7 +61,7 @@ public class CubeTests
         var c = new Cube();
         var p = Tuple.CreatePoint(x, y, z);
 
-        var result = c.NormalAt(p);
+        var result = c.NormalAt(p, new Intersection(1, c));
         var expectedResult = Tuple.CreateVector(nx, ny, nz);
         
         Assert.Equal(expectedResult, result);

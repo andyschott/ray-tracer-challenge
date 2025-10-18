@@ -66,7 +66,7 @@ public record Cylinder : Shape
             1, Maximum, 1);
     }
 
-    protected override Tuple CalculateNormal(Tuple objectPoint)
+    protected override Tuple CalculateNormal(Tuple objectPoint, Intersection hit)
     {
         var dist = Math.Pow(objectPoint.X, 2) + Math.Pow(objectPoint.Z, 2);
         if (dist < 1)

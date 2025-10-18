@@ -51,7 +51,7 @@ public record Sphere : Shape
         ];
     }
 
-    protected override Tuple CalculateNormal(Tuple objectPoint)
+    protected override Tuple CalculateNormal(Tuple objectPoint, Intersection hit)
     {
         return objectPoint - Origin;
     }

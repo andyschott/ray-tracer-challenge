@@ -7,7 +7,20 @@ public abstract record Shape
 
     public Matrix Transform { get; }
 
-    public Material Material { get; init; }
+    private static readonly Material _defaultMaterial = new();
+    private readonly Material? _material;
+    public Material Material
+    {
+        get
+        {
+            if (_material is null)
+            {
+                return Parent?.Material ?? _defaultMaterial;
+            }
+            return _material;
+        }
+        init => _material = value;
+    }
     
     public Group? Parent { get; set; }
     
@@ -20,7 +33,7 @@ public abstract record Shape
         InverseTransform = transform?.Inverse() ?? Matrix.Identity;
         InverseTransposeTransform = InverseTransform.Transpose();
         
-        Material = material ?? new Material();
+        _material = material;
     }
     
     public Intersections Intersects(Ray ray)
@@ -56,10 +69,10 @@ public abstract record Shape
         return worldNormal;
     }
     
-    public Tuple NormalAt(Tuple point)
+    public Tuple NormalAt(Tuple point, Intersection hit)
     {
         var objectPoint = ConvertToObjectSpace(point);
-        var objectNormal = CalculateNormal(objectPoint);
+        var objectNormal = CalculateNormal(objectPoint, hit);
 
         return ConvertNormalToWorld(objectNormal);
     }
@@ -67,5 +80,6 @@ public abstract record Shape
     public abstract Bounds GetBounds();
 
     protected abstract Intersections CalculateIntersection(Ray ray);
-    protected abstract Tuple CalculateNormal(Tuple objectPoint);
+    protected abstract Tuple CalculateNormal(Tuple objectPoint,
+        Intersection hit);
 }

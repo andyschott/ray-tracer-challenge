@@ -73,8 +73,8 @@ var cylinder = new Cylinder(Matrix.Identity.Translate(4, 0, 0.5))
 */
 var world = new World
 {
-    Light = new PointLight(Tuple.CreatePoint(-10, 10, -10),
-        new Color(1, 0.65, 0))
+    Light = new PointLight(Tuple.CreatePoint(-15, 10, -15),
+        new Color(1, 1, 1))
 };
 // world.Shapes.Add(floor);
 // world.Shapes.Add(wall);
@@ -83,10 +83,37 @@ var world = new World
 // world.Shapes.Add(left);
 // world.Shapes.Add(cube);
 // world.Shapes.Add(cylinder);
-world.Shapes.Add(Hexagon(Matrix.Identity.Scale(3, 3, 3)));
+var ground = new Plane
+{
+    Material = new Material
+    {
+        Color = new Color(0.76, 0.7, 0.50),
+    }
+};
+
+var sky = new Plane(Matrix.Identity
+    .RotateX(Math.PI / 4)
+    .Translate(0, 0, 100))
+{
+    Material = new Material
+    {
+        Color = new Color(0.53, 0.81, 0.92),
+    }
+};
+
+world.Shapes.Add(ground);
+world.Shapes.Add(sky);
+// world.Shapes.Add(Pyramid(Matrix.Identity.Scale(3, 3, 3)));
+
+var group = BuildGroup();
+if (group is null)
+{
+    return;
+}
+world.Shapes.Add(group);
 
 var camera = new Camera(1000, 500, Math.PI / 3,
-    TransformationFactory.View(Tuple.CreatePoint(0, 5, -10),
+    TransformationFactory.View(Tuple.CreatePoint(3, 5, -15),
         Tuple.CreatePoint(0, 1, 0),
         Tuple.CreatePoint(0, 1, 0)));
 
@@ -107,6 +134,41 @@ return;
 static void Log(string str)
 {
     Console.WriteLine($"[{DateTime.Now}] {str}");
+}
+
+Group? BuildGroup()
+{
+    string inputFile;
+    if (args.Length > 0)
+    {
+        inputFile = args[0];
+    }
+    else
+    {
+        Console.WriteLine("Path to Input File:");
+        Console.Write("> ");
+    
+        var response = Console.ReadLine();
+        if (string.IsNullOrEmpty(response))
+        {
+            return null;
+        }
+
+        inputFile = response;
+    }
+    
+    Console.Write("Red: ");
+    var r = double.Parse(Console.ReadLine()!);
+    Console.Write("Green: ");
+    var g = double.Parse(Console.ReadLine()!);
+    Console.Write("Blue: ");
+    var b = double.Parse(Console.ReadLine()!);
+    
+    using var reader = new StreamReader(inputFile);
+    var parser = new ObjModelParser();
+    var model = parser.Parse(reader);
+    return model.ToGroup(new Color(r, g, b),
+        Matrix.Identity.Scale(3, 3, 3));
 }
 
 static Shape HexagonCorner()
@@ -149,4 +211,46 @@ static Shape Hexagon(Matrix transform)
     }
     
     return hexagon;
+}
+
+static Shape Pyramid(Matrix transform)
+{
+    var material = new Material
+    {
+        Color = new Color(1, 0.65, 0)
+    };
+    var t1 = new Triangle(-1, 0, -1,
+        1, 0, -1,
+        0, 1, 0)
+    {
+        Material = material
+    };
+    var t2 = new Triangle(-1, 0, 1,
+        -1, 0, -1,
+        0, 1, 0)
+    {
+        Material = material
+    };
+    var t3 = new Triangle(1, 0, 1,
+        -1, 0, 1,
+        0, 1, 0)
+    {
+        Material = material
+    };
+    var t4 = new Triangle(1, 0, 1,
+        1, 0, -1,
+        0, 1, 0)
+    {
+        Material = material
+    };
+
+    var pyramid = new Group(transform)
+    {
+        t1,
+        t2,
+        t3,
+        t4
+    };
+
+    return pyramid;
 }

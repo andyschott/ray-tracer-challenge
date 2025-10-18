@@ -115,7 +115,8 @@ public class GroupTests
         var s = new Sphere(Matrix.Identity.Translate(5, 0, 0));
         g2.Add(s);
 
-        var result = s.NormalAt(Tuple.CreatePoint(1.7321, 1.1547, -5.5774));
+        var result = s.NormalAt(Tuple.CreatePoint(1.7321, 1.1547, -5.5774),
+            new Intersection(1, s));
         var expectedResult = Tuple.CreateVector(0.2857, 0.4286, -0.8571);
         
         Assert.Equal(expectedResult, result);

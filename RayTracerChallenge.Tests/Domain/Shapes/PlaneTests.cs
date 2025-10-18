@@ -18,7 +18,8 @@ public class PlaneTests
 
         var expectedResult = Tuple.CreateVector(0, 1, 0);
         
-        var normal = p.NormalAt(Tuple.CreatePoint(x, y, z));
+        var normal = p.NormalAt(Tuple.CreatePoint(x, y, z),
+            new Intersection(1, p));
         Assert.Equal(expectedResult, normal);
     }
 

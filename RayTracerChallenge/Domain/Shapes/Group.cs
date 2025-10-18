@@ -33,7 +33,7 @@ public record Group : Shape, IList<Shape>
         return new Intersections(intersections);
     }
 
-    protected override Tuple CalculateNormal(Tuple objectPoint)
+    protected override Tuple CalculateNormal(Tuple objectPoint, Intersection hit)
     {
         throw new NotSupportedException();
     }

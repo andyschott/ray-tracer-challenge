@@ -179,4 +179,14 @@ public class IntersectionTests
         var result = comps.Schlick();
         Assert.Equal(0.48873, result, 5);
     }
+
+    [Fact]
+    public void IntersectionCanHaveUAndV()
+    {
+        var s = new Triangle(0, 1, 0, -1, 0, 0, 1, 0, 0);
+        var i = new Intersection(3.5, s, 0.2, 0.4);
+        
+        Assert.Equal(0.2, i.U);
+        Assert.Equal(0.4, i.V);
+    }
 }

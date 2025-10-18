@@ -154,7 +154,8 @@ public class SphereTests
     {
         var s = new Sphere();
         
-        var n = s.NormalAt(Tuple.CreatePoint(x, y, z));
+        var n = s.NormalAt(Tuple.CreatePoint(x, y, z),
+            new Intersection(1, s));
         var expectedResult = Tuple.CreateVector(normalX, normalY, normalZ);
         
         Assert.Equal(expectedResult, n);
@@ -177,7 +178,8 @@ public class SphereTests
         var s = new Sphere();
         
         var n = s.NormalAt(Tuple.CreatePoint(0.5773502692,
-            0.5773502692, 0.5773502692));
+            0.5773502692, 0.5773502692),
+            new Intersection(1, s));
         var expectedResult = n.Normalize();
         
         Assert.Equal(expectedResult, n);
@@ -188,7 +190,8 @@ public class SphereTests
     {
         var s = new Sphere(Matrix.Identity.Translate(0, 1, 0));
         
-        var n = s.NormalAt(Tuple.CreatePoint(0, 1.70711, -0.70711));
+        var n = s.NormalAt(Tuple.CreatePoint(0, 1.70711, -0.70711),
+            new Intersection(1, s));
         var expectedResult = Tuple.CreateVector(0, 0.70711, -0.70711);
         
         Assert.Equal(expectedResult, n);
@@ -203,7 +206,8 @@ public class SphereTests
         
         var n = s.NormalAt(Tuple.CreatePoint(0,
             Math.Sqrt(2)/2,
-            -Math.Sqrt(2)/2));
+            -Math.Sqrt(2)/2),
+            new Intersection(1, s));
         var expectedResult = Tuple.CreateVector(0, 0.97014, -0.24254);
         
         Assert.Equal(expectedResult, n);

@@ -4,7 +4,9 @@ namespace RayTracerChallenge.Domain;
 
 public record Intersection(
     double T,
-    Shape Shape) : IComparable<Intersection>
+    Shape Shape,
+    double? U = null,
+    double? V = null) : IComparable<Intersection>
 {
     public record Computation(
         double T,
@@ -50,7 +52,7 @@ public record Intersection(
         
         var point = ray.CalculatePosition(T);
         var eyeVector = -ray.Direction;
-        var normalVector = Shape.NormalAt(point);
+        var normalVector = Shape.NormalAt(point, this);
 
         var inside = false;
         if (normalVector.Dot(eyeVector) < 0)
