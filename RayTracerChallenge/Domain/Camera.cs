@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+
 namespace RayTracerChallenge.Domain;
 
 public record Camera
@@ -62,7 +64,7 @@ public record Camera
         return new Ray(_origin, direction);
     }
 
-    public async Task<Canvas> Render(World world)
+    public Canvas Render(World world)
     {
         var image = new Canvas(HorizontalSize, VerticalSize);
 
@@ -70,29 +72,49 @@ public record Camera
         var pairs = Enumerable.Range(0, VerticalSize)
             .SelectMany(y =>
             {
-                var something = Enumerable.Range(0, HorizontalSize);
-                return something.Select(x => (x, y));
-            }).ToArray();
-        var chunks = pairs.Chunk(logicalProcessors);
-        foreach (var chunk in chunks)
+                return Enumerable.Range(0, HorizontalSize).Select(x => (x, y));
+            });
+
+        var workQueue = new ConcurrentQueue<(int x, int y)>();
+        foreach (var item in pairs)
         {
-            var tasks = chunk.Select(pair =>
-            {
-                return Task.Run(() =>
-                {
-                    var ray = RayForPixel(pair.x, pair.y);
-                    var color = world.ColorAt(ray);
-                    return (pair.x, pair.y, color);
-                });
-            }).ToArray();
-            
-            var results = await Task.WhenAll(tasks);
-            foreach (var (x, y, color) in results)
-            {
-                image[x, y] = color;
-            }
+            workQueue.Enqueue(item);
+        }
+        
+        var tp = new ThreadParams(workQueue,
+            this,
+            image,
+            world);
+        var threads = new Thread[logicalProcessors];
+        for (var i = 0; i < logicalProcessors; i++)
+        {
+            var t = new Thread(RenderThread);
+            t.Start(tp);
+
+            threads[i] = t;
+        }
+
+        foreach (var t in threads)
+        {
+            t.Join();
         }
         
         return image;
     }
+
+    private static void RenderThread(object? data)
+    {
+        var (workQueue, camera, canvas, world) = (ThreadParams)data!;
+        while (workQueue.TryDequeue(out var pair))
+        {
+            var ray = camera.RayForPixel(pair.x, pair.y);
+            var color = world.ColorAt(ray);
+            canvas[pair.x, pair.y] = color;
+        }
+    }
+
+    private record ThreadParams(ConcurrentQueue<(int x, int y)> WorkQueue,
+        Camera Camera,
+        Canvas Canvas,
+        World World);
 }

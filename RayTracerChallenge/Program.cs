@@ -103,23 +103,23 @@ var sky = new Plane(Matrix.Identity
 
 world.Shapes.Add(ground);
 world.Shapes.Add(sky);
-// world.Shapes.Add(Pyramid(Matrix.Identity.Scale(3, 3, 3)));
+world.Shapes.Add(Pyramid(Matrix.Identity.Scale(3, 3, 3)));
 
-var group = BuildGroup();
-if (group is null)
-{
-    return;
-}
-world.Shapes.Add(group);
+// var group = BuildGroup();
+// if (group is null)
+// {
+//     return;
+// }
+// world.Shapes.Add(group);
 
-var camera = new Camera(1000, 500, Math.PI / 3,
+var camera = new Camera(2000, 1000, Math.PI / 3,
     TransformationFactory.View(Tuple.CreatePoint(3, 5, -15),
         Tuple.CreatePoint(0, 1, 0),
         Tuple.CreatePoint(0, 1, 0)));
 
 Log("Tracing rays...");
 var stopWatch = Stopwatch.StartNew();
-var canvas = await camera.Render(world);
+var canvas = camera.Render(world);
 stopWatch.Stop();
 Log($"Done. Took {stopWatch.ElapsedMilliseconds}ms");
 
