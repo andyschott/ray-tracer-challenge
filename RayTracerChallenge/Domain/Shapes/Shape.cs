@@ -22,7 +22,7 @@ public abstract record Shape
         init => _material = value;
     }
     
-    public Group? Parent { get; set; }
+    public Shape? Parent { get; set; }
     
     protected readonly Tuple Origin = Tuple.CreatePoint(0, 0, 0);
     
